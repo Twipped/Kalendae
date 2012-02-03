@@ -20,6 +20,16 @@ I might include a jquery plugin as an optional dependency, but that will be the 
 
 Kalendae is released under an MIT license and is freely distributable.
 
+##Screenshots
+
+Single month, single day selection, no blackouts:   
+![screenshot](http://i.imgur.com/Haziu.png)
+
+Two month, multiple selection with weekends blacked out:   
+![screenshot](http://i.imgur.com/GHdvW.png)
+
+Two month, range selection with weekends blacked out:   
+![screenshot](http://i.imgur.com/Zr5oI.png)
 
 ##Building Kalendae
 
