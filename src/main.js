@@ -370,12 +370,13 @@ Kalendae.prototype.draw = function fill() {
 			$span = cal.days[j];
 			
 			klass = [];
-			if (day.month() != month.month()) klass.push(this.classes.dayOutOfMonth);
-			else if (!this.blackout(day)) klass.push(this.classes.dayActive);
-			
+
 			s = this.isSelected(day);
 			if (s) klass.push(({'-1':this.classes.dayInRange,'1':this.classes.daySelected, 'true':this.classes.daySelected})[s]);
-			
+
+			if (day.month() != month.month()) klass.push(this.classes.dayOutOfMonth);
+			else if (!this.blackout(day) || s>0) klass.push(this.classes.dayActive);
+						
 			if (Math.floor(today.diff(day, 'days', true)) === 0) klass.push(this.classes.dayToday);
 
 			$span.innerHTML = day.format(this.settings.dayNumberFormat);
