@@ -199,6 +199,7 @@ Kalendae.prototype.classes = {
 	'dayActive'			:'k-active',
 	'daySelected'		:'k-selected',
 	'dayInRange'		:'k-range',
+	'dayToday'			:'k-today',
 	'monthSeparator'	:'k-separator'
 };
 
@@ -351,6 +352,7 @@ Kalendae.prototype.draw = function fill() {
 	// return;
 	var month = moment(this.viewStartDate),
 		day,
+		today = moment().hours(0).minutes(0).seconds(0),
 		cal,
 		$span,
 		klass,
@@ -373,6 +375,8 @@ Kalendae.prototype.draw = function fill() {
 			
 			s = this.isSelected(day);
 			if (s) klass.push(({'-1':this.classes.dayInRange,'1':this.classes.daySelected, 'true':this.classes.daySelected})[s]);
+			
+			if (Math.floor(today.diff(day, 'days', true)) === 0) klass.push(this.classes.dayToday);
 
 			$span.innerHTML = day.format(this.settings.dayNumberFormat);
 			$span.className = klass.join(' ');

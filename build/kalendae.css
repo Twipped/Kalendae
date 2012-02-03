@@ -62,6 +62,9 @@
 	color:#999;
 }
 
+.kalendae .k-today {
+	text-decoration:underline;
+}
 
 .kalendae .k-days span.k-selected {
 	border-color:#1072A5;
