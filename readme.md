@@ -12,7 +12,7 @@ Please note that Kalendae is still a work in progress and should probably not be
 6. Be attached to **any** page element, not just named elements.
 7. Configurable blackouts, either as an array of dates or via a callback function
 8. Output selected dates in a variety of formats
-9. Leverage [method.js](http://www.methodjs.com) for smart date parsing.
+9. Leverage [moment.js](http://www.momentjs.com) for smart date parsing.
 10. Support IE8 and above.
 11. Keep it simple.
 
