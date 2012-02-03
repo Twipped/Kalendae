@@ -12,10 +12,10 @@
 		var k1 = new Kalendae({
 			attachTo:document.body,
 			months:1,
-			selected:'2/3/12',
+			selected:'2/2/12',
 			mode:'single',
 			blackout: function (date) {
-				return [1,0,0,0,0,0,1][moment(date).day()]; //blackout weekends
+				return moment(date).date() % 2; //blackout every other day
 			}
 		});
 
@@ -48,7 +48,7 @@
 			selected:'2/3/12,3/15/12, 4/9/12',
 			mode:'multiple',
 			blackout: function (date) {
-				return [1,0,0,0,0,0,1][moment(date).day()]; //blackout weekends
+				return moment(date).format('w') % 2;  //blackout every other week
 			}
 		});
 
