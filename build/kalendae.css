@@ -3,14 +3,15 @@
 	display: inline-block;zoom:1;*display:inline;
 	background:#eee;
 	padding:10px;
+	margin:5px;
 	border-radius:5px;
 	font-size:11px;
 	font-family:'Helvetica Neue', 'Helvetica';
 	cursor:default;
 }
 
-.kalendae .k-calendar {display: inline-block;zoom:1;*display:inline;width:154px;vertical-align:top;}
-.kalendae .k-separator {display: inline-block;zoom:1;*display:inline;width:2px;vertical-align:top;background:#ddd;height:150px;margin:5px 10px;}
+.kalendae .k-calendar {display: inline-block;zoom:1;*display:inline;width:155px;vertical-align:top;}
+.kalendae .k-separator {display: inline-block;zoom:1;*display:inline;width:2px;vertical-align:top;background:#ddd;height:155px;margin:0px 10px;}
 
 .kalendae .k-title {text-align:center;}
 .kalendae .k-caption {font-size:12px;line-height:17px;}
