@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html lang="ru-RU">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<link rel="stylesheet" href="build/kalendae.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<script src="build/kalendae.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+	
+	<script type="text/javascript" charset="utf-8">
+		var k = new Kalendae({
+			attachTo:document.body,
+			months:3,
+			selected:'2/3/12,3/15/12',
+			mode:'multiple',
+			blackout: function (date) {
+				return [1,0,0,0,0,0,1][moment(date).day()]; //blackout weekends
+			},
+			subscribe: {
+				'change':function () {
+					console.log('change', this.getSelected());
+				},
+				'date-clicked':function (date) {
+					console.log('date-clicked', date);
+				},
+				'view-changed':function (direction) {
+					console.log('view-changed', direction);
+				}
+			}
+		});
+
+	</script>
+
+	
+</body>
+</html>
