@@ -499,7 +499,7 @@
             return +this._d;
         },
 
-        'native' : function () {
+        'nativeDate' : function () {
             return this._d;
         },
 

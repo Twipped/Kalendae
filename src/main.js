@@ -207,7 +207,7 @@ Kalendae.prototype = {
 		var out = [];
 		var i=0, c = this.selected.length;
 		for (;i<c;i++) {
-			out.push(this.selected[i]['native']());
+			out.push(this.selected[i].nativeDate());
 		}
 		return out;
 	},
