@@ -203,7 +203,7 @@ Kalendae.prototype = {
 		'monthSeparator'	:'k-separator'
 	},
 	
-	'getSelectedAsDates' : function getSelectedAsDates() {
+	getSelectedAsDates : function getSelectedAsDates() {
 		var out = [];
 		var i=0, c = this.selected.length;
 		for (;i<c;i++) {
@@ -212,7 +212,7 @@ Kalendae.prototype = {
 		return out;
 	},
 	
-	'getSelectedAsText' : function getSelectedAsText(format) {
+	getSelectedAsText : function getSelectedAsText(format) {
 		var out = [];
 		var i=0, c = this.selected.length;
 		for (;i<c;i++) {
@@ -221,7 +221,7 @@ Kalendae.prototype = {
 		return out;
 	},
 	
-	'getSelectedRaw' : function getSelected() {
+	getSelectedRaw : function getSelected() {
 		var out = [];
 		var i=0, c = this.selected.length;
 		for (;i<c;i++) {
@@ -230,7 +230,7 @@ Kalendae.prototype = {
 		return out;
 	},
 	
-	'getSelected' : function getSelected(format) {
+	getSelected : function getSelected(format) {
 		var sel = this.getSelectedAsText(format);
 		switch (this.settings.mode) {
 			case 'range':
@@ -247,7 +247,7 @@ Kalendae.prototype = {
 		}
 	},
 	
-	'isSelected' : function isSelected(input) {
+	isSelected : function isSelected(input) {
 		input = moment(input).hours(0).minutes(0).seconds(0).valueOf();
 		if (input < 1 || !this.selected || this.selected.length < 1) return false;
 
@@ -281,7 +281,7 @@ Kalendae.prototype = {
 		return false;
 	},
 	
-	'setSelected' : function setSelected(input, draw) {
+	setSelected : function setSelected(input, draw) {
 		this.selected = parseDates(input, this.settings.parseSplitDelimiter);
 		this.selected.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 
@@ -289,7 +289,7 @@ Kalendae.prototype = {
 		if (draw !== false) this.draw();
 	},
 	
-	'addSelected' : function addSelected(date, draw) {
+	addSelected : function addSelected(date, draw) {
 		date = moment(date).hours(0).minutes(0).seconds(0);
 		switch (this.settings.mode) {
 			case 'multiple':
@@ -316,7 +316,7 @@ Kalendae.prototype = {
 		return true;
 	},
 	
-	'removeSelected' : function removeSelected(date, draw) {
+	removeSelected : function removeSelected(date, draw) {
 		date = moment(date).hours(0).minutes(0).seconds(0).valueOf();
 		var i = this.selected.length;
 		while (i--) {
@@ -330,7 +330,7 @@ Kalendae.prototype = {
 		return false;
 	},
 	
-	'draw' : function fill() {
+	draw : function fill() {
 		// return;
 		var month = moment(this.viewStartDate),
 			day,

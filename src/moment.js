@@ -499,7 +499,7 @@ var moment = Kalendae.moment = (function (Date, undefined) {
             return +this._d;
         },
 
-        'nativeDate' : function () {
+        nativeDate : function () {
             return this._d;
         },
 
