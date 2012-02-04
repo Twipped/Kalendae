@@ -1,16 +1,15 @@
 
 var util = {
-	isIE : /msie/.test(navigator.userAgent.toLowerCase()),
-
 // ELEMENT FUNCTIONS
 
 	$: function (elem) {
 		return (typeof elem == 'string') ? document.getElementById(elem) : elem;
 	},
 	
-	make: function (tagName, attributes) {
+	make: function (tagName, attributes, attach) {
 		var k, e = document.createElement(tagName);
 		if (!!attributes) for (k in attributes) if (attributes.hasOwnProperty(k)) e.setAttribute(k, attributes[k]);
+		if (!!attach) attach.appendChild(e);
 		return e;
 	},
 

@@ -8,11 +8,13 @@
 (function (undefined) {
 
 var Kalendae = function (options) {
-	var opts = this.settings = util.merge(this.defaults, options),
-		$container = this.container = util.make('div', {'class':this.classes.container}),
-		calendars = this.calendars = [],
+	var self = this,
+		classes = self.classes,
+		opts = self.settings = util.merge(self.defaults, options),
+		$container = self.container = util.make('div', {'class':classes.container}),
+		calendars = self.calendars = [],
 		startDay = moment().day(opts.weekStart),
-		viewStartDate,
+		vsd,
 		columnHeaders = [],
 		$cal,
 		$title,
@@ -21,7 +23,7 @@ var Kalendae = function (options) {
 		$days, dayNodes = [],
 		$span,
 		i = 0,
-		j = this.settings.months;
+		j = opts.months;
 	
 	//generate the column headers (Su, Mo, Tu, etc)
 	i = 7;
@@ -31,77 +33,76 @@ var Kalendae = function (options) {
 	}
 	
 	//setup publish/subscribe and apply any subscriptions passed in settings
-	MinPubSub(this);
+	MinPubSub(self);
 	if (typeof opts.subscribe === 'object') {
 		for (i in opts.subscribe) if (opts.subscribe.hasOwnProperty(i)) {
-			this.subscribe(i, opts.subscribe[i]);
+			self.subscribe(i, opts.subscribe[i]);
 		}
 	}
 	
 	//process default selected dates
-	this.selected = [];
-	if (!!opts.selected) this.setSelected(opts.selected, false);
+	self._sel = [];
+	if (!!opts.selected) self.setSelected(opts.selected, false);
 
 	//set the view month
 	if (!!opts.viewStartDate) {
-		viewStartDate = moment(opts.viewStartDate, opts.format);
-	} else if (this.selected.length > 0) {
-		viewStartDate = moment(this.selected[0]);
+		vsd = moment(opts.viewStartDate, opts.format);
+	} else if (self._sel.length > 0) {
+		vsd = moment(self._sel[0]);
 	} else {
-		viewStartDate = moment();
+		vsd = moment();
 	}
-	this.viewStartDate = viewStartDate.date(1);
+	self.viewStartDate = vsd.date(1);
 	
 	
 	if (typeof opts.blackout === 'function') {
-		this.blackout = opts.blackout;
+		self.blackout = opts.blackout;
 	} else if (!!opts.blackout) {
-		var bdates = parseDates(opts.blackout, this.settings.parseSplitDelimiter);
-		this.blackout = function (input) {
+		var bdates = parseDates(opts.blackout, opts.parseSplitDelimiter);
+		self.blackout = function (input) {
 			input = moment(input).hours(0).minutes(0).seconds(0).valueOf();
-			if (input < 1 || !this.selected || this.selected.length < 1) return false;
+			if (input < 1 || !self._sel || self._sel.length < 1) return false;
 			var i = bdates.length;
 			while (i--) if (bdates[i].valueOf() === input) return true;
 			return false;			
 		}
 	} else {
-		this.blackout = function () {return false;}
+		self.blackout = function () {return false;}
 	}
 	
 	
 	//for the total months setting, generate N calendar views and add them to the container
-	j = Math.max(this.settings.months,1);
+	j = Math.max(opts.months,1);
 	while (j--) {
-		$container.appendChild($cal = util.make('div', {'class':this.classes.calendar}));
+		$cal = util.make('div', {'class':classes.calendar}, $container);
 		
 		$cal.setAttribute('data-cal-index', j);
-		if (this.settings.months > 1) {
-			if (j == Math.max(this.settings.months-1,1)) util.addClassName($cal, this.classes.monthFirst);
-			else if (j === 0) util.addClassName($cal, this.classes.monthLast);
-			else util.addClassName($cal, this.classes.monthMiddle);
+		if (opts.months > 1) {
+			if (j == Math.max(opts.months-1,1)) util.addClassName($cal, classes.monthFirst);
+			else if (j === 0) util.addClassName($cal, classes.monthLast);
+			else util.addClassName($cal, classes.monthMiddle);
 		}
 		
 		//title bar
-		$cal.appendChild($title = util.make('div', {'class':this.classes.title}));
-		$title.appendChild(util.make('a', {'class':this.classes.previous}));	//previous button
-		$title.appendChild(util.make('a', {'class':this.classes.next}));		//next button
-		$title.appendChild($caption = util.make('span', {'class':this.classes.caption}));	//title caption
+		$title = util.make('div', {'class':classes.title}, $cal);
+		util.make('a', {'class':classes.previous}, $title);	//previous button
+		util.make('a', {'class':classes.next}, $title);		//next button
+		$caption = util.make('span', {'class':classes.caption}, $title);	//title caption
 		
 		//column headers
-		$cal.appendChild($header = util.make('div', {'class':this.classes.header}));
+		$header = util.make('div', {'class':classes.header}, $cal);
 		i = 0;
 		do {
-			$header.appendChild($span = util.make('span'));
+			$span = util.make('span', {}, $header);
 			$span.innerHTML = columnHeaders[i];
 		} while (++i < 7)
 
 		//individual day cells
-		$cal.appendChild($days = util.make('div', {'class':this.classes.days}));
+		$days = util.make('div', {'class':classes.days}, $cal);
 		i = 0;
 		dayNodes = [];
 		while (i++ < 42) {
-			$days.appendChild($span = util.make('span'));
-			dayNodes.push($span);
+			dayNodes.push(util.make('span', {}, $days));
 		}
 
 		//store each calendar view for easy redrawing
@@ -110,50 +111,49 @@ var Kalendae = function (options) {
 			days:dayNodes
 		});
 		
-		if (j) $container.appendChild(util.make('div', {'class':this.classes.monthSeparator}));
+		if (j) util.make('div', {'class':classes.monthSeparator}, $container);
 	}
 	
-	this.draw();
+	self.draw();
 	
-	var that = this;
 	util.addEvent($container, 'click', function (event, target) {
 		var clickedDate;
-		if (util.hasClassName(target, that.classes.next)) {
+		if (util.hasClassName(target, classes.next)) {
 		//NEXT MONTH BUTTON
-			if (that.publish('view-changed', that, ['next']) !== false) {
-				that.viewStartDate.add('months',1);
-				that.draw();
+			if (self.publish('view-changed', self, ['next']) !== false) {
+				self.viewStartDate.add('months',1);
+				self.draw();
 			}
 			event.preventDefault();
 			return true;
 			
 			
-		} else if (util.hasClassName(target, that.classes.previous)) {
+		} else if (util.hasClassName(target, classes.previous)) {
 		//PREVIOUS MONTH BUTTON
-			if (that.publish('view-changed', that, ['previous']) !== false) {
-				that.viewStartDate.subtract('months',1);
-				that.draw();
+			if (self.publish('view-changed', self, ['previous']) !== false) {
+				self.viewStartDate.subtract('months',1);
+				self.draw();
 			}
 			event.preventDefault();
 			return true;
 			
 			
-		} else if (util.hasClassName(target.parentNode, that.classes.days) && util.hasClassName(target, that.classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
+		} else if (util.hasClassName(target.parentNode, classes.days) && util.hasClassName(target, classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
 		//DAY CLICK
-			clickedDate = moment(clickedDate, that.settings.dayAttributeFormat);
-			if (that.publish('date-clicked', that, [clickedDate]) !== false) {
+			clickedDate = moment(clickedDate, opts.dayAttributeFormat);
+			if (self.publish('date-clicked', self, [clickedDate]) !== false) {
 			
-				switch (that.settings.mode) {
+				switch (opts.mode) {
 					case 'multiple':
-						if (!that.addSelected(clickedDate)) that.removeSelected(clickedDate);
+						if (!self.addSelected(clickedDate)) self.removeSelected(clickedDate);
 						break;
 					case 'range':
-						that.addSelected(clickedDate);
+						self.addSelected(clickedDate);
 						break;
 					case 'single':
 						/* falls through */
 					default:
-						that.addSelected(clickedDate);
+						self.addSelected(clickedDate);
 						break;
 				}
 
@@ -172,7 +172,7 @@ var Kalendae = function (options) {
 };
 
 Kalendae.prototype = {
-	'defaults' : {
+	defaults : {
 		attachTo:				null,			/* the element to attach the root container to. can be string or DOMElement */
 		months:					1,				/* total number of months to display side by side */
 		weekStart:				0,				/* day to use for the start of the week. 0 is Sunday */
@@ -192,49 +192,49 @@ Kalendae.prototype = {
 		rangeDelimiter:			' - ',			/* string to use between dates when outputting in range mode */
 		multipleDelimiter:		', '			/* string to use between dates when outputting in multiple mode */
 	},
-	'classes' : {
-		'container'			:'kalendae',
-		'calendar'			:'k-calendar',
-		'monthFirst'		:'k-first-month',
-		'monthMiddle'		:'k-middle-month',
-		'monthLast'			:'k-last-month',
-		'title'				:'k-title',
-		'previous'			:'k-previous',
-		'next'				:'k-next',
-		'caption'			:'k-caption',
-		'header'			:'k-header',
-		'days'				:'k-days',
-		'dayOutOfMonth'		:'k-out-of-month',
-		'dayActive'			:'k-active',
-		'daySelected'		:'k-selected',
-		'dayInRange'		:'k-range',
-		'dayToday'			:'k-today',
-		'monthSeparator'	:'k-separator'
+	classes : {
+		container		:'kalendae',
+		calendar		:'k-calendar',
+		monthFirst		:'k-first-month',
+		monthMiddle		:'k-middle-month',
+		monthLast		:'k-last-month',
+		title			:'k-title',
+		previous		:'k-previous',
+		next			:'k-next',
+		caption			:'k-caption',
+		header			:'k-header',
+		days			:'k-days',
+		dayOutOfMonth	:'k-out-of-month',
+		dayActive		:'k-active',
+		daySelected		:'k-selected',
+		dayInRange		:'k-range',
+		dayToday		:'k-today',
+		monthSeparator	:'k-separator'
 	},
 	
 	getSelectedAsDates : function getSelectedAsDates() {
 		var out = [];
-		var i=0, c = this.selected.length;
+		var i=0, c = this._sel.length;
 		for (;i<c;i++) {
-			out.push(this.selected[i].nativeDate());
+			out.push(this._sel[i].nativeDate());
 		}
 		return out;
 	},
 	
 	getSelectedAsText : function getSelectedAsText(format) {
 		var out = [];
-		var i=0, c = this.selected.length;
+		var i=0, c = this._sel.length;
 		for (;i<c;i++) {
-			out.push(this.selected[i].format(format || this.settings.format || 'YYYY-MM-DD'))
+			out.push(this._sel[i].format(format || this.settings.format || 'YYYY-MM-DD'))
 		}
 		return out;
 	},
 	
 	getSelectedRaw : function getSelected() {
 		var out = [];
-		var i=0, c = this.selected.length;
+		var i=0, c = this._sel.length;
 		for (;i<c;i++) {
-			out.push(moment(this.selected[i]))
+			out.push(moment(this._sel[i]))
 		}
 		return out;
 	},
@@ -258,12 +258,12 @@ Kalendae.prototype = {
 	
 	isSelected : function isSelected(input) {
 		input = moment(input).hours(0).minutes(0).seconds(0).valueOf();
-		if (input < 1 || !this.selected || this.selected.length < 1) return false;
+		if (input < 1 || !this._sel || this._sel.length < 1) return false;
 
 		switch (this.settings.mode) {
 			case 'range':
-				var a = this.selected[0] ? this.selected[0].valueOf() : 0,
-					b = this.selected[1] ? this.selected[1].valueOf() : 0;
+				var a = this._sel[0] ? this._sel[0].valueOf() : 0,
+					b = this._sel[1] ? this._sel[1].valueOf() : 0;
 
 				if (a === input || b === input) return 1;
 				if (!a || !b) return 0;
@@ -272,9 +272,9 @@ Kalendae.prototype = {
 				return false;
 
 			case 'multiple':
-				var i = this.selected.length;
+				var i = this._sel.length;
 				while (i--) {
-					if (this.selected[i].valueOf() === input) {
+					if (this._sel[i].valueOf() === input) {
 						return true;
 					}
 				}
@@ -284,15 +284,15 @@ Kalendae.prototype = {
 			case 'single':
 				/* falls through */
 			default:
-				return (this.selected[0] && (this.selected[0].valueOf() === input));
+				return (this._sel[0] && (this._sel[0].valueOf() === input));
 		}
 
 		return false;
 	},
 	
 	setSelected : function setSelected(input, draw) {
-		this.selected = parseDates(input, this.settings.parseSplitDelimiter);
-		this.selected.sort(function (a,b) {return a.valueOf() - b.valueOf();});
+		this._sel = parseDates(input, this.settings.parseSplitDelimiter);
+		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 
 		this.publish('change', this);
 		if (draw !== false) this.draw();
@@ -302,24 +302,24 @@ Kalendae.prototype = {
 		date = moment(date).hours(0).minutes(0).seconds(0);
 		switch (this.settings.mode) {
 			case 'multiple':
-				if (!this.isSelected(date)) this.selected.push(date);
+				if (!this.isSelected(date)) this._sel.push(date);
 				else return false;
 				break;
 			case 'range':
 
-				if (this.selected.length !== 1) this.selected = [date];
+				if (this._sel.length !== 1) this._sel = [date];
 				else {
-					if (date.valueOf() > this.selected[0].valueOf()) this.selected[1] = date;
-					else this.selected = [date, this.selected[0]];
+					if (date.valueOf() > this._sel[0].valueOf()) this._sel[1] = date;
+					else this._sel = [date, this._sel[0]];
 				}
 				break;
 			case 'single':
 				/* falls through */
 			default:
-				this.selected = [date];
+				this._sel = [date];
 				break;
 		}
-		this.selected.sort(function (a,b) {return a.valueOf() - b.valueOf();});
+		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 		this.publish('change', this);
 		if (draw !== false) this.draw();
 		return true;
@@ -327,10 +327,10 @@ Kalendae.prototype = {
 	
 	removeSelected : function removeSelected(date, draw) {
 		date = moment(date).hours(0).minutes(0).seconds(0).valueOf();
-		var i = this.selected.length;
+		var i = this._sel.length;
 		while (i--) {
-			if (this.selected[i].valueOf() === date) {
-				this.selected.splice(i,1);
+			if (this._sel[i].valueOf() === date) {
+				this._sel.splice(i,1);
 				this.publish('change', this);
 				if (draw !== false) this.draw();
 				return true;
@@ -339,11 +339,12 @@ Kalendae.prototype = {
 		return false;
 	},
 	
-	draw : function fill() {
+	draw : function draw() {
 		// return;
 		var month = moment(this.viewStartDate),
 			day,
 			today = moment().hours(0).minutes(0).seconds(0),
+			classes = this.classes,
 			cal,
 			$span,
 			klass,
@@ -363,12 +364,12 @@ Kalendae.prototype = {
 				klass = [];
 
 				s = this.isSelected(day);
-				if (s) klass.push(({'-1':this.classes.dayInRange,'1':this.classes.daySelected, 'true':this.classes.daySelected})[s]);
+				if (s) klass.push(({'-1':classes.dayInRange,'1':classes.daySelected, 'true':classes.daySelected})[s]);
 
-				if (day.month() != month.month()) klass.push(this.classes.dayOutOfMonth);
-				else if (!this.blackout(day) || s>0) klass.push(this.classes.dayActive);
+				if (day.month() != month.month()) klass.push(classes.dayOutOfMonth);
+				else if (!this.blackout(day) || s>0) klass.push(classes.dayActive);
 
-				if (Math.floor(today.diff(day, 'days', true)) === 0) klass.push(this.classes.dayToday);
+				if (Math.floor(today.diff(day, 'days', true)) === 0) klass.push(classes.dayToday);
 
 				$span.innerHTML = day.format(this.settings.dayNumberFormat);
 				$span.className = klass.join(' ');
@@ -407,17 +408,16 @@ window.Kalendae = Kalendae;
 
 
 var util = {
-	isIE : /msie/.test(navigator.userAgent.toLowerCase()),
-
 // ELEMENT FUNCTIONS
 
 	$: function (elem) {
 		return (typeof elem == 'string') ? document.getElementById(elem) : elem;
 	},
 	
-	make: function (tagName, attributes) {
+	make: function (tagName, attributes, attach) {
 		var k, e = document.createElement(tagName);
 		if (!!attributes) for (k in attributes) if (attributes.hasOwnProperty(k)) e.setAttribute(k, attributes[k]);
+		if (!!attach) attach.appendChild(e);
 		return e;
 	},
 
@@ -544,7 +544,7 @@ var util = {
 * MIT Licensed
 */
 
-MinPubSub = function(d){
+var MinPubSub = function(d){
 
 	if (!d) d = this;
 
