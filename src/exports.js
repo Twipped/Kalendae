@@ -1,6 +1,23 @@
 window['moment'] = moment;
+moment.prototype['clone'] = moment.prototype.clone;
+moment.prototype['valueOf'] = moment.prototype.valueOf;
+moment.prototype['nativeDate'] = moment.prototype.nativeDate;
+moment.prototype['toString'] = moment.prototype.toString;
+moment.prototype['toDate'] = moment.prototype.toDate;
+moment.prototype['format'] = moment.prototype.format;
+moment.prototype['add'] = moment.prototype.add;
+moment.prototype['subtract'] = moment.prototype.subtract;
+moment.prototype['diff'] = moment.prototype.diff;
+moment.prototype['from'] = moment.prototype.from;
+moment.prototype['fromNow'] = moment.prototype.fromNow;
+moment.prototype['calendar'] = moment.prototype.calendar;
+moment.prototype['isLeapYear'] = moment.prototype.isLeapYear;
+moment.prototype['isDST'] = moment.prototype.isDST;
+moment.prototype['day'] = moment.prototype.day;
+
 
 window['Kalendae'] = Kalendae;
+Kalendae['moment'] = moment;
 Kalendae.prototype['getSelectedAsDates'] = Kalendae.prototype.getSelectedAsDates;
 Kalendae.prototype['getSelectedAsText'] = Kalendae.prototype.getSelectedAsText;
 Kalendae.prototype['getSelectedRaw'] = Kalendae.prototype.getSelectedRaw;

@@ -31,6 +31,8 @@ build/kalendae.min.js: build/kalendae.js
 		>> $@
 	gzip -c build/kalendae.min.js | wc -c
 
+	#--data-urlencode 'compilation_level=ADVANCED_OPTIMIZATIONS' \
+
 build/kalendae.min.errors: build/kalendae.js
 	curl -s \
 		--data-urlencode 'js_code@build/kalendae.js' \
