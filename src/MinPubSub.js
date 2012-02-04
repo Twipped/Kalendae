@@ -6,7 +6,7 @@
 * MIT Licensed
 */
 
-MinPubSub = function(d){
+var MinPubSub = function(d){
 
 	if (!d) d = this;
 
