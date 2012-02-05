@@ -575,6 +575,9 @@ Kalendae.Input = function (input, options) {
 	util.addEvent($container, 'mousedown', function (event, target) {
 		noclose = true; //IE8 doesn't obey event blocking when it comes to focusing, so we have to do this shit.
 	});
+	util.addEvent(window.document, 'mousedown', function (event, target) {
+		noclose = false;
+	});
 
 	util.addEvent($input, 'focus', function () {
 		self.setSelected(this.value);
