@@ -107,7 +107,7 @@ var Kalendae = function (options) {
 	
 	self.draw();
 	
-	util.addEvent($container, 'click', function (event, target) {
+	util.addEvent($container, 'mousedown', function (event, target) {
 		var clickedDate;
 		if (util.hasClassName(target, classes.next)) {
 		//NEXT MONTH BUTTON
