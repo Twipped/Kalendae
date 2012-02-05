@@ -203,7 +203,7 @@ Kalendae.prototype = {
 		monthSeparator	:'k-separator'
 	},
 	
-	getSelectedAsDates : function getSelectedAsDates() {
+	getSelectedAsDates : function () {
 		var out = [];
 		var i=0, c = this._sel.length;
 		for (;i<c;i++) {
@@ -212,7 +212,7 @@ Kalendae.prototype = {
 		return out;
 	},
 	
-	getSelectedAsText : function getSelectedAsText(format) {
+	getSelectedAsText : function (format) {
 		var out = [];
 		var i=0, c = this._sel.length;
 		for (;i<c;i++) {
@@ -221,7 +221,7 @@ Kalendae.prototype = {
 		return out;
 	},
 	
-	getSelectedRaw : function getSelected() {
+	getSelectedRaw : function () {
 		var out = [];
 		var i=0, c = this._sel.length;
 		for (;i<c;i++) {
@@ -230,7 +230,7 @@ Kalendae.prototype = {
 		return out;
 	},
 	
-	getSelected : function getSelected(format) {
+	getSelected : function (format) {
 		var sel = this.getSelectedAsText(format);
 		switch (this.settings.mode) {
 			case 'range':
@@ -247,7 +247,7 @@ Kalendae.prototype = {
 		}
 	},
 	
-	isSelected : function isSelected(input) {
+	isSelected : function (input) {
 		input = moment(input).hours(0).minutes(0).seconds(0).valueOf();
 		if (input < 1 || !this._sel || this._sel.length < 1) return false;
 
@@ -281,7 +281,7 @@ Kalendae.prototype = {
 		return false;
 	},
 	
-	setSelected : function setSelected(input, draw) {
+	setSelected : function (input, draw) {
 		this._sel = parseDates(input, this.settings.parseSplitDelimiter);
 		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 
@@ -289,7 +289,7 @@ Kalendae.prototype = {
 		if (draw !== false) this.draw();
 	},
 	
-	addSelected : function addSelected(date, draw) {
+	addSelected : function (date, draw) {
 		date = moment(date).hours(0).minutes(0).seconds(0);
 		switch (this.settings.mode) {
 			case 'multiple':
@@ -316,7 +316,7 @@ Kalendae.prototype = {
 		return true;
 	},
 	
-	removeSelected : function removeSelected(date, draw) {
+	removeSelected : function (date, draw) {
 		date = moment(date).hours(0).minutes(0).seconds(0).valueOf();
 		var i = this._sel.length;
 		while (i--) {
@@ -374,7 +374,7 @@ Kalendae.prototype = {
 	}
 }
 
-var parseDates = function parseDates(input, delimiter) {
+var parseDates = function (input, delimiter) {
 	var output = [];
 	
 	if (typeof input === 'string') {
