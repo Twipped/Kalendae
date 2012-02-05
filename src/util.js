@@ -1,16 +1,15 @@
 
 var util = {
-	isIE : /msie/.test(navigator.userAgent.toLowerCase()),
-
 // ELEMENT FUNCTIONS
 
 	$: function (elem) {
 		return (typeof elem == 'string') ? document.getElementById(elem) : elem;
 	},
 	
-	make: function (tagName, attributes) {
+	make: function (tagName, attributes, attach) {
 		var k, e = document.createElement(tagName);
 		if (!!attributes) for (k in attributes) if (attributes.hasOwnProperty(k)) e.setAttribute(k, attributes[k]);
+		if (!!attach) attach.appendChild(e);
 		return e;
 	},
 
@@ -63,14 +62,21 @@ var util = {
 		elem.className = util.trimString(elem.className.replace(new RegExp("(^|\\s+)" + className + "(\\s+|$)"), ' '));
 	},
 
-	getTop: function (elem, isInner) {
-		var result = elem.offsetTop;
+	getPosition: function (elem, isInner) {
+		var x = elem.offsetLeft,
+			y = elem.offsetTop,
+			r = {};
+			
 		if (!isInner) {
 			while ((elem = elem.offsetParent)) {
-				result += elem.offsetTop;
+				x += elem.offsetLeft;
+				y += elem.offsetTop;
 			}
 		}
-		return result;
+		
+		r[0] = r.left = x;
+		r[1] = r.top = y;
+		return r;
 	},
 
 	getHeight: function (elem) {
@@ -101,8 +107,8 @@ var util = {
 			d = {},
 			i = deep?1:0;
 
-		var _c = function _c(a, b) {
-			if (typeof b !== 'object') return a;
+		var _c = function (a, b) {
+			if (typeof b !== 'object') return;
 			for (var k in b) if (b.hasOwnProperty(k)) {
 				//if property is an object or array, merge the contents instead of overwriting, if extend() was called as such
 				if (deep && typeof a[k] === 'object' && typeof b[k] === 'object') _update(a[k], b[k]);
@@ -128,3 +134,4 @@ var util = {
 		);
 	}
 };
+

@@ -6,7 +6,7 @@
 //
 // Version 1.3.0
 
-(function (Date, undefined) {
+var moment = Kalendae.moment = (function (Date, undefined) {
 
     var moment,
         round = Math.round,
@@ -499,7 +499,7 @@
             return +this._d;
         },
 
-        'native' : function () {
+        nativeDate : function () {
             return this._d;
         },
 
@@ -614,12 +614,7 @@
         return this._d.getTimezoneOffset();
     };
 
-    // CommonJS module is defined
-    if (hasModule) {
-        module.exports = moment;
-    }
-    if (typeof window !== 'undefined') {
-        window['moment'] = moment;
-    }
-
+	return moment;
 })(Date);
+
+

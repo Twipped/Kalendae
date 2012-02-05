@@ -1,6 +1,7 @@
 
 kal=src/main.js \
 	src/util.js \
+	src/input.js \
 	src/MinPubSub.js \
 	src/moment.js
 
@@ -30,6 +31,8 @@ build/kalendae.min.js: build/kalendae.js
 		http://closure-compiler.appspot.com/compile \
 		>> $@
 	gzip -c build/kalendae.min.js | wc -c
+
+	#--data-urlencode 'compilation_level=ADVANCED_OPTIMIZATIONS' \
 
 build/kalendae.min.errors: build/kalendae.js
 	curl -s \
