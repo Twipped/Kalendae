@@ -152,6 +152,9 @@ var Kalendae = function (options) {
 			event.preventDefault();
 			return true;
 			
+		} else {
+			event.preventDefault();
+			return true;			
 		}
 	});
 	
