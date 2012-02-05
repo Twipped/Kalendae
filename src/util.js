@@ -72,6 +72,16 @@ var util = {
 		return result;
 	},
 
+	getLeft: function (elem, isInner) {
+		var result = elem.offsetLeft;
+		if (!isInner) {
+			while ((elem = elem.offsetParent)) {
+				result += elem.offsetLeft;
+			}
+		}
+		return result;
+	},
+
 	getHeight: function (elem) {
 		return elem.offsetHeight || elem.scrollHeight;
 	},
