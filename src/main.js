@@ -285,7 +285,6 @@ Kalendae.prototype = {
 		this._sel = parseDates(input, this.settings.parseSplitDelimiter);
 		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 
-		this.publish('change', this);
 		if (draw !== false) this.draw();
 	},
 	
