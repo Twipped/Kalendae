@@ -115,9 +115,7 @@ var Kalendae = function (options) {
 				self.viewStartDate.add('months',1);
 				self.draw();
 			}
-			event.preventDefault();
-			return true;
-			
+			return false;			
 			
 		} else if (util.hasClassName(target, classes.previous)) {
 		//PREVIOUS MONTH BUTTON
@@ -125,8 +123,7 @@ var Kalendae = function (options) {
 				self.viewStartDate.subtract('months',1);
 				self.draw();
 			}
-			event.preventDefault();
-			return true;
+			return false;
 			
 			
 		} else if (util.hasClassName(target.parentNode, classes.days) && util.hasClassName(target, classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
@@ -149,13 +146,10 @@ var Kalendae = function (options) {
 				}
 
 			}
-			event.preventDefault();
-			return true;
+			return false;
 			
-		} else {
-			event.preventDefault();
-			return true;			
 		}
+		return false;
 	});
 	
 

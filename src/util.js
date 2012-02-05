@@ -22,16 +22,24 @@ var util = {
 
 	// Adds a listener callback to a DOM element which is fired on a specified
 	// event.  Callback is sent the event object and the element that triggered the event
-	addEvent: function (elem, event, callback) {
+	addEvent: function (elem, eventName, callback) {
 		var listener = function (event) {
 			event = event || window.event;
-			var target = event.target || event.srcElement; 
-			return callback.apply(elem, [event, target]);
+			var target = event.target || event.srcElement;
+			var block = callback.apply(elem, [event, target]);
+			if (block === false) {
+				if (!!event.preventDefault) event.preventDefault();
+				else {
+					event.returnValue = false;
+					event.cancelBubble = true;
+				}
+			}
+			return block;
 		};
 		if (elem.attachEvent) { // IE only.  The "on" is mandatory.
-			elem.attachEvent("on" + event, listener);
+			elem.attachEvent("on" + eventName, listener);
 		} else { // Other browsers.
-			elem.addEventListener(event, listener, false);
+			elem.addEventListener(eventName, listener, false);
 		}
 		return listener;
 	},
