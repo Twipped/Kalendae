@@ -17,16 +17,28 @@ Kalendae.Input = function (input, options) {
 	//call our parent constructor
 	Kalendae.call(self, opts);
 	
-	var $container = self.container;
+	var $container = self.container,
+		noclose = false;
 	
 	$container.style.display = 'none';
 	util.addClassName($container, classes.positioned);
 	
+	util.addEvent($container, 'mousedown', function (event, target) {
+		noclose = true; //IE8 doesn't obey event blocking when it comes to focusing, so we have to do this shit.
+	});
+
 	util.addEvent($input, 'focus', function () {
 		self.setSelected(this.value);
 		self.show();
 	});
-	util.addEvent($input, 'blur', function () {self.hide();});
+	
+	util.addEvent($input, 'blur', function () {
+		if (noclose) {
+			noclose = false;
+			$input.focus();
+		}
+		else self.hide();
+	});
 	util.addEvent($input, 'keyup', function (event) {
 		self.setSelected(this.value);
 	});
@@ -34,6 +46,7 @@ Kalendae.Input = function (input, options) {
 	self.subscribe('change', function () {
 		$input.value = self.getSelected();
 	});
+	
 };
 
 Kalendae.Input.prototype = util.merge(Kalendae.prototype, {

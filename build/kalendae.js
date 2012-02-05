@@ -124,9 +124,7 @@ var Kalendae = function (options) {
 				self.viewStartDate.add('months',1);
 				self.draw();
 			}
-			event.preventDefault();
-			return true;
-			
+			return false;			
 			
 		} else if (util.hasClassName(target, classes.previous)) {
 		//PREVIOUS MONTH BUTTON
@@ -134,8 +132,7 @@ var Kalendae = function (options) {
 				self.viewStartDate.subtract('months',1);
 				self.draw();
 			}
-			event.preventDefault();
-			return true;
+			return false;
 			
 			
 		} else if (util.hasClassName(target.parentNode, classes.days) && util.hasClassName(target, classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
@@ -158,13 +155,10 @@ var Kalendae = function (options) {
 				}
 
 			}
-			event.preventDefault();
-			return true;
+			return false;
 			
-		} else {
-			event.preventDefault();
-			return true;			
 		}
+		return false;
 	});
 	
 
@@ -432,16 +426,24 @@ var util = {
 
 	// Adds a listener callback to a DOM element which is fired on a specified
 	// event.  Callback is sent the event object and the element that triggered the event
-	addEvent: function (elem, event, callback) {
+	addEvent: function (elem, eventName, callback) {
 		var listener = function (event) {
 			event = event || window.event;
-			var target = event.target || event.srcElement; 
-			return callback.apply(elem, [event, target]);
+			var target = event.target || event.srcElement;
+			var block = callback.apply(elem, [event, target]);
+			if (block === false) {
+				if (!!event.preventDefault) event.preventDefault();
+				else {
+					event.returnValue = false;
+					event.cancelBubble = true;
+				}
+			}
+			return block;
 		};
 		if (elem.attachEvent) { // IE only.  The "on" is mandatory.
-			elem.attachEvent("on" + event, listener);
+			elem.attachEvent("on" + eventName, listener);
 		} else { // Other browsers.
-			elem.addEventListener(event, listener, false);
+			elem.addEventListener(eventName, listener, false);
 		}
 		return listener;
 	},
@@ -564,16 +566,28 @@ Kalendae.Input = function (input, options) {
 	//call our parent constructor
 	Kalendae.call(self, opts);
 	
-	var $container = self.container;
+	var $container = self.container,
+		noclose = false;
 	
 	$container.style.display = 'none';
 	util.addClassName($container, classes.positioned);
 	
+	util.addEvent($container, 'mousedown', function (event, target) {
+		noclose = true; //IE8 doesn't obey event blocking when it comes to focusing, so we have to do this shit.
+	});
+
 	util.addEvent($input, 'focus', function () {
 		self.setSelected(this.value);
 		self.show();
 	});
-	util.addEvent($input, 'blur', function () {self.hide();});
+	
+	util.addEvent($input, 'blur', function () {
+		if (noclose) {
+			noclose = false;
+			$input.focus();
+		}
+		else self.hide();
+	});
 	util.addEvent($input, 'keyup', function (event) {
 		self.setSelected(this.value);
 	});
@@ -581,6 +595,7 @@ Kalendae.Input = function (input, options) {
 	self.subscribe('change', function () {
 		$input.value = self.getSelected();
 	});
+	
 };
 
 Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
