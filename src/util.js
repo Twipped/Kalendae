@@ -62,24 +62,21 @@ var util = {
 		elem.className = util.trimString(elem.className.replace(new RegExp("(^|\\s+)" + className + "(\\s+|$)"), ' '));
 	},
 
-	getTop: function (elem, isInner) {
-		var result = elem.offsetTop;
+	getPosition: function (elem, isInner) {
+		var x = elem.offsetLeft,
+			y = elem.offsetTop,
+			r = {};
+			
 		if (!isInner) {
 			while ((elem = elem.offsetParent)) {
-				result += elem.offsetTop;
+				x += elem.offsetLeft;
+				y += elem.offsetTop;
 			}
 		}
-		return result;
-	},
-
-	getLeft: function (elem, isInner) {
-		var result = elem.offsetLeft;
-		if (!isInner) {
-			while ((elem = elem.offsetParent)) {
-				result += elem.offsetLeft;
-			}
-		}
-		return result;
+		
+		r[0] = r.left = x;
+		r[1] = r.top = y;
+		return r;
 	},
 
 	getHeight: function (elem) {
@@ -110,8 +107,8 @@ var util = {
 			d = {},
 			i = deep?1:0;
 
-		var _c = function _c(a, b) {
-			if (typeof b !== 'object') return a;
+		var _c = function (a, b) {
+			if (typeof b !== 'object') return;
 			for (var k in b) if (b.hasOwnProperty(k)) {
 				//if property is an object or array, merge the contents instead of overwriting, if extend() was called as such
 				if (deep && typeof a[k] === 'object' && typeof b[k] === 'object') _update(a[k], b[k]);
