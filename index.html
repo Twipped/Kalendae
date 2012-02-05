@@ -22,7 +22,7 @@
 		var k2 = new Kalendae({
 			attachTo:document.body,
 			months:2,
-			selected:'2/3/12,3/15/12',
+			selected:'2/3/12 - 3/15/12',
 			mode:'range',
 			blackout: function (date) {
 				return [1,0,0,0,0,0,1][Kalendae.moment(date).day()]; //blackout weekends
@@ -45,7 +45,7 @@
 		var k3 = new Kalendae({
 			attachTo:document.body,
 			months:3,
-			selected:'2/3/12,3/15/12, 4/9/12',
+			selected:'2/3/12, 3/15/12, 4/2/12',
 			mode:'multiple',
 			blackout: function (date) {
 				return Kalendae.moment(date).format('w') % 2;  //blackout every other week
@@ -54,6 +54,15 @@
 
 	</script>
 
+	<hr>
+
+	Click this input element: <input type="text" value="2/16/2012" id="input1">
+	<script type="text/javascript" charset="utf-8">
+		var k4 = new Kalendae.Input('input1', {
+			months:2
+		});
+	</script>
+	
 	
 </body>
 </html>

@@ -116,7 +116,7 @@ var Kalendae = function (options) {
 	
 	self.draw();
 	
-	util.addEvent($container, 'click', function (event, target) {
+	util.addEvent($container, 'mousedown', function (event, target) {
 		var clickedDate;
 		if (util.hasClassName(target, classes.next)) {
 		//NEXT MONTH BUTTON
@@ -161,6 +161,9 @@ var Kalendae = function (options) {
 			event.preventDefault();
 			return true;
 			
+		} else {
+			event.preventDefault();
+			return true;			
 		}
 	});
 	
@@ -212,7 +215,7 @@ Kalendae.prototype = {
 		monthSeparator	:'k-separator'
 	},
 	
-	getSelectedAsDates : function getSelectedAsDates() {
+	getSelectedAsDates : function () {
 		var out = [];
 		var i=0, c = this._sel.length;
 		for (;i<c;i++) {
@@ -221,7 +224,7 @@ Kalendae.prototype = {
 		return out;
 	},
 	
-	getSelectedAsText : function getSelectedAsText(format) {
+	getSelectedAsText : function (format) {
 		var out = [];
 		var i=0, c = this._sel.length;
 		for (;i<c;i++) {
@@ -230,7 +233,7 @@ Kalendae.prototype = {
 		return out;
 	},
 	
-	getSelectedRaw : function getSelected() {
+	getSelectedRaw : function () {
 		var out = [];
 		var i=0, c = this._sel.length;
 		for (;i<c;i++) {
@@ -239,7 +242,7 @@ Kalendae.prototype = {
 		return out;
 	},
 	
-	getSelected : function getSelected(format) {
+	getSelected : function (format) {
 		var sel = this.getSelectedAsText(format);
 		switch (this.settings.mode) {
 			case 'range':
@@ -256,7 +259,7 @@ Kalendae.prototype = {
 		}
 	},
 	
-	isSelected : function isSelected(input) {
+	isSelected : function (input) {
 		input = moment(input).hours(0).minutes(0).seconds(0).valueOf();
 		if (input < 1 || !this._sel || this._sel.length < 1) return false;
 
@@ -290,15 +293,14 @@ Kalendae.prototype = {
 		return false;
 	},
 	
-	setSelected : function setSelected(input, draw) {
+	setSelected : function (input, draw) {
 		this._sel = parseDates(input, this.settings.parseSplitDelimiter);
 		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 
-		this.publish('change', this);
 		if (draw !== false) this.draw();
 	},
 	
-	addSelected : function addSelected(date, draw) {
+	addSelected : function (date, draw) {
 		date = moment(date).hours(0).minutes(0).seconds(0);
 		switch (this.settings.mode) {
 			case 'multiple':
@@ -325,7 +327,7 @@ Kalendae.prototype = {
 		return true;
 	},
 	
-	removeSelected : function removeSelected(date, draw) {
+	removeSelected : function (date, draw) {
 		date = moment(date).hours(0).minutes(0).seconds(0).valueOf();
 		var i = this._sel.length;
 		while (i--) {
@@ -383,7 +385,7 @@ Kalendae.prototype = {
 	}
 }
 
-var parseDates = function parseDates(input, delimiter) {
+var parseDates = function (input, delimiter) {
 	var output = [];
 	
 	if (typeof input === 'string') {
@@ -470,14 +472,21 @@ var util = {
 		elem.className = util.trimString(elem.className.replace(new RegExp("(^|\\s+)" + className + "(\\s+|$)"), ' '));
 	},
 
-	getTop: function (elem, isInner) {
-		var result = elem.offsetTop;
+	getPosition: function (elem, isInner) {
+		var x = elem.offsetLeft,
+			y = elem.offsetTop,
+			r = {};
+			
 		if (!isInner) {
 			while ((elem = elem.offsetParent)) {
-				result += elem.offsetTop;
+				x += elem.offsetLeft;
+				y += elem.offsetTop;
 			}
 		}
-		return result;
+		
+		r[0] = r.left = x;
+		r[1] = r.top = y;
+		return r;
 	},
 
 	getHeight: function (elem) {
@@ -508,8 +517,8 @@ var util = {
 			d = {},
 			i = deep?1:0;
 
-		var _c = function _c(a, b) {
-			if (typeof b !== 'object') return a;
+		var _c = function (a, b) {
+			if (typeof b !== 'object') return;
 			for (var k in b) if (b.hasOwnProperty(k)) {
 				//if property is an object or array, merge the contents instead of overwriting, if extend() was called as such
 				if (deep && typeof a[k] === 'object' && typeof b[k] === 'object') _update(a[k], b[k]);
@@ -535,6 +544,92 @@ var util = {
 		);
 	}
 };
+
+
+Kalendae.Input = function (input, options) {
+	this.input = $input = util.$(input);
+
+	if (!$input || $input.tagName !== 'INPUT') throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
+	
+	var self = this,
+		classes = self.classes
+		opts = self.settings = util.merge(self.defaults, options);
+	
+	//force attachment to the body
+	opts.attachTo = window.document.body;
+
+	//if no override provided, use the input's contents
+	if (!opts.selected) opts.selected = $input.value;
+	
+	//call our parent constructor
+	Kalendae.call(self, opts);
+	
+	var $container = self.container;
+	
+	$container.style.display = 'none';
+	util.addClassName($container, classes.positioned);
+	
+	util.addEvent($input, 'focus', function () {
+		self.setSelected(this.value);
+		self.show();
+	});
+	util.addEvent($input, 'blur', function () {self.hide();});
+	util.addEvent($input, 'keyup', function (event) {
+		self.setSelected(this.value);
+	});
+	
+	self.subscribe('change', function () {
+		$input.value = self.getSelected();
+	});
+};
+
+Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
+	defaults : util.merge(Kalendae.prototype.defaults, {
+		format: 'MM/DD/YYYY',
+		side: 'bottom',
+		offsetLeft: 0,
+		offsetTop: 0
+	}),
+	classes : util.merge(Kalendae.prototype.classes, {
+		positioned : 'k-floating'
+		
+	}),
+	
+	show : function () {
+		var $container = this.container,
+			style = $container.style,
+			$input = this.input,
+			pos = util.getPosition($input);
+		
+		style.display = '';
+		switch (opts.side) {
+			case 'left':
+				style.left = (pos.left - util.getWidth($container) + this.settings.offsetLeft) + 'px';
+				style.top  = (pos.top + this.settings.offsetTop) + 'px';
+				break;
+			case 'right':
+				style.left = (pos.left + util.getWidth($input)) + 'px';
+				style.top  = (pos.top + this.settings.offsetTop) + 'px';
+				break;
+			case 'top':
+				style.left = (pos.left + this.settings.offsetLeft) + 'px';
+				style.top  = (pos.top - util.getHeight($container) + this.settings.offsetTop) + 'px';
+				break;
+			case 'bottom':
+				/* falls through */
+			default:
+				style.left = (pos.left + this.settings.offsetLeft) + 'px';
+				style.top  = (pos.top + util.getHeight($input) + this.settings.offsetTop) + 'px';
+				break;
+		}
+		
+	},
+	
+	hide : function () {
+		this.container.style.display = 'none';
+	}
+	
+});
 
 
 /*!

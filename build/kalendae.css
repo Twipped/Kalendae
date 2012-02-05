@@ -8,6 +8,16 @@
 	font-size:11px;
 	font-family:'Helvetica Neue', 'Helvetica';
 	cursor:default;
+	position:relative;
+}
+
+.kalendae.k-floating {
+	position:absolute;
+	top:0;
+	left:0;
+	z-index:100000;
+	margin:0;
+	box-shadow:0 1px 3px rgba(0,0,0,0.75);
 }
 
 .kalendae .k-calendar {display: inline-block;zoom:1;*display:inline;width:155px;vertical-align:top;}

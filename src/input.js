@@ -1,0 +1,86 @@
+
+Kalendae.Input = function (input, options) {
+	this.input = $input = util.$(input);
+
+	if (!$input || $input.tagName !== 'INPUT') throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
+	
+	var self = this,
+		classes = self.classes
+		opts = self.settings = util.merge(self.defaults, options);
+	
+	//force attachment to the body
+	opts.attachTo = window.document.body;
+
+	//if no override provided, use the input's contents
+	if (!opts.selected) opts.selected = $input.value;
+	
+	//call our parent constructor
+	Kalendae.call(self, opts);
+	
+	var $container = self.container;
+	
+	$container.style.display = 'none';
+	util.addClassName($container, classes.positioned);
+	
+	util.addEvent($input, 'focus', function () {
+		self.setSelected(this.value);
+		self.show();
+	});
+	util.addEvent($input, 'blur', function () {self.hide();});
+	util.addEvent($input, 'keyup', function (event) {
+		self.setSelected(this.value);
+	});
+	
+	self.subscribe('change', function () {
+		$input.value = self.getSelected();
+	});
+};
+
+Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
+	defaults : util.merge(Kalendae.prototype.defaults, {
+		format: 'MM/DD/YYYY',
+		side: 'bottom',
+		offsetLeft: 0,
+		offsetTop: 0
+	}),
+	classes : util.merge(Kalendae.prototype.classes, {
+		positioned : 'k-floating'
+		
+	}),
+	
+	show : function () {
+		var $container = this.container,
+			style = $container.style,
+			$input = this.input,
+			pos = util.getPosition($input);
+		
+		style.display = '';
+		switch (opts.side) {
+			case 'left':
+				style.left = (pos.left - util.getWidth($container) + this.settings.offsetLeft) + 'px';
+				style.top  = (pos.top + this.settings.offsetTop) + 'px';
+				break;
+			case 'right':
+				style.left = (pos.left + util.getWidth($input)) + 'px';
+				style.top  = (pos.top + this.settings.offsetTop) + 'px';
+				break;
+			case 'top':
+				style.left = (pos.left + this.settings.offsetLeft) + 'px';
+				style.top  = (pos.top - util.getHeight($container) + this.settings.offsetTop) + 'px';
+				break;
+			case 'bottom':
+				/* falls through */
+			default:
+				style.left = (pos.left + this.settings.offsetLeft) + 'px';
+				style.top  = (pos.top + util.getHeight($input) + this.settings.offsetTop) + 'px';
+				break;
+		}
+		
+	},
+	
+	hide : function () {
+		this.container.style.display = 'none';
+	}
+	
+});
+
