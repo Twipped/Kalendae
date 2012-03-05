@@ -187,7 +187,9 @@ Kalendae.prototype = {
 		dayAttributeFormat:		'YYYY-MM-DD',	/* format mask for the data-date attribute set on every span */
 		parseSplitDelimiter:	/,\s*|\s*-\s*/,	/* regex to use for splitting multiple dates from a passed string */
 		rangeDelimiter:			' - ',			/* string to use between dates when outputting in range mode */
-		multipleDelimiter:		', '			/* string to use between dates when outputting in multiple mode */
+		multipleDelimiter:		', ',			/* string to use between dates when outputting in multiple mode */
+		
+		dateClassMap:			{}
 	},
 	classes : {
 		container		:'kalendae',
@@ -346,7 +348,8 @@ Kalendae.prototype = {
 			klass,
 			i=0, c,
 			j=0, k,
-			s;
+			s,
+			dateString;
 
 		c = this.calendars.length;
 		do {
@@ -367,9 +370,13 @@ Kalendae.prototype = {
 
 				if (Math.floor(today.diff(day, 'days', true)) === 0) klass.push(classes.dayToday);
 
+				dateString = day.format(this.settings.dayAttributeFormat);
+				if (this.settings.dateClassMap[dateString]) klass.push(this.settings.dateClassMap[dateString]);
+
 				$span.innerHTML = day.format(this.settings.dayNumberFormat);
 				$span.className = klass.join(' ');
-				$span.setAttribute('data-date', day.format(this.settings.dayAttributeFormat));
+				$span.setAttribute('data-date', dateString);
+				
 
 				day.add('days',1);
 			} while (++j < 42);

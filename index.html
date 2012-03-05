@@ -5,6 +5,11 @@
 	<title></title>
 	<link rel="stylesheet" href="build/kalendae.css" type="text/css" media="screen" title="no title" charset="utf-8">
 	<script src="build/kalendae.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css" media="screen">
+		.kalendae span.closed {
+			background:red;
+		}
+	</style>
 </head>
 <body>
 	<h1>Kalendae</h1>
@@ -16,6 +21,9 @@
 			mode:'single',
 			blackout: function (date) {
 				return Kalendae.moment(date).date() % 2; //blackout every other day
+			},
+			dateClassMap: {
+				'2012-02-22':'closed'
 			}
 		});
 
