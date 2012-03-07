@@ -1,5 +1,5 @@
 
-var util = {
+var util = Kalendae.util = {
 // ELEMENT FUNCTIONS
 
 	$: function (elem) {
