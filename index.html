@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title></title>
-	<link rel="stylesheet" href="build/kalendae.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<link rel="stylesheet" href="build/kalendae.css" type="text/css" charset="utf-8">
 	<script src="build/kalendae.js" type="text/javascript" charset="utf-8"></script>
 	<style type="text/css" media="screen">
 		.kalendae span.closed {
@@ -14,8 +14,7 @@
 <body>
 	<h1>Kalendae</h1>
 	<script type="text/javascript" charset="utf-8">
-		var k1 = new Kalendae({
-			attachTo:document.body,
+		var k1 = new Kalendae(document.body, {
 			months:1,
 			selected:'2/2/2012',
 			mode:'single',
@@ -57,7 +56,8 @@
 			mode:'multiple',
 			blackout: function (date) {
 				return Kalendae.moment(date).format('w') % 2;  //blackout every other week
-			}
+			},
+			direction: 'past'
 		});
 
 	</script>
@@ -71,6 +71,13 @@
 		});
 	</script>
 	
+	<hr>
+	This calendar is auto-created.
+	<div class="auto-kal"></div>
+	
+	<hr>
+	So is the one on this input.
+	<input type="text" class="auto-kal">
 	
 </body>
 </html>

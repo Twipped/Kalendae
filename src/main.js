@@ -1,7 +1,12 @@
-var Kalendae = function (options) {
+var today;
+
+var Kalendae = function (targetElement, options) {
+	//if the first argument isn't an element and isn't a string, assume that it is the options object
+	if (!(targetElement instanceof Element || typeof targetElement === 'string')) options = targetElement;
+	
 	var self = this,
 		classes = self.classes,
-		opts = self.settings = util.merge(self.defaults, options),
+		opts = self.settings = util.merge(self.defaults, {attachTo:targetElement}, options || {}),
 		$container = self.container = util.make('div', {'class':classes.container}),
 		calendars = self.calendars = [],
 		startDay = moment().day(opts.weekStart),
@@ -51,7 +56,7 @@ var Kalendae = function (options) {
 	} else if (!!opts.blackout) {
 		var bdates = parseDates(opts.blackout, opts.parseSplitDelimiter);
 		self.blackout = function (input) {
-			input = moment(input).hours(0).minutes(0).seconds(0).valueOf();
+			input = moment(input).hours(0).minutes(0).seconds(0).milliseconds(0).valueOf();
 			if (input < 1 || !self._sel || self._sel.length < 1) return false;
 			var i = bdates.length;
 			while (i--) if (bdates[i].valueOf() === input) return true;
@@ -60,6 +65,9 @@ var Kalendae = function (options) {
 	} else {
 		self.blackout = function () {return false;}
 	}
+	
+	
+	self.direction = self.directions[opts.direction] ? self.directions[opts.direction] : self.directions['any'];
 	
 	
 	//for the total months setting, generate N calendar views and add them to the container
@@ -202,6 +210,14 @@ Kalendae.prototype = {
 		monthSeparator	:'k-separator'
 	},
 	
+	directions: {
+		'past'			:function (date) {return moment(date).valueOf() >= today.valueOf();}, 
+		'today-past'	:function (date) {return moment(date).valueOf() > today.valueOf();}, 
+		'any'			:function (date) {return false;}, 
+		'today-future'	:function (date) {return moment(date).valueOf() < today.valueOf();}, 
+		'future'		:function (date) {return moment(date).valueOf() <= today.valueOf();}
+	},
+	
 	getSelectedAsDates : function () {
 		var out = [];
 		var i=0, c = this._sel.length;
@@ -247,7 +263,7 @@ Kalendae.prototype = {
 	},
 	
 	isSelected : function (input) {
-		input = moment(input).hours(0).minutes(0).seconds(0).valueOf();
+		input = moment(input).hours(0).minutes(0).seconds(0).milliseconds(0).valueOf();
 		if (input < 1 || !this._sel || this._sel.length < 1) return false;
 
 		switch (this.settings.mode) {
@@ -288,7 +304,7 @@ Kalendae.prototype = {
 	},
 	
 	addSelected : function (date, draw) {
-		date = moment(date).hours(0).minutes(0).seconds(0);
+		date = moment(date).hours(0).minutes(0).seconds(0).milliseconds(0);
 		switch (this.settings.mode) {
 			case 'multiple':
 				if (!this.isSelected(date)) this._sel.push(date);
@@ -315,7 +331,7 @@ Kalendae.prototype = {
 	},
 	
 	removeSelected : function (date, draw) {
-		date = moment(date).hours(0).minutes(0).seconds(0).valueOf();
+		date = moment(date).hours(0).minutes(0).seconds(0).milliseconds(0).valueOf();
 		var i = this._sel.length;
 		while (i--) {
 			if (this._sel[i].valueOf() === date) {
@@ -332,7 +348,6 @@ Kalendae.prototype = {
 		// return;
 		var month = moment(this.viewStartDate),
 			day,
-			today = moment().hours(0).minutes(0).seconds(0),
 			classes = this.classes,
 			cal,
 			$span,
@@ -340,7 +355,12 @@ Kalendae.prototype = {
 			i=0, c,
 			j=0, k,
 			s,
+<<<<<<< HEAD
 			dateString;
+=======
+			dateString,
+			opts = this.settings;
+>>>>>>> refs/heads/master
 
 		c = this.calendars.length;
 		do {
@@ -354,17 +374,24 @@ Kalendae.prototype = {
 				klass = [];
 
 				s = this.isSelected(day);
+
 				if (s) klass.push(({'-1':classes.dayInRange,'1':classes.daySelected, 'true':classes.daySelected})[s]);
 
 				if (day.month() != month.month()) klass.push(classes.dayOutOfMonth);
-				else if (!this.blackout(day) || s>0) klass.push(classes.dayActive);
+				else if (!(this.blackout(day) || this.direction(day)) || s>0) klass.push(classes.dayActive);
 
 				if (Math.floor(today.diff(day, 'days', true)) === 0) klass.push(classes.dayToday);
 
 				dateString = day.format(this.settings.dayAttributeFormat);
+<<<<<<< HEAD
 				if (this.settings.dateClassMap[dateString]) klass.push(this.settings.dateClassMap[dateString]);
 
 				$span.innerHTML = day.format(this.settings.dayNumberFormat);
+=======
+				if (opts.dateClassMap[dateString]) klass.push(opts.dateClassMap[dateString]);
+
+				$span.innerHTML = day.format(opts.dayNumberFormat);
+>>>>>>> refs/heads/master
 				$span.className = klass.join(' ');
 				$span.setAttribute('data-date', dateString);
 				
@@ -389,7 +416,7 @@ var parseDates = function (input, delimiter) {
 	c = input.length;
 	i = 0;
 	do {
-		output.push( moment(input[i]).hours(0).minutes(0).seconds(0) );
+		output.push( moment(input[i]).hours(0).minutes(0).seconds(0).milliseconds(0) );
 	} while (++i < c);
 	
 	return output;
@@ -398,5 +425,3 @@ var parseDates = function (input, delimiter) {
 
 
 window.Kalendae = Kalendae;
-
-

@@ -1,9 +1,13 @@
 
-var util = {
+var util = Kalendae.util = {
 // ELEMENT FUNCTIONS
 
 	$: function (elem) {
 		return (typeof elem == 'string') ? document.getElementById(elem) : elem;
+	},
+	
+	$$: function (selector) {
+		return document.querySelectorAll(selector);
 	},
 	
 	make: function (tagName, attributes, attach) {
@@ -19,6 +23,8 @@ var util = {
 		// shamelessly copied from jQuery
 		return elem.offsetWidth > 0 || elem.offsetHeight > 0;
 	},
+	
+	domReady:function (f){/in/.test(document.readyState) ? setTimeout(function() {util.domReady(f);},9) : f()},
 
 	// Adds a listener callback to a DOM element which is fired on a specified
 	// event.  Callback is sent the event object and the element that triggered the event

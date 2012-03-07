@@ -1,9 +1,11 @@
 
 kal=src/main.js \
 	src/util.js \
+	src/auto.js \
 	src/input.js \
 	src/MinPubSub.js \
-	src/moment.js
+	src/moment.js \
+	src/jq.js
 
 all: build/kalendae.js
 
