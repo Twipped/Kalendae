@@ -24,6 +24,9 @@ Two month, multiple selection with weekends blacked out:
 Two month, range selection with weekends blacked out:   
 ![screenshot](http://i.imgur.com/Zr5oI.png)
 
+###[View The Demo Page](http://chipersoft.github.com/Kalendae/)
+
+
 ##Usage
 
 Copy the contents of the `build/` folder into wherever your website scripts are kept.  Include the JS and CSS files in the head of your document like so:
