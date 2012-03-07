@@ -5,6 +5,8 @@
 	padding:10px;
 	margin:5px;
 	border-radius:5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
 	font-size:11px;
 	font-family:'Helvetica Neue', 'Helvetica';
 	cursor:default;
@@ -70,6 +72,8 @@
 	padding:2px 3px 2px 2px;
 	border:1px solid transparent;
 	border-radius:3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
 	color:#999;
 }
 
