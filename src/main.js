@@ -51,7 +51,7 @@ var Kalendae = function (options) {
 	} else if (!!opts.blackout) {
 		var bdates = parseDates(opts.blackout, opts.parseSplitDelimiter);
 		self.blackout = function (input) {
-			input = moment(input).hours(0).minutes(0).seconds(0).valueOf();
+			input = moment(input).hours(0).minutes(0).seconds(0).milliseconds(0).valueOf();
 			if (input < 1 || !self._sel || self._sel.length < 1) return false;
 			var i = bdates.length;
 			while (i--) if (bdates[i].valueOf() === input) return true;
@@ -247,7 +247,7 @@ Kalendae.prototype = {
 	},
 	
 	isSelected : function (input) {
-		input = moment(input).hours(0).minutes(0).seconds(0).valueOf();
+		input = moment(input).hours(0).minutes(0).seconds(0).milliseconds(0).valueOf();
 		if (input < 1 || !this._sel || this._sel.length < 1) return false;
 
 		switch (this.settings.mode) {
@@ -288,7 +288,7 @@ Kalendae.prototype = {
 	},
 	
 	addSelected : function (date, draw) {
-		date = moment(date).hours(0).minutes(0).seconds(0);
+		date = moment(date).hours(0).minutes(0).seconds(0).milliseconds(0);
 		switch (this.settings.mode) {
 			case 'multiple':
 				if (!this.isSelected(date)) this._sel.push(date);
@@ -315,7 +315,7 @@ Kalendae.prototype = {
 	},
 	
 	removeSelected : function (date, draw) {
-		date = moment(date).hours(0).minutes(0).seconds(0).valueOf();
+		date = moment(date).hours(0).minutes(0).seconds(0).milliseconds(0).valueOf();
 		var i = this._sel.length;
 		while (i--) {
 			if (this._sel[i].valueOf() === date) {
@@ -332,7 +332,7 @@ Kalendae.prototype = {
 		// return;
 		var month = moment(this.viewStartDate),
 			day,
-			today = moment().hours(0).minutes(0).seconds(0),
+			today = moment().hours(0).minutes(0).seconds(0).milliseconds(0),
 			classes = this.classes,
 			cal,
 			$span,
@@ -355,6 +355,7 @@ Kalendae.prototype = {
 				klass = [];
 
 				s = this.isSelected(day);
+
 				if (s) klass.push(({'-1':classes.dayInRange,'1':classes.daySelected, 'true':classes.daySelected})[s]);
 
 				if (day.month() != month.month()) klass.push(classes.dayOutOfMonth);
@@ -390,7 +391,7 @@ var parseDates = function (input, delimiter) {
 	c = input.length;
 	i = 0;
 	do {
-		output.push( moment(input[i]).hours(0).minutes(0).seconds(0) );
+		output.push( moment(input[i]).hours(0).minutes(0).seconds(0).milliseconds(0) );
 	} while (++i < c);
 	
 	return output;
