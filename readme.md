@@ -52,7 +52,7 @@ Kalendae does not require jQuery, but does provide a jQuery plugin when jQuery i
 
 ##moment.js
 
-To ease date handling processes, Kalendae bundles the moment.js date handling library.  This bundled library has been altered to prevent it from being added to the global context, but is still available if you wish to use it in your own code.  Add the following directly after the `<script>` tag to make moment available for your application.
+To ease date handling processes, Kalendae bundles the [moment.js](http://www.momentjs.com) date handling library.  This bundled library has been altered to prevent it from being added to the global context, but is still available if you wish to use it in your own code.  Add the following directly after the `<script>` tag to make moment available for your application.
     
     <script type="text/javascript" charset="utf-8">
         window.moment = Kalendae.moment;
@@ -121,7 +121,7 @@ The following settings alter the internal behavior of Kalendae and should only b
 	- Default is `"D"`
 	
 - `dayAttributeFormat`: Format string for the `data-date` attribute set on every span 
-    - Default is "YYYY-MM-DD"
+    - Default is `"YYYY-MM-DD"`
 
 - `parseSplitDelimiter`: RegExp used when splitting multiple dates from a passed string
     - Default is `/,\s*|\s*-\s*/`
@@ -130,7 +130,7 @@ The following settings alter the internal behavior of Kalendae and should only b
 	- Default is `' - '`
 	
 - `multipleDelimiter`: String used to delimit dates when outputting in multiple mode
-    - Default is ', '
+    - Default is `', '`
 
 ###Example Blackout Functions
 
@@ -191,7 +191,7 @@ Callbacks can also be passed in the options object:
     
 Kalendae offers the following events:
 
-- `change` - Fires whenever the selected date changes, either from a user clicking or a call to setSelected()
+- `change` - Fires whenever the selected date changes, either from a user clicking or a call to `setSelected()`
 
 - `date-clicked` - Fires when a date has been clicked, but before the selection is changed.  Receives the date clicked as a moment object in the first parameter.  Returning false will prevent selection change.
 
