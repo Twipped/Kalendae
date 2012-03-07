@@ -340,7 +340,8 @@ Kalendae.prototype = {
 			i=0, c,
 			j=0, k,
 			s,
-			dateString;
+			dateString,
+			opts = this.settings;
 
 		c = this.calendars.length;
 		do {
@@ -362,9 +363,9 @@ Kalendae.prototype = {
 				if (Math.floor(today.diff(day, 'days', true)) === 0) klass.push(classes.dayToday);
 
 				dateString = day.format(this.settings.dayAttributeFormat);
-				if (this.settings.dateClassMap[dateString]) klass.push(this.settings.dateClassMap[dateString]);
+				if (opts.dateClassMap[dateString]) klass.push(opts.dateClassMap[dateString]);
 
-				$span.innerHTML = day.format(this.settings.dayNumberFormat);
+				$span.innerHTML = day.format(opts.dayNumberFormat);
 				$span.className = klass.join(' ');
 				$span.setAttribute('data-date', dateString);
 				

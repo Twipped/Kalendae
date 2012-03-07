@@ -349,7 +349,8 @@ Kalendae.prototype = {
 			i=0, c,
 			j=0, k,
 			s,
-			dateString;
+			dateString,
+			opts = this.settings;
 
 		c = this.calendars.length;
 		do {
@@ -371,9 +372,9 @@ Kalendae.prototype = {
 				if (Math.floor(today.diff(day, 'days', true)) === 0) klass.push(classes.dayToday);
 
 				dateString = day.format(this.settings.dayAttributeFormat);
-				if (this.settings.dateClassMap[dateString]) klass.push(this.settings.dateClassMap[dateString]);
+				if (opts.dateClassMap[dateString]) klass.push(opts.dateClassMap[dateString]);
 
-				$span.innerHTML = day.format(this.settings.dayNumberFormat);
+				$span.innerHTML = day.format(opts.dayNumberFormat);
 				$span.className = klass.join(' ');
 				$span.setAttribute('data-date', dateString);
 				
@@ -408,6 +409,21 @@ var parseDates = function (input, delimiter) {
 
 window.Kalendae = Kalendae;
 
+if (typeof jQuery !== 'undefined') {
+	jQuery.fn.kalendae = function (options) {
+		this.each(function (i, element) {
+			var $e = $(element);
+			if ($e.is('input')) {
+				//if element is an input, bind a popup calendar to the input.
+				$e.data('kalendae', new Kalendae.Input(element, options));
+			} else {
+				//otherwise, insert a flat calendar into the element.
+				$e.data('kalendae', new Kalendae($.extend({}, {attachTo:element}, options)));
+			}
+		});
+		return this;
+	}
+}
 
 
 var util = {
