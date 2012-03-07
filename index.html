@@ -14,8 +14,7 @@
 <body>
 	<h1>Kalendae</h1>
 	<script type="text/javascript" charset="utf-8">
-		var k1 = new Kalendae({
-			attachTo:document.body,
+		var k1 = new Kalendae(document.body, {
 			months:1,
 			selected:'2/2/2012',
 			mode:'single',
@@ -57,7 +56,8 @@
 			mode:'multiple',
 			blackout: function (date) {
 				return Kalendae.moment(date).format('w') % 2;  //blackout every other week
-			}
+			},
+			direction: 'past'
 		});
 
 	</script>
