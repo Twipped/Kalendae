@@ -1,7 +1,12 @@
-var Kalendae = function (options) {
+var today;
+
+var Kalendae = function (targetElement, options) {
+	//if the first argument isn't an element and isn't a string, assume that it is the options object
+	if (!(targetElement instanceof Element || typeof targetElement === 'string')) options = targetElement;
+	
 	var self = this,
 		classes = self.classes,
-		opts = self.settings = util.merge(self.defaults, options),
+		opts = self.settings = util.merge(self.defaults, {attachTo:targetElement}, options || {}),
 		$container = self.container = util.make('div', {'class':classes.container}),
 		calendars = self.calendars = [],
 		startDay = moment().day(opts.weekStart),
@@ -332,7 +337,6 @@ Kalendae.prototype = {
 		// return;
 		var month = moment(this.viewStartDate),
 			day,
-			today = moment().hours(0).minutes(0).seconds(0).milliseconds(0),
 			classes = this.classes,
 			cal,
 			$span,
