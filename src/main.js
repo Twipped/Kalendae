@@ -67,6 +67,9 @@ var Kalendae = function (targetElement, options) {
 	}
 	
 	
+	self.direction = self.directions[opts.direction] ? self.directions[opts.direction] : self.directions['any'];
+	
+	
 	//for the total months setting, generate N calendar views and add them to the container
 	j = Math.max(opts.months,1);
 	while (j--) {
@@ -205,6 +208,14 @@ Kalendae.prototype = {
 		dayInRange		:'k-range',
 		dayToday		:'k-today',
 		monthSeparator	:'k-separator'
+	},
+	
+	directions: {
+		'past'			:function (date) {return moment(date).valueOf() >= today.valueOf();}, 
+		'today-past'	:function (date) {return moment(date).valueOf() > today.valueOf();}, 
+		'any'			:function (date) {return false;}, 
+		'today-future'	:function (date) {return moment(date).valueOf() < today.valueOf();}, 
+		'future'		:function (date) {return moment(date).valueOf() <= today.valueOf();}
 	},
 	
 	getSelectedAsDates : function () {
@@ -363,7 +374,7 @@ Kalendae.prototype = {
 				if (s) klass.push(({'-1':classes.dayInRange,'1':classes.daySelected, 'true':classes.daySelected})[s]);
 
 				if (day.month() != month.month()) klass.push(classes.dayOutOfMonth);
-				else if (!this.blackout(day) || s>0) klass.push(classes.dayActive);
+				else if (!(this.blackout(day) || this.direction(day)) || s>0) klass.push(classes.dayActive);
 
 				if (Math.floor(today.diff(day, 'days', true)) === 0) klass.push(classes.dayToday);
 
