@@ -20,6 +20,8 @@
 	z-index:100000;
 	margin:0;
 	box-shadow:0 1px 3px rgba(0,0,0,0.75);
+	-moz-box-shadow:0 1px 3px rgba(0,0,0,0.75);
+	-webkit-box-shadow:0 1px 3px rgba(0,0,0,0.75);
 }
 
 .kalendae .k-calendar {display: inline-block;zoom:1;*display:inline;width:155px;vertical-align:top;}
