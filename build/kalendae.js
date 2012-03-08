@@ -596,8 +596,7 @@ Kalendae.util.domReady(function () {
 });
 
 Kalendae.Input = function (targetElement, options) {
-	
-	this.input = $input = util.$(targetElement);
+	var $input = this.input = util.$(targetElement);
 
 	if (!$input || $input.tagName !== 'INPUT') throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
 	
