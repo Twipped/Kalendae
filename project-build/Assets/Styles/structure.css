@@ -1,0 +1,19 @@
+body {
+	margin: 1em;
+}
+.container {
+	position: relative;
+}
+.abs {
+	position: absolute;	
+}
+.right {
+	right: 0;
+}
+.top {
+	top: 0;
+}
+.container.docs code {
+	display: block;
+	margin-top: -1.5em;
+}
