@@ -1,0 +1,19 @@
+https://github.com/jshint/node-jshint
+
+Installation:
+npm install jshint
+
+Usage:
+jshint path path2 [options] // => run against specific scripts
+jshint *.js // => run against all scripts
+jshint main.js --show-non-errors // => show non-errors (e.g. Implied globals etc)
+jshint main.js --config ./Lint/config.json // => use specific configuration options
+jshint main.js --show-non-errors --config ./Lint/config.json // => example of showing non-errors against specific configuration settings
+
+If you get no errors then that means the script ran fine
+
+Generic usage:
+jshint **/*.js --config ./Lint/config.json
+
+Configuration:
+config.json

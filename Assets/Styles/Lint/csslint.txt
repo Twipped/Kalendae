@@ -1,0 +1,29 @@
+https://github.com/stubbornella/csslint/wiki/Command-line-interface
+
+Installation:
+npm install -g csslint
+
+Usage:
+csslint [options] [file|dir]*
+csslint file1.css file2.css
+csslint ./
+csslint --errors=box-model,ids test.css // => decide what should be errors
+csslint --warnings=box-model,ids test.css // => decide what should be warnings
+
+Configuration:
+You can view the options by running csslint --help
+All 'rules' can be viewed using: csslint --list-rules
+The rules have #ID's that you can specify as errors|warnings
+
+Generic usage:
+csslint --errors=import,compatible-vendor-prefixes,display-property-grouping,overqualified-elements,fallback-colors,duplicate-properties,empty-rules,gradients,universal-selector,vendor-prefix,zero-units --warnings=important,known-properties,font-sizes,outline-none,shorthand,unqualified-attributes ./
+
+Prettier Syntax:
+It's recommended to create a shell script to wrap the CSS Lint functionality so you can use the same syntax as the Node.js CLI. 
+
+For Linux/Mac, create a file named csslint and add the following to the file:
+#!/bin/bash
+java -jar js.jar csslint-rhino.js $@
+
+After creating the file, you need to ensure it can be executed, so go to the command line and type:
+chmod +x csslint
