@@ -297,7 +297,7 @@ Kalendae.prototype = {
 	},
 	
 	setSelected : function (input, draw) {
-		this._sel = parseDates(input, this.settings.parseSplitDelimiter);
+		this._sel = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
 		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 
 		if (draw !== false) this.draw();
@@ -394,7 +394,7 @@ Kalendae.prototype = {
 	}
 }
 
-var parseDates = function (input, delimiter) {
+var parseDates = function (input, delimiter, format) {
 	var output = [];
 	
 	if (typeof input === 'string') {
@@ -406,7 +406,7 @@ var parseDates = function (input, delimiter) {
 	c = input.length;
 	i = 0;
 	do {
-		output.push( moment(input[i]).hours(0).minutes(0).seconds(0).milliseconds(0) );
+		output.push( moment(input[i], format).hours(0).minutes(0).seconds(0).milliseconds(0) );
 	} while (++i < c);
 	
 	return output;
