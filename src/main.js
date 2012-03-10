@@ -297,7 +297,7 @@ Kalendae.prototype = {
 	},
 	
 	setSelected : function (input, draw) {
-		this._sel = parseDates(input, this.settings.parseSplitDelimiter);
+		this._sel = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
 		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 
 		if (draw !== false) this.draw();
@@ -359,8 +359,22 @@ Kalendae.prototype = {
 			opts = this.settings;
 
 		c = this.calendars.length;
+		
+		var viewDelta = ({
+			'past'			: c-1,
+			'today-past'	: c-1,
+			'any'			: c>2?Math.floor(c/2):0,
+			'today-future'	: 0,
+			'future'		: 0
+		})[this.settings.direction];
+		
+		if (viewDelta) month = month.subtract({M:viewDelta});
+
 		do {
 			day = moment(month).date(1).day(this.settings.weekStart);
+			if (day.date()<8) { // if weekStart has shifted us into the second row, shift back.
+				day.subtract('days',7);
+			}
 			cal = this.calendars[i];
 			cal.caption.innerHTML = month.format(this.settings.titleFormat);
 			j = 0;
@@ -394,7 +408,7 @@ Kalendae.prototype = {
 	}
 }
 
-var parseDates = function (input, delimiter) {
+var parseDates = function (input, delimiter, format) {
 	var output = [];
 	
 	if (typeof input === 'string') {
@@ -406,7 +420,7 @@ var parseDates = function (input, delimiter) {
 	c = input.length;
 	i = 0;
 	do {
-		output.push( moment(input[i]).hours(0).minutes(0).seconds(0).milliseconds(0) );
+		output.push( moment(input[i], format).hours(0).minutes(0).seconds(0).milliseconds(0) );
 	} while (++i < c);
 	
 	return output;
