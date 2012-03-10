@@ -372,9 +372,9 @@ Kalendae.prototype = {
 
 		do {
 			day = moment(month).date(1).day(this.settings.weekStart);
-			if(day.date()>1 && day.date() < 7){
-        day = moment(month).date(1).day(this.settings.weekStart-7);
-      }
+			if (day.date()<8) { // if weekStart has shifted us into the second row, shift back.
+				day.subtract('days',7);
+			}
 			cal = this.calendars[i];
 			cal.caption.innerHTML = month.format(this.settings.titleFormat);
 			j = 0;
