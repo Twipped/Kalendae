@@ -1,6 +1,7 @@
 
 Kalendae.Input = function (targetElement, options) {
-	var $input = this.input = util.$(targetElement);
+	var $input = this.input = util.$(targetElement),
+		overwriteInput;
 
 	if (!$input || $input.tagName !== 'INPUT') throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
 	
@@ -13,9 +14,12 @@ Kalendae.Input = function (targetElement, options) {
 
 	//if no override provided, use the input's contents
 	if (!opts.selected) opts.selected = $input.value;
+	else overwriteInput = true;
 	
 	//call our parent constructor
 	Kalendae.call(self, opts);
+	
+	if (overwriteInput) $input.value = self.getSelected();
 	
 	var $container = self.container,
 		noclose = false;
