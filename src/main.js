@@ -297,7 +297,7 @@ Kalendae.prototype = {
 	},
 	
 	setSelected : function (input, draw) {
-		this._sel = parseDates(input, this.settings.parseSplitDelimiter);
+		this._sel = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
 		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 
 		if (draw !== false) this.draw();
@@ -359,8 +359,23 @@ Kalendae.prototype = {
 			opts = this.settings;
 
 		c = this.calendars.length;
+	  if(this.settings.direction==='today-past' || this.settings.direction==='past'){
+    	var now = moment();
+    	if(now.month()===month.month() && c>1){				
+    			var monthsToSubtract = month.month()-now.month()-(c-1);
+    			if(now.month()<month.month()){
+    				monthsToSubtract = monthsToSubtract-11; // current month doesn't count so it's 11 instead of 12
+    			}
+    			if(monthsToSubtract<0){
+    				month = month.subtract({M:(monthsToSubtract*-1)});
+    			}
+    	 }
+    }
 		do {
 			day = moment(month).date(1).day(this.settings.weekStart);
+			if(day.date()>1 && day.date() < 7){
+        day = moment(month).date(1).day(this.settings.weekStart-7);
+      }
 			cal = this.calendars[i];
 			cal.caption.innerHTML = month.format(this.settings.titleFormat);
 			j = 0;
@@ -394,7 +409,7 @@ Kalendae.prototype = {
 	}
 }
 
-var parseDates = function (input, delimiter) {
+var parseDates = function (input, delimiter, format) {
 	var output = [];
 	
 	if (typeof input === 'string') {
@@ -406,7 +421,7 @@ var parseDates = function (input, delimiter) {
 	c = input.length;
 	i = 0;
 	do {
-		output.push( moment(input[i]).hours(0).minutes(0).seconds(0).milliseconds(0) );
+		output.push( moment(input[i], format).hours(0).minutes(0).seconds(0).milliseconds(0) );
 	} while (++i < c);
 	
 	return output;
