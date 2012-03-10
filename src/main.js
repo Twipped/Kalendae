@@ -359,18 +359,17 @@ Kalendae.prototype = {
 			opts = this.settings;
 
 		c = this.calendars.length;
-	  if(this.settings.direction==='today-past' || this.settings.direction==='past'){
-    	var now = moment();
-    	if(now.month()===month.month() && c>1){				
-    			var monthsToSubtract = month.month()-now.month()-(c-1);
-    			if(now.month()<month.month()){
-    				monthsToSubtract = monthsToSubtract-11; // current month doesn't count so it's 11 instead of 12
-    			}
-    			if(monthsToSubtract<0){
-    				month = month.subtract({M:(monthsToSubtract*-1)});
-    			}
-    	 }
-    }
+		
+		var viewDelta = ({
+			'past'			: c-1,
+			'today-past'	: c-1,
+			'any'			: c>2?Math.floor(c/2):0,
+			'today-future'	: 0,
+			'future'		: 0
+		})[this.settings.direction];
+		
+		if (viewDelta) month = month.subtract({M:viewDelta});
+
 		do {
 			day = moment(month).date(1).day(this.settings.weekStart);
 			if(day.date()>1 && day.date() < 7){
