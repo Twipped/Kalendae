@@ -371,10 +371,10 @@ Kalendae.prototype = {
 		if (viewDelta) month = month.subtract({M:viewDelta});
 
 		do {
-			day = moment(month).date(1).day(this.settings.weekStart);
-			if (day.date()<8) { // if weekStart has shifted us into the second row, shift back.
-				day.subtract('days',7);
-			}
+			day = moment(month).date(1);
+			day.day( day.day() < this.settings.weekStart ? this.settings.weekStart-7 : this.settings.weekStart); 
+			//if the first day of the month is less than our week start, back up a week
+
 			cal = this.calendars[i];
 			cal.caption.innerHTML = month.format(this.settings.titleFormat);
 			j = 0;
