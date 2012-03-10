@@ -413,8 +413,8 @@ var parseDates = function (input, delimiter, format) {
 	
 	if (typeof input === 'string') {
 		input = input.split(delimiter);		
-	} else if (!unit.isArray(input)) {
-		input = [sel_in];
+	} else if (!util.isArray(input)) {
+		input = [input];
 	}
 	
 	c = input.length;
