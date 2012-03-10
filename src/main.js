@@ -420,7 +420,7 @@ var parseDates = function (input, delimiter, format) {
 	c = input.length;
 	i = 0;
 	do {
-		output.push( moment(input[i], format).hours(0).minutes(0).seconds(0).milliseconds(0) );
+		if (input[i]) output.push( moment(input[i], format).hours(0).minutes(0).seconds(0).milliseconds(0) );
 	} while (++i < c);
 	
 	return output;
