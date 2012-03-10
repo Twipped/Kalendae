@@ -306,7 +306,7 @@ Kalendae.prototype = {
 	},
 	
 	setSelected : function (input, draw) {
-		this._sel = parseDates(input, this.settings.parseSplitDelimiter);
+		this._sel = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
 		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 
 		if (draw !== false) this.draw();
@@ -368,8 +368,22 @@ Kalendae.prototype = {
 			opts = this.settings;
 
 		c = this.calendars.length;
+		
+		var viewDelta = ({
+			'past'			: c-1,
+			'today-past'	: c-1,
+			'any'			: c>2?Math.floor(c/2):0,
+			'today-future'	: 0,
+			'future'		: 0
+		})[this.settings.direction];
+		
+		if (viewDelta) month = month.subtract({M:viewDelta});
+
 		do {
-			day = moment(month).date(1).day(this.settings.weekStart);
+			day = moment(month).date(1);
+			day.day( day.day() < this.settings.weekStart ? this.settings.weekStart-7 : this.settings.weekStart); 
+			//if the first day of the month is less than our week start, back up a week
+
 			cal = this.calendars[i];
 			cal.caption.innerHTML = month.format(this.settings.titleFormat);
 			j = 0;
@@ -403,19 +417,19 @@ Kalendae.prototype = {
 	}
 }
 
-var parseDates = function (input, delimiter) {
+var parseDates = function (input, delimiter, format) {
 	var output = [];
 	
 	if (typeof input === 'string') {
 		input = input.split(delimiter);		
-	} else if (!unit.isArray(input)) {
-		input = [sel_in];
+	} else if (!util.isArray(input)) {
+		input = [input];
 	}
 	
 	c = input.length;
 	i = 0;
 	do {
-		output.push( moment(input[i]).hours(0).minutes(0).seconds(0).milliseconds(0) );
+		if (input[i]) output.push( moment(input[i], format).hours(0).minutes(0).seconds(0).milliseconds(0) );
 	} while (++i < c);
 	
 	return output;
@@ -596,7 +610,8 @@ Kalendae.util.domReady(function () {
 });
 
 Kalendae.Input = function (targetElement, options) {
-	var $input = this.input = util.$(targetElement);
+	var $input = this.input = util.$(targetElement),
+		overwriteInput;
 
 	if (!$input || $input.tagName !== 'INPUT') throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
 	
@@ -609,9 +624,12 @@ Kalendae.Input = function (targetElement, options) {
 
 	//if no override provided, use the input's contents
 	if (!opts.selected) opts.selected = $input.value;
+	else overwriteInput = true;
 	
 	//call our parent constructor
 	Kalendae.call(self, opts);
+	
+	if (overwriteInput) $input.value = self.getSelected();
 	
 	var $container = self.container,
 		noclose = false;
@@ -1404,16 +1422,15 @@ var moment = Kalendae.moment = (function (Date, undefined) {
 
 today = moment().hours(0).minutes(0).seconds(0).milliseconds(0);
 
-
 if (typeof jQuery !== 'undefined') {
 	jQuery.fn.kalendae = function (options) {
 		this.each(function (i, e) {
 			if (e.tagName === 'INPUT') {
 				//if element is an input, bind a popup calendar to the input.
-				$(e).data('kalendae', new Kalendae.Input(element, options));
+				$(e).data('kalendae', new Kalendae.Input(e, options));
 			} else {
 				//otherwise, insert a flat calendar into the element.
-				$(e).data('kalendae', new Kalendae($.extend({}, {attachTo:element}, options)));
+				$(e).data('kalendae', new Kalendae($.extend({}, {attachTo:e}, options)));
 			}
 		});
 		return this;
