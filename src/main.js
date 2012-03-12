@@ -19,7 +19,9 @@ var Kalendae = function (targetElement, options) {
 		$days, dayNodes = [],
 		$span,
 		i = 0,
-		j = opts.months;
+		j = opts.months,
+		$left,
+		$right;
 	
 	//generate the column headers (Su, Mo, Tu, etc)
 	i = 7;
@@ -97,8 +99,8 @@ var Kalendae = function (targetElement, options) {
 		
 		//title bar
 		$title = util.make('div', {'class':classes.title}, $cal);
-		util.make('a', {'class':classes.previous}, $title);	//previous button
-		util.make('a', {'class':classes.next}, $title);		//next button
+		$left = util.make('a', {'class':classes.previous}, $title);	//previous button
+		$right = util.make('a', {'class':classes.next}, $title);		//next button
 		$caption = util.make('span', {'class':classes.caption}, $title);	//title caption
 		
 		//column headers
@@ -120,7 +122,9 @@ var Kalendae = function (targetElement, options) {
 		//store each calendar view for easy redrawing
 		calendars.push({
 			caption:$caption,
-			days:dayNodes
+			days:dayNodes,
+			previous: $left,
+			next: $right
 		});
 		
 		if (j) util.make('div', {'class':classes.monthSeparator}, $container);
@@ -407,7 +411,14 @@ Kalendae.prototype = {
 			} while (++j < 42);
 			month.add('months',1);
 		} while (++i < c);
-
+    if(opts.direction==='today-past' || opts.direction==='past'){
+    		month.subtract('months',1);
+        if(month.month()==moment().month() && month.year()==moment().year()){
+    				cal.next.setAttribute("style", "display: none;");
+    		}else{
+    				cal.next.setAttribute("style", "");
+    	  }
+    }
 	}
 }
 
