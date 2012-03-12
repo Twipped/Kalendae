@@ -50,6 +50,19 @@ var Kalendae = function (targetElement, options) {
 	}
 	self.viewStartDate = vsd.date(1);
 	
+	var viewDelta = ({
+  		'past'			: options.months-1,
+  		'today-past'	: options.months-1,
+  		'any'			: options.months>2?Math.floor(options.months/2):0,
+  		'today-future'	: 0,
+  		'future'		: 0
+  	})[this.settings.direction];
+
+
+  	if (viewDelta && moment().month()==moment(self.viewStartDate).month()){
+  		self.viewStartDate = moment(self.viewStartDate).subtract({M:viewDelta}).date(1);			
+  	}
+  
 	
 	if (typeof opts.blackout === 'function') {
 		self.blackout = opts.blackout;
@@ -359,16 +372,6 @@ Kalendae.prototype = {
 			opts = this.settings;
 
 		c = this.calendars.length;
-		
-		var viewDelta = ({
-			'past'			: c-1,
-			'today-past'	: c-1,
-			'any'			: c>2?Math.floor(c/2):0,
-			'today-future'	: 0,
-			'future'		: 0
-		})[this.settings.direction];
-		
-		if (viewDelta) month = month.subtract({M:viewDelta});
 
 		do {
 			day = moment(month).date(1);
