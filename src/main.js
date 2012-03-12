@@ -19,7 +19,9 @@ var Kalendae = function (targetElement, options) {
 		$days, dayNodes = [],
 		$span,
 		i = 0,
-		j = opts.months;
+		j = opts.months,
+		$left,
+		$right;
 	
 	//generate the column headers (Su, Mo, Tu, etc)
 	i = 7;
@@ -50,6 +52,19 @@ var Kalendae = function (targetElement, options) {
 	}
 	self.viewStartDate = vsd.date(1);
 	
+	var viewDelta = ({
+  		'past'			: options.months-1,
+  		'today-past'	: options.months-1,
+  		'any'			: options.months>2?Math.floor(options.months/2):0,
+  		'today-future'	: 0,
+  		'future'		: 0
+  	})[this.settings.direction];
+
+
+  	if (viewDelta && moment().month()==moment(self.viewStartDate).month()){
+  		self.viewStartDate = moment(self.viewStartDate).subtract({M:viewDelta}).date(1);			
+  	}
+  
 	
 	if (typeof opts.blackout === 'function') {
 		self.blackout = opts.blackout;
@@ -84,8 +99,8 @@ var Kalendae = function (targetElement, options) {
 		
 		//title bar
 		$title = util.make('div', {'class':classes.title}, $cal);
-		util.make('a', {'class':classes.previous}, $title);	//previous button
-		util.make('a', {'class':classes.next}, $title);		//next button
+		$left = util.make('a', {'class':classes.previous}, $title);	//previous button
+		$right = util.make('a', {'class':classes.next}, $title);		//next button
 		$caption = util.make('span', {'class':classes.caption}, $title);	//title caption
 		
 		//column headers
@@ -107,7 +122,9 @@ var Kalendae = function (targetElement, options) {
 		//store each calendar view for easy redrawing
 		calendars.push({
 			caption:$caption,
-			days:dayNodes
+			days:dayNodes,
+			previous: $left,
+			next: $right
 		});
 		
 		if (j) util.make('div', {'class':classes.monthSeparator}, $container);
@@ -359,16 +376,6 @@ Kalendae.prototype = {
 			opts = this.settings;
 
 		c = this.calendars.length;
-		
-		var viewDelta = ({
-			'past'			: c-1,
-			'today-past'	: c-1,
-			'any'			: c>2?Math.floor(c/2):0,
-			'today-future'	: 0,
-			'future'		: 0
-		})[this.settings.direction];
-		
-		if (viewDelta) month = month.subtract({M:viewDelta});
 
 		do {
 			day = moment(month).date(1);
@@ -404,7 +411,14 @@ Kalendae.prototype = {
 			} while (++j < 42);
 			month.add('months',1);
 		} while (++i < c);
-
+    if(opts.direction==='today-past' || opts.direction==='past'){
+    		month.subtract('months',1);
+        if(month.month()==moment().month() && month.year()==moment().year()){
+    				cal.next.setAttribute("style", "display: none;");
+    		}else{
+    				cal.next.setAttribute("style", "");
+    	  }
+    }
 	}
 }
 
@@ -417,7 +431,7 @@ var parseDates = function (input, delimiter, format) {
 		input = [input];
 	}
 	
-	c = input.length;
+	var c = input.length;
 	i = 0;
 	do {
 		if (input[i]) output.push( moment(input[i], format).hours(0).minutes(0).seconds(0).milliseconds(0) );
