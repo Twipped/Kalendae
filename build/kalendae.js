@@ -59,7 +59,20 @@ var Kalendae = function (targetElement, options) {
 	}
 	self.viewStartDate = vsd.date(1);
 	
-	
+	var viewDelta = ({
+		'past'			: opts.months-1,
+		'today-past'	: opts.months-1,
+		'any'			: opts.months>2?Math.floor(opts.months/2):0,
+		'today-future'	: 0,
+		'future'		: 0
+	})[this.settings.direction];
+
+
+	if (viewDelta && moment().month()==moment(self.viewStartDate).month()){
+		self.viewStartDate = moment(self.viewStartDate).subtract({M:viewDelta}).date(1);
+	}
+
+
 	if (typeof opts.blackout === 'function') {
 		self.blackout = opts.blackout;
 	} else if (!!opts.blackout) {
@@ -128,7 +141,7 @@ var Kalendae = function (targetElement, options) {
 		var clickedDate;
 		if (util.hasClassName(target, classes.next)) {
 		//NEXT MONTH BUTTON
-			if (self.publish('view-changed', self, ['next']) !== false) {
+			if (!self.disableNext && self.publish('view-changed', self, ['next']) !== false) {
 				self.viewStartDate.add('months',1);
 				self.draw();
 			}
@@ -136,7 +149,7 @@ var Kalendae = function (targetElement, options) {
 			
 		} else if (util.hasClassName(target, classes.previous)) {
 		//PREVIOUS MONTH BUTTON
-			if (self.publish('view-changed', self, ['previous']) !== false) {
+			if (!self.disablePrevious && self.publish('view-changed', self, ['previous']) !== false) {
 				self.viewStartDate.subtract('months',1);
 				self.draw();
 			}
@@ -182,6 +195,7 @@ Kalendae.prototype = {
 		months:					1,				/* total number of months to display side by side */
 		weekStart:				0,				/* day to use for the start of the week. 0 is Sunday */
 		direction:				'any',			/* past, today-past, any, today-future, future */
+		directionScrolling:		true,			/* if a direction other than any is defined, prevent scrolling out of range */
 		viewStartDate:			null,			/* date in the month to display.  When multiple months, this is the left most */
 		blackout:				null,			/* array of dates, or function to be passed a date */
 		selected:				null,			/* dates already selected.  can be string, date, or array of strings or dates. */
@@ -193,7 +207,7 @@ Kalendae.prototype = {
 		titleFormat:			'MMMM, YYYY',	/* format mask for month titles. See momentjs.com for rules */
 		dayNumberFormat:		'D',			/* format mask for individual days */
 		dayAttributeFormat:		'YYYY-MM-DD',	/* format mask for the data-date attribute set on every span */
-		parseSplitDelimiter:	/,\s*|\s*-\s*/,	/* regex to use for splitting multiple dates from a passed string */
+		parseSplitDelimiter:	/,\s*|\s+-\s+/,	/* regex to use for splitting multiple dates from a passed string */
 		rangeDelimiter:			' - ',			/* string to use between dates when outputting in range mode */
 		multipleDelimiter:		', ',			/* string to use between dates when outputting in multiple mode */
 		
@@ -216,8 +230,13 @@ Kalendae.prototype = {
 		daySelected		:'k-selected',
 		dayInRange		:'k-range',
 		dayToday		:'k-today',
-		monthSeparator	:'k-separator'
+		monthSeparator	:'k-separator',
+		disablePrevious	:'k-disable-previous',
+		disableNext		:'k-disable-next'
 	},
+	
+	disablePrevious: false,
+	disableNext: false,
 	
 	directions: {
 		'past'			:function (date) {return moment(date).valueOf() >= today.valueOf();}, 
@@ -306,7 +325,7 @@ Kalendae.prototype = {
 	},
 	
 	setSelected : function (input, draw) {
-		this._sel = parseDates(input, this.settings.parseSplitDelimiter);
+		this._sel = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
 		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
 
 		if (draw !== false) this.draw();
@@ -368,8 +387,12 @@ Kalendae.prototype = {
 			opts = this.settings;
 
 		c = this.calendars.length;
+
 		do {
-			day = moment(month).date(1).day(this.settings.weekStart);
+			day = moment(month).date(1);
+			day.day( day.day() < this.settings.weekStart ? this.settings.weekStart-7 : this.settings.weekStart); 
+			//if the first day of the month is less than our week start, back up a week
+
 			cal = this.calendars[i];
 			cal.caption.innerHTML = month.format(this.settings.titleFormat);
 			j = 0;
@@ -399,23 +422,47 @@ Kalendae.prototype = {
 			} while (++j < 42);
 			month.add('months',1);
 		} while (++i < c);
+		
+		if (opts.directionScrolling) {
+			var diff = -(moment().diff(month, 'months'));		
+			if (opts.direction==='today-past' || opts.direction==='past') {
 
+				if (diff <= 0) {
+					this.disableNext = false;
+					util.removeClassName(this.container, classes.disableNext);
+				} else {
+					this.disableNext = true;
+					util.addClassName(this.container, classes.disableNext);
+				}
+
+			} else if (opts.direction==='today-future' || opts.direction==='future') {
+
+				if (diff > opts.months) {
+					this.disablePrevious = false;
+					util.removeClassName(this.container, classes.disablePrevious);
+				} else {
+					this.disablePrevious = true;
+					util.addClassName(this.container, classes.disablePrevious);
+				}
+
+			}
+		}
 	}
 }
 
-var parseDates = function (input, delimiter) {
+var parseDates = function (input, delimiter, format) {
 	var output = [];
 	
 	if (typeof input === 'string') {
 		input = input.split(delimiter);		
-	} else if (!unit.isArray(input)) {
-		input = [sel_in];
+	} else if (!util.isArray(input)) {
+		input = [input];
 	}
 	
-	c = input.length;
+	var c = input.length;
 	i = 0;
 	do {
-		output.push( moment(input[i]).hours(0).minutes(0).seconds(0).milliseconds(0) );
+		if (input[i]) output.push( moment(input[i], format).hours(0).minutes(0).seconds(0).milliseconds(0) );
 	} while (++i < c);
 	
 	return output;
@@ -596,7 +643,8 @@ Kalendae.util.domReady(function () {
 });
 
 Kalendae.Input = function (targetElement, options) {
-	var $input = this.input = util.$(targetElement);
+	var $input = this.input = util.$(targetElement),
+		overwriteInput;
 
 	if (!$input || $input.tagName !== 'INPUT') throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
 	
@@ -609,9 +657,12 @@ Kalendae.Input = function (targetElement, options) {
 
 	//if no override provided, use the input's contents
 	if (!opts.selected) opts.selected = $input.value;
+	else overwriteInput = true;
 	
 	//call our parent constructor
 	Kalendae.call(self, opts);
+	
+	if (overwriteInput) $input.value = self.getSelected();
 	
 	var $container = self.container,
 		noclose = false;
@@ -1404,16 +1455,15 @@ var moment = Kalendae.moment = (function (Date, undefined) {
 
 today = moment().hours(0).minutes(0).seconds(0).milliseconds(0);
 
-
 if (typeof jQuery !== 'undefined') {
 	jQuery.fn.kalendae = function (options) {
 		this.each(function (i, e) {
 			if (e.tagName === 'INPUT') {
 				//if element is an input, bind a popup calendar to the input.
-				$(e).data('kalendae', new Kalendae.Input(element, options));
+				$(e).data('kalendae', new Kalendae.Input(e, options));
 			} else {
 				//otherwise, insert a flat calendar into the element.
-				$(e).data('kalendae', new Kalendae($.extend({}, {attachTo:element}, options)));
+				$(e).data('kalendae', new Kalendae($.extend({}, {attachTo:e}, options)));
 			}
 		});
 		return this;

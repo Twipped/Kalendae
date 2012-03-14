@@ -16,7 +16,8 @@
 	<script type="text/javascript" charset="utf-8">
 		var k1 = new Kalendae(document.body, {
 			months:1,
-			selected:'2/2/2012',
+			selected:'2-2-2012',
+			format:'DD-MM-YYYY',
 			mode:'single',
 			blackout: function (date) {
 				return Kalendae.moment(date).date() % 2; //blackout every other day
@@ -31,9 +32,6 @@
 			months:2,
 			selected:'2/3/2012 - 3/15/2012',
 			mode:'range',
-			blackout: function (date) {
-				return [1,0,0,0,0,0,1][Kalendae.moment(date).day()]; //blackout weekends
-			},
 			/*
 			subscribe: {
 				'change':function () {
@@ -47,6 +45,9 @@
 				}
 			}
 			*/
+			blackout: function (date) {
+				return [1,0,0,0,0,0,1][Kalendae.moment(date).day()]; //blackout weekends
+			}
 		});
 		
 		var k3 = new Kalendae({
