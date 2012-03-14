@@ -97,6 +97,9 @@ The following options are available for configuration.
     - Stacks with `blackout`
     - Default is `"any"`
     
+- `directionScrolling`: If `true` and a direction other than `any` is defined, Kalendae will not allow scrolling the view outside the direction.
+    - Default is true.
+    
 - `blackout`: Dates to be disallowed from selection.
     - Can be an array of dates formatted according to `format`, or a function taking a moment date object as the first argument and returning true to prevent selection.
     - Stacks with `direction`

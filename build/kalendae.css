@@ -51,6 +51,14 @@
 	overflow:hidden;
 }
 
+.kalendae.k-disable-next .k-next {
+    display:none;
+}
+
+.kalendae.k-disable-previous .k-previous {
+    display:none;
+}
+
 
 .kalendae .k-header span,
 .kalendae .k-days span {

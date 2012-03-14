@@ -132,7 +132,7 @@ var Kalendae = function (targetElement, options) {
 		var clickedDate;
 		if (util.hasClassName(target, classes.next)) {
 		//NEXT MONTH BUTTON
-			if (self.publish('view-changed', self, ['next']) !== false) {
+			if (!self.disableNext && self.publish('view-changed', self, ['next']) !== false) {
 				self.viewStartDate.add('months',1);
 				self.draw();
 			}
@@ -140,7 +140,7 @@ var Kalendae = function (targetElement, options) {
 			
 		} else if (util.hasClassName(target, classes.previous)) {
 		//PREVIOUS MONTH BUTTON
-			if (self.publish('view-changed', self, ['previous']) !== false) {
+			if (!self.disablePrevious && self.publish('view-changed', self, ['previous']) !== false) {
 				self.viewStartDate.subtract('months',1);
 				self.draw();
 			}
@@ -186,6 +186,7 @@ Kalendae.prototype = {
 		months:					1,				/* total number of months to display side by side */
 		weekStart:				0,				/* day to use for the start of the week. 0 is Sunday */
 		direction:				'any',			/* past, today-past, any, today-future, future */
+		directionScrolling:		true,			/* if a direction other than any is defined, prevent scrolling out of range */
 		viewStartDate:			null,			/* date in the month to display.  When multiple months, this is the left most */
 		blackout:				null,			/* array of dates, or function to be passed a date */
 		selected:				null,			/* dates already selected.  can be string, date, or array of strings or dates. */
@@ -220,8 +221,13 @@ Kalendae.prototype = {
 		daySelected		:'k-selected',
 		dayInRange		:'k-range',
 		dayToday		:'k-today',
-		monthSeparator	:'k-separator'
+		monthSeparator	:'k-separator',
+		disablePrevious	:'k-disable-previous',
+		disableNext		:'k-disable-next'
 	},
+	
+	disablePrevious: false,
+	disableNext: false,
 	
 	directions: {
 		'past'			:function (date) {return moment(date).valueOf() >= today.valueOf();}, 
@@ -407,7 +413,31 @@ Kalendae.prototype = {
 			} while (++j < 42);
 			month.add('months',1);
 		} while (++i < c);
+		
+		if (opts.directionScrolling) {
+			var diff = -(moment().diff(month, 'months'));		
+			if (opts.direction==='today-past' || opts.direction==='past') {
 
+				if (diff <= 0) {
+					this.disableNext = false;
+					util.removeClassName(this.container, classes.disableNext);
+				} else {
+					this.disableNext = true;
+					util.addClassName(this.container, classes.disableNext);
+				}
+
+			} else if (opts.direction==='today-future' || opts.direction==='future') {
+
+				if (diff > opts.months) {
+					this.disablePrevious = false;
+					util.removeClassName(this.container, classes.disablePrevious);
+				} else {
+					this.disablePrevious = true;
+					util.addClassName(this.container, classes.disablePrevious);
+				}
+
+			}
+		}
 	}
 }
 
