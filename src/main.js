@@ -417,7 +417,7 @@ var parseDates = function (input, delimiter, format) {
 		input = [input];
 	}
 	
-	c = input.length;
+	var c = input.length;
 	i = 0;
 	do {
 		if (input[i]) output.push( moment(input[i], format).hours(0).minutes(0).seconds(0).milliseconds(0) );
