@@ -193,7 +193,7 @@ Kalendae.prototype = {
 		titleFormat:			'MMMM, YYYY',	/* format mask for month titles. See momentjs.com for rules */
 		dayNumberFormat:		'D',			/* format mask for individual days */
 		dayAttributeFormat:		'YYYY-MM-DD',	/* format mask for the data-date attribute set on every span */
-		parseSplitDelimiter:	/,\s*|\s*-\s*/,	/* regex to use for splitting multiple dates from a passed string */
+		parseSplitDelimiter:	/,\s*|\s+-\s+/,	/* regex to use for splitting multiple dates from a passed string */
 		rangeDelimiter:			' - ',			/* string to use between dates when outputting in range mode */
 		multipleDelimiter:		', ',			/* string to use between dates when outputting in multiple mode */
 		

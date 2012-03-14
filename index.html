@@ -16,7 +16,8 @@
 	<script type="text/javascript" charset="utf-8">
 		var k1 = new Kalendae(document.body, {
 			months:1,
-			selected:'2/2/2012',
+			selected:'2-2-2012',
+			format:'DD-MM-YYYY',
 			mode:'single',
 			blackout: function (date) {
 				return Kalendae.moment(date).date() % 2; //blackout every other day
