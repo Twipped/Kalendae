@@ -32,9 +32,6 @@
 			months:2,
 			selected:'2/3/2012 - 3/15/2012',
 			mode:'range',
-			blackout: function (date) {
-				return [1,0,0,0,0,0,1][Kalendae.moment(date).day()]; //blackout weekends
-			},
 			/*
 			subscribe: {
 				'change':function () {
@@ -48,6 +45,9 @@
 				}
 			}
 			*/
+			blackout: function (date) {
+				return [1,0,0,0,0,0,1][Kalendae.moment(date).day()]; //blackout weekends
+			}
 		});
 		
 		var k3 = new Kalendae({
