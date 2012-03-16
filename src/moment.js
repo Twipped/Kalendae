@@ -584,7 +584,7 @@ var moment = Kalendae.moment = (function (Date, undefined) {
 
         day : function (input) {
             var day = this._d.getDay();
-            return input == null ? day :
+            return (typeof input === 'undefined') ? day :
                 this.add({ d : input - day });
         }
     };
@@ -592,7 +592,7 @@ var moment = Kalendae.moment = (function (Date, undefined) {
     // helper for adding shortcuts
     function makeShortcut(name, key) {
         moment.fn[name] = function (input) {
-            if (input != null) {
+            if (typeof input !== 'undefined') {
                 this._d['set' + key](input);
                 return this;
             } else {
