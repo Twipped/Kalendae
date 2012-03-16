@@ -78,10 +78,10 @@ var Kalendae = function (targetElement, options) {
 	} else if (!!opts.blackout) {
 		var bdates = parseDates(opts.blackout, opts.parseSplitDelimiter);
 		self.blackout = function (input) {
-			input = moment(input).hours(0).minutes(0).seconds(0).milliseconds(0).valueOf();
+			input = moment(input).yearDay();
 			if (input < 1 || !self._sel || self._sel.length < 1) return false;
 			var i = bdates.length;
-			while (i--) if (bdates[i].valueOf() === input) return true;
+			while (i--) if (bdates[i].yearDay() === input) return true;
 			return false;			
 		}
 	} else {
@@ -239,11 +239,11 @@ Kalendae.prototype = {
 	disableNext: false,
 	
 	directions: {
-		'past'			:function (date) {return moment(date).valueOf() >= today.valueOf();}, 
-		'today-past'	:function (date) {return moment(date).valueOf() > today.valueOf();}, 
+		'past'			:function (date) {return moment(date).yearDay() >= today.yearDay();}, 
+		'today-past'	:function (date) {return moment(date).yearDay() > today.yearDay();}, 
 		'any'			:function (date) {return false;}, 
-		'today-future'	:function (date) {return moment(date).valueOf() < today.valueOf();}, 
-		'future'		:function (date) {return moment(date).valueOf() <= today.valueOf();}
+		'today-future'	:function (date) {return moment(date).yearDay() < today.yearDay();}, 
+		'future'		:function (date) {return moment(date).yearDay() <= today.yearDay();}
 	},
 	
 	getSelectedAsDates : function () {
@@ -291,13 +291,13 @@ Kalendae.prototype = {
 	},
 	
 	isSelected : function (input) {
-		input = moment(input).hours(0).minutes(0).seconds(0).milliseconds(0).valueOf();
+		input = moment(input).yearDay();
 		if (input < 1 || !this._sel || this._sel.length < 1) return false;
 
 		switch (this.settings.mode) {
 			case 'range':
-				var a = this._sel[0] ? this._sel[0].valueOf() : 0,
-					b = this._sel[1] ? this._sel[1].valueOf() : 0;
+				var a = this._sel[0] ? this._sel[0].yearDay() : 0,
+					b = this._sel[1] ? this._sel[1].yearDay() : 0;
 
 				if (a === input || b === input) return 1;
 				if (!a || !b) return 0;
@@ -308,7 +308,7 @@ Kalendae.prototype = {
 			case 'multiple':
 				var i = this._sel.length;
 				while (i--) {
-					if (this._sel[i].valueOf() === input) {
+					if (this._sel[i].yearDay() === input) {
 						return true;
 					}
 				}
@@ -318,7 +318,7 @@ Kalendae.prototype = {
 			case 'single':
 				/* falls through */
 			default:
-				return (this._sel[0] && (this._sel[0].valueOf() === input));
+				return (this._sel[0] && (this._sel[0].yearDay() === input));
 		}
 
 		return false;
@@ -326,13 +326,13 @@ Kalendae.prototype = {
 	
 	setSelected : function (input, draw) {
 		this._sel = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
-		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
+		this._sel.sort(function (a,b) {return a.yearDay() - b.yearDay();});
 
 		if (draw !== false) this.draw();
 	},
 	
 	addSelected : function (date, draw) {
-		date = moment(date).hours(0).minutes(0).seconds(0).milliseconds(0);
+		date = moment(date);
 		switch (this.settings.mode) {
 			case 'multiple':
 				if (!this.isSelected(date)) this._sel.push(date);
@@ -342,7 +342,7 @@ Kalendae.prototype = {
 
 				if (this._sel.length !== 1) this._sel = [date];
 				else {
-					if (date.valueOf() > this._sel[0].valueOf()) this._sel[1] = date;
+					if (date.yearDay() > this._sel[0].yearDay()) this._sel[1] = date;
 					else this._sel = [date, this._sel[0]];
 				}
 				break;
@@ -352,17 +352,17 @@ Kalendae.prototype = {
 				this._sel = [date];
 				break;
 		}
-		this._sel.sort(function (a,b) {return a.valueOf() - b.valueOf();});
+		this._sel.sort(function (a,b) {return a.yearDay() - b.yearDay();});
 		this.publish('change', this);
 		if (draw !== false) this.draw();
 		return true;
 	},
 	
 	removeSelected : function (date, draw) {
-		date = moment(date).hours(0).minutes(0).seconds(0).milliseconds(0).valueOf();
+		date = moment(date).yearDay();
 		var i = this._sel.length;
 		while (i--) {
-			if (this._sel[i].valueOf() === date) {
+			if (this._sel[i].yearDay() === date) {
 				this._sel.splice(i,1);
 				this.publish('change', this);
 				if (draw !== false) this.draw();
@@ -408,7 +408,7 @@ Kalendae.prototype = {
 				if (day.month() != month.month()) klass.push(classes.dayOutOfMonth);
 				else if (!(this.blackout(day) || this.direction(day)) || s>0) klass.push(classes.dayActive);
 
-				if (Math.floor(today.diff(day, 'days', true)) === 0) klass.push(classes.dayToday);
+				if (day.yearDay() === today.yearDay()) klass.push(classes.dayToday);
 
 				dateString = day.format(this.settings.dayAttributeFormat);
 				if (opts.dateClassMap[dateString]) klass.push(opts.dateClassMap[dateString]);
@@ -1420,7 +1420,7 @@ var moment = Kalendae.moment = (function (Date, undefined) {
 
         day : function (input) {
             var day = this._d.getDay();
-            return input == null ? day :
+            return (typeof input === 'undefined') ? day :
                 this.add({ d : input - day });
         }
     };
@@ -1428,7 +1428,7 @@ var moment = Kalendae.moment = (function (Date, undefined) {
     // helper for adding shortcuts
     function makeShortcut(name, key) {
         moment.fn[name] = function (input) {
-            if (input != null) {
+            if (typeof input !== 'undefined') {
                 this._d['set' + key](input);
                 return this;
             } else {
@@ -1453,7 +1453,22 @@ var moment = Kalendae.moment = (function (Date, undefined) {
 	return moment;
 })(Date);
 
-today = moment().hours(0).minutes(0).seconds(0).milliseconds(0);
+
+//function to reset the date object to 00:00 GMT
+moment.fn.stripTime = function () {
+	this._d = new Date(Math.floor(this._d.valueOf() / 86400000) * 86400000);
+	return this;
+}
+
+
+//function to get the total number of days since the epoch.
+moment.fn.yearDay = function (input) {
+	var yearday = Math.floor(this._d / 86400000);
+    return (typeof input === 'undefined') ? yearday :
+        this.add({ d : input - yearday });
+}
+
+today = moment().stripTime();
 
 if (typeof jQuery !== 'undefined') {
 	jQuery.fn.kalendae = function (options) {
