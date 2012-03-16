@@ -617,4 +617,3 @@ var moment = Kalendae.moment = (function (Date, undefined) {
 	return moment;
 })(Date);
 
-today = moment().hours(0).minutes(0).seconds(0).milliseconds(0);

@@ -5,6 +5,7 @@ kal=src/main.js \
 	src/input.js \
 	src/MinPubSub.js \
 	src/moment.js \
+	src/moment.ext.js \
 	src/jq.js
 
 all: build/kalendae.js
