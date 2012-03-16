@@ -13,56 +13,124 @@
 </head>
 <body>
 	<h1>Kalendae</h1>
+	<p>Single Select</p>
 	<script type="text/javascript" charset="utf-8">
-		var k1 = new Kalendae(document.body, {
+		new Kalendae(document.body, {
 			months:1,
-			selected:'2-2-2012',
-			format:'DD-MM-YYYY',
 			mode:'single',
+			selected:Kalendae.moment().subtract({M:1})
+		});
+
+		new Kalendae({
+			attachTo:document.body,
+			months:2,
+			mode:'single',
+			selected:Kalendae.moment().subtract({M:1})
+		});
+		
+		new Kalendae({
+			attachTo:document.body,
+			months:3,
+			mode:'single',
+			selected:Kalendae.moment().subtract({M:1})
+		});
+	</script>
+		
+	<p>Range Select</p>	
+	<script type="text/javascript" charset="utf-8">
+		new Kalendae(document.body, {
+			months:1,
+			mode:'range',
+			selected:[Kalendae.moment().subtract({M:1}), Kalendae.moment().add({M:1})]
+		});
+
+		new Kalendae({
+			attachTo:document.body,
+			months:2,
+			mode:'range',
+			selected:[Kalendae.moment().subtract({M:1}), Kalendae.moment().add({M:1})]
+		});
+		
+		new Kalendae({
+			attachTo:document.body,
+			months:3,
+			mode:'range',
+			selected:[Kalendae.moment().subtract({M:1}), Kalendae.moment().add({M:1})]
+		});
+	</script>
+
+	<p>Multi-Select</p>
+	<script type="text/javascript" charset="utf-8">
+		new Kalendae(document.body, {
+			months:1,
+			mode:'multiple',
+			selected:[Kalendae.moment().subtract({M:1}), Kalendae.moment().add({M:1})]
+		});
+
+		new Kalendae({
+			attachTo:document.body,
+			months:2,
+			mode:'multiple',
+			selected:[Kalendae.moment().subtract({M:1}), Kalendae.moment().add({M:1})]
+		});
+		
+		new Kalendae({
+			attachTo:document.body,
+			months:3,
+			mode:'multiple',
+			selected:[Kalendae.moment().subtract({M:1}), Kalendae.moment().add({M:1})]
+		});
+		
+
+	</script>
+
+	<hr>
+	<p>Blackout and Direction Tests</p>
+	
+	<script type="text/javascript" charset="utf-8">
+		//direction
+		new Kalendae(document.body, {
+			months:3,
+			direction:'future'
+		});
+
+		//direction
+		new Kalendae(document.body, {
+			months:3,
+			direction:'past'
+		});
+
+		//blackout
+		new Kalendae(document.body, {
 			blackout: function (date) {
 				return Kalendae.moment(date).date() % 2; //blackout every other day
-			},
-			dateClassMap: {
-				'2012-02-22':'closed'
 			}
 		});
 
-		var k2 = new Kalendae({
-			attachTo:document.body,
-			months:2,
-			selected:'2/3/2012 - 3/15/2012',
-			mode:'range',
-			/*
-			subscribe: {
-				'change':function () {
-					console.log('change', this.getSelected());
-				},
-				'date-clicked':function (date) {
-					console.log('date-clicked', date);
-				},
-				'view-changed':function (direction) {
-					console.log('view-changed', direction);
-				}
-			}
-			*/
+		//blackout AND direction
+		new Kalendae(document.body, {
+			direction:'future',
 			blackout: function (date) {
 				return [1,0,0,0,0,0,1][Kalendae.moment(date).day()]; //blackout weekends
 			}
 		});
-		
-		var k3 = new Kalendae({
-			attachTo:document.body,
-			months:3,
-			selected:'2/3/2012, 3/15/2012, 4/2/2012',
-			mode:'multiple',
-			blackout: function (date) {
-				return Kalendae.moment(date).format('w') % 2;  //blackout every other week
-			},
-			direction: 'past'
-		});
-
+				
 	</script>
 
+
+
+	<hr>
+	<p>Class Map Test</p>
+	
+	<script type="text/javascript" charset="utf-8">
+		//direction
+		var classMap = [];
+			classMap[ Kalendae.moment().add({d:5}).format('YYYY-MM-DD') ] = 'closed';
+			
+		new Kalendae(document.body, {
+			dateClassMap: classMap
+		});
+	</script>
 	<hr>
 
 	Click this input element: <input type="text" value="2/16/2012" id="input1">
