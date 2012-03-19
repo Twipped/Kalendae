@@ -75,7 +75,22 @@ var util = Kalendae.util = {
 		if (!(elem = util.$(elem))) return;
 		elem.className = util.trimString(elem.className.replace(new RegExp("(^|\\s+)" + className + "(\\s+|$)"), ' '));
 	},
-
+		
+	filterResults: function(n_win, n_docel, n_body) {
+  	var n_result = n_win ? n_win : 0;
+  	if (n_docel && (!n_result || (n_result > n_docel)))
+  		n_result = n_docel;
+  	return n_body && (!n_result || (n_result > n_body)) ? n_body : n_result;
+  },
+	
+	scrollTop: function() {
+  	return util.filterResults (
+  		window.pageYOffset ? window.pageYOffset : 0,
+  		document.documentElement ? document.documentElement.scrollTop : 0,
+  		document.body ? document.body.scrollTop : 0
+  	);
+  },	
+	
 	getPosition: function (elem, isInner) {
 		var x = elem.offsetLeft,
 			y = elem.offsetTop,
@@ -87,7 +102,7 @@ var util = Kalendae.util = {
 				y += elem.offsetTop;
 			}
 		}
-		
+		y += util.scrollTop();
 		r[0] = r.left = x;
 		r[1] = r.top = y;
 		return r;
