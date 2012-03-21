@@ -365,7 +365,7 @@ Kalendae.prototype = {
 	
 	draw : function draw() {
 		// return;
-		var month = moment(this.viewStartDate),
+		var month = moment(this.viewStartDate).hours(12), //force middle of the day to avoid any weird date shifts
 			day,
 			classes = this.classes,
 			cal,
