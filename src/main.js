@@ -97,8 +97,10 @@ var Kalendae = function (targetElement, options) {
 		
 		//title bar
 		$title = util.make('div', {'class':classes.title}, $cal);
-		util.make('a', {'class':classes.previous}, $title);	//previous button
-		util.make('a', {'class':classes.next}, $title);		//next button
+		util.make('a', {'class':classes.previousYear}, $title);	//previous button
+		util.make('a', {'class':classes.previousMonth}, $title);	//previous button
+		util.make('a', {'class':classes.nextYear}, $title);		//next button
+		util.make('a', {'class':classes.nextMonth}, $title);		//next button
 		$caption = util.make('span', {'class':classes.caption}, $title);	//title caption
 		
 		//column headers
@@ -130,22 +132,39 @@ var Kalendae = function (targetElement, options) {
 	
 	util.addEvent($container, 'mousedown', function (event, target) {
 		var clickedDate;
-		if (util.hasClassName(target, classes.next)) {
+		if (util.hasClassName(target, classes.nextMonth)) {
 		//NEXT MONTH BUTTON
-			if (!self.disableNext && self.publish('view-changed', self, ['next']) !== false) {
+			if (!self.disableNext && self.publish('view-changed', self, ['next-month']) !== false) {
 				self.viewStartDate.add('months',1);
 				self.draw();
 			}
 			return false;			
 			
-		} else if (util.hasClassName(target, classes.previous)) {
+		} else if (util.hasClassName(target, classes.previousMonth)) {
 		//PREVIOUS MONTH BUTTON
-			if (!self.disablePrevious && self.publish('view-changed', self, ['previous']) !== false) {
+			if (!self.disablePreviousMonth && self.publish('view-changed', self, ['previous-month']) !== false) {
 				self.viewStartDate.subtract('months',1);
 				self.draw();
 			}
 			return false;
 			
+		} else if (util.hasClassName(target, classes.nextYear)) {
+		//NEXT MONTH BUTTON
+			if (!self.disableNext && self.publish('view-changed', self, ['next-year']) !== false) {
+				self.viewStartDate.add('years',1);
+				self.draw();
+			}
+			return false;			
+
+		} else if (util.hasClassName(target, classes.previousYear)) {
+		//PREVIOUS MONTH BUTTON
+			if (!self.disablePreviousMonth && self.publish('view-changed', self, ['previous-year']) !== false) {
+				self.viewStartDate.subtract('years',1);
+				self.draw();
+			}
+			return false;
+
+
 			
 		} else if (util.hasClassName(target.parentNode, classes.days) && util.hasClassName(target, classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
 		//DAY CLICK
@@ -211,8 +230,10 @@ Kalendae.prototype = {
 		monthMiddle		:'k-middle-month',
 		monthLast		:'k-last-month',
 		title			:'k-title',
-		previous		:'k-previous',
-		next			:'k-next',
+		previousMonth	:'k-btn-previous-month',
+		nextMonth		:'k-btn-next-month',
+		previousYear	:'k-btn-previous-year',
+		nextYear		:'k-btn-next-year',
 		caption			:'k-caption',
 		header			:'k-header',
 		days			:'k-days',
@@ -222,12 +243,16 @@ Kalendae.prototype = {
 		dayInRange		:'k-range',
 		dayToday		:'k-today',
 		monthSeparator	:'k-separator',
-		disablePrevious	:'k-disable-previous',
-		disableNext		:'k-disable-next'
+		disablePreviousMonth	:'k-disable-previous-month-btn',
+		disableNextMonth		:'k-disable-next-month-btn',
+		disablePreviousYear		:'k-disable-previous-year-btn',
+		disableNextYear			:'k-disable-next-year-btn'
 	},
 	
-	disablePrevious: false,
-	disableNext: false,
+	disablePreviousMonth: false,
+	disableNextMonth: false,
+	disablePreviousYear: false,
+	disableNextYear: false,
 	
 	directions: {
 		'past'			:function (date) {return moment(date).yearDay() >= today.yearDay();}, 
@@ -419,24 +444,46 @@ Kalendae.prototype = {
 			if (opts.direction==='today-past' || opts.direction==='past') {
 
 				if (diff <= 0) {
-					this.disableNext = false;
-					util.removeClassName(this.container, classes.disableNext);
+					this.disableNextMonth = false;
+					util.removeClassName(this.container, classes.disableNextMonth);
 				} else {
-					this.disableNext = true;
-					util.addClassName(this.container, classes.disableNext);
+					this.disableNextMonth = true;
+					util.addClassName(this.container, classes.disableNextMonth);
 				}
 
 			} else if (opts.direction==='today-future' || opts.direction==='future') {
 
 				if (diff > opts.months) {
-					this.disablePrevious = false;
-					util.removeClassName(this.container, classes.disablePrevious);
+					this.disablePreviousMonth = false;
+					util.removeClassName(this.container, classes.disablePreviousMonth);
 				} else {
-					this.disablePrevious = true;
-					util.addClassName(this.container, classes.disablePrevious);
+					this.disablePreviousMonth = true;
+					util.addClassName(this.container, classes.disablePreviousMonth);
 				}
 
 			}
+			
+				
+			if (opts.direction==='today-past' || opts.direction==='past') {
+				if (month.add({Y:1}).diff(moment(), 'years') < 0) {
+					this.disableNextYear = false;
+					util.removeClassName(this.container, classes.disableNextYear);
+				} else {
+					this.disableNextYear = true;
+					util.addClassName(this.container, classes.disableNextYear);
+				}
+
+			} else if (opts.direction==='today-future' || opts.direction==='future') {
+				if (month.subtract({Y:1}).diff(moment(), 'years') > 0) {
+					this.disablePreviousYear = false;
+					util.removeClassName(this.container, classes.disablePreviousYear);
+				} else {
+					this.disablePreviousYear = true;
+					util.addClassName(this.container, classes.disablePreviousYear);
+				}
+
+			}
+			
 		}
 	}
 }

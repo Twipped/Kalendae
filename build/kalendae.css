@@ -27,21 +27,36 @@
 .kalendae .k-calendar {display: inline-block;zoom:1;*display:inline;width:155px;vertical-align:top;}
 .kalendae .k-separator {display: inline-block;zoom:1;*display:inline;width:2px;vertical-align:top;background:#ddd;height:155px;margin:0px 10px;}
 
-.kalendae .k-title {text-align:center;}
-.kalendae .k-caption {font-size:12px;line-height:17px;}
+.kalendae .k-title {text-align:center;white-space:nowrap;position:relative;height:18px;}
+.kalendae .k-caption {font-size:12px;line-height:18px;}
 
-.kalendae .k-previous,
-.kalendae .k-next {width:16px;height:16px;cursor:pointer;background:#666 url('arrows.png') no-repeat top left;}
-.kalendae .k-previous {float:left;}
-.kalendae .k-next {float:right;background-position:top right}
+.kalendae .k-btn-previous-month,
+.kalendae .k-btn-next-month {width:16px;height:16px;cursor:pointer;background:#777 url('arrows.png') no-repeat center left;position:absolute;top:0;}
+.kalendae .k-btn-previous-month {left:16px;}
+.kalendae .k-btn-next-month {right:16px;background-position:center right;}
 
-.kalendae .k-previous:hover,
-.kalendae .k-next:hover {background-color:#7EA0E2;}
+.kalendae .k-btn-previous-year,
+.kalendae .k-btn-next-year {width:16px;height:16px;cursor:pointer;background:#333 url('arrows.png') no-repeat center left;position:absolute;top:0;}
+.kalendae .k-btn-previous-year {left:0;}
+.kalendae .k-btn-next-year {right:0;background-position:center right;}
 
-.kalendae .k-first-month .k-next,
-.kalendae .k-middle-month .k-next,
-.kalendae .k-middle-month .k-previous,
-.kalendae .k-last-month .k-previous {display:none;}
+.kalendae .k-btn-previous-month:hover,
+.kalendae .k-btn-next-month:hover {background-color:#7EA0E2;}
+
+.kalendae .k-btn-previous-year:hover,
+.kalendae .k-btn-next-year:hover {background-color:#6FDF81;}
+
+
+.kalendae .k-first-month .k-btn-next-month,
+.kalendae .k-middle-month .k-btn-next-month,
+.kalendae .k-middle-month .k-btn-previous-month,
+.kalendae .k-last-month .k-btn-previous-month {display:none;}
+
+.kalendae .k-first-month .k-btn-next-year,
+.kalendae .k-middle-month .k-btn-next-year,
+.kalendae .k-middle-month .k-btn-previous-year,
+.kalendae .k-last-month .k-btn-previous-year {display:none;}
+
 
 .kalendae .k-title,
 .kalendae .k-header,
@@ -51,11 +66,10 @@
 	overflow:hidden;
 }
 
-.kalendae.k-disable-next .k-next {
-    display:none;
-}
-
-.kalendae.k-disable-previous .k-previous {
+.kalendae.k-disable-next-month-btn .k-btn-next-month,
+.kalendae.k-disable-previous-month-btn .k-btn-previous-month,
+.kalendae.k-disable-next-year-btn .k-btn-next-year,
+.kalendae.k-disable-previous-year-btn .k-btn-previous-year {
     display:none;
 }
 
@@ -64,7 +78,6 @@
 .kalendae .k-days span {
 	float:left;
 	margin:1px 1px;
-/*	outline:1px solid red;*/
 }
 
 .kalendae .k-header span {
