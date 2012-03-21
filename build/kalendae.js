@@ -177,7 +177,7 @@ var Kalendae = function (targetElement, options) {
 			
 		} else if (util.hasClassName(target.parentNode, classes.days) && util.hasClassName(target, classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
 		//DAY CLICK
-			clickedDate = moment(clickedDate, opts.dayAttributeFormat);
+			clickedDate = moment(clickedDate, opts.dayAttributeFormat).hours(12);
 			if (self.publish('date-clicked', self, [clickedDate]) !== false) {
 			
 				switch (opts.mode) {
@@ -357,7 +357,7 @@ Kalendae.prototype = {
 	},
 	
 	addSelected : function (date, draw) {
-		date = moment(date);
+		date = moment(date).hours(12);
 		switch (this.settings.mode) {
 			case 'multiple':
 				if (!this.isSelected(date)) this._sel.push(date);
@@ -509,7 +509,7 @@ var parseDates = function (input, delimiter, format) {
 	var c = input.length;
 	i = 0;
 	do {
-		if (input[i]) output.push( moment(input[i], format).hours(0).minutes(0).seconds(0).milliseconds(0) );
+		if (input[i]) output.push( moment(input[i], format).hours(12) );
 	} while (++i < c);
 	
 	return output;
