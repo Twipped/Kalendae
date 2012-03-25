@@ -30,10 +30,23 @@
 	position:absolute;
 	top:-8px;
 	right:-8px;
-	width:20px;
-	height:20px;
+	width:16px;
+	height:16px;
+	background:white;
+	border:2px solid #ccc;
+	color:#999;
+	line-height:17px;
+	text-align:center;
+	font-size:13px;
+	border-radius:10px;
+	box-shadow:0 1px 3px rgba(0,0,0,0.75);
 	cursor:pointer;
-	background:url('close.png') no-repeat top left;
+}
+.kalendae .k-btn-close:after {content:"\2716";}
+.kalendae .k-btn-close:hover {
+	color:#7EA0E2;
+	background:white;
+	border-color:#7EA0E2;
 }
 
 /** Month Container **/
@@ -180,4 +193,12 @@
 .kalendae.ie8.k-floating {
 	border:1px solid #ccc;
 }
+
+.kalendae.ie8 .k-btn-close {
+	width:20px;
+	height:20px;
+	border:none;
+	background:url('close.png') no-repeat top left;
+}
+.kalendae.ie8 .k-btn-close:after {display:none;}
 
