@@ -15,14 +15,14 @@ Kalendae is an attempt to do something that nobody has yet been able to do: make
 
 ##Screenshots
 
-Single month, single day selection, no blackouts:   
-![screenshot](http://i.imgur.com/Haziu.png)
+Default calendar, no options defined.
+![screenshot](http://i.imgur.com/Ig52z.png)
 
-Two month, multiple selection with weekends blacked out:   
-![screenshot](http://i.imgur.com/GHdvW.png)
+Two month calendar attached to an input element.
+![screenshot](http://i.imgur.com/GIR3g.png)
 
-Two month, range selection with weekends blacked out:   
-![screenshot](http://i.imgur.com/Zr5oI.png)
+Two month, range selection, future dates only, with weekends blacked out:
+![screenshot](http://i.imgur.com/JzBc7.png)
 
 ###[View The Demo Page](http://chipersoft.github.com/Kalendae/)
 
