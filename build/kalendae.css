@@ -30,6 +30,17 @@
 .kalendae .k-title {text-align:center;white-space:nowrap;position:relative;height:18px;}
 .kalendae .k-caption {font-size:12px;line-height:18px;}
 
+.kalendae .k-btn-close {
+	position:absolute;
+	top:-8px;
+	right:-8px;
+	width:20px;
+	height:20px;
+	cursor:pointer;
+	background:url('close.png') no-repeat top left;
+}
+
+
 .kalendae .k-btn-previous-month,
 .kalendae .k-btn-next-month {width:16px;height:16px;cursor:pointer;background:#777 url('arrows.png') no-repeat center left;position:absolute;top:0;}
 .kalendae .k-btn-previous-month {left:16px;}

@@ -19,6 +19,14 @@ Kalendae.Input = function (targetElement, options) {
 	//call our parent constructor
 	Kalendae.call(self, opts);
 	
+	//create the close button
+	if (opts.closeButton) {
+		var $closeButton = util.make('a', {'class':classes.closeButton}, self.container)
+		util.addEvent($closeButton, 'click', function () {
+			$input.blur();
+		});
+	}
+	
 	if (overwriteInput) $input.value = self.getSelected();
 	
 	var $container = self.container,
@@ -60,12 +68,13 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 	defaults : util.merge(Kalendae.prototype.defaults, {
 		format: 'MM/DD/YYYY',
 		side: 'bottom',
+		closeButton: true,
 		offsetLeft: 0,
 		offsetTop: 0
 	}),
 	classes : util.merge(Kalendae.prototype.classes, {
-		positioned : 'k-floating'
-		
+		positioned : 'k-floating',
+		closeButton: 'k-btn-close'
 	}),
 	
 	show : function () {
