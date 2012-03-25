@@ -2,7 +2,7 @@
  *	Kalendae, a framework agnostic javascript date picker           *
  *	Copyright(c) 2012 Jarvis Badgley (chipersoft@gmail.com)         *
  *	http://github.com/ChiperSoft/Kalendae                           *
- *	Version 0.1                                                     *
+ *	Version 0.2                                                     *
  ********************************************************************/
 
 (function (undefined) {
@@ -29,6 +29,8 @@ var Kalendae = function (targetElement, options) {
 		$span,
 		i = 0,
 		j = opts.months;
+	
+	if (util.isIE8()) util.addClassName($container, 'ie8');
 	
 	//generate the column headers (Su, Mo, Tu, etc)
 	i = 7;
@@ -520,6 +522,11 @@ var parseDates = function (input, delimiter, format) {
 window.Kalendae = Kalendae;
 
 var util = Kalendae.util = {
+	
+	isIE8: function() {
+	    return !!( (/msie 8./i).test(navigator.appVersion) && !(/opera/i).test(navigator.userAgent) && window.ActiveXObject && XDomainRequest && !window.msPerformance );
+	},
+	
 // ELEMENT FUNCTIONS
 
 	$: function (elem) {
@@ -726,6 +733,14 @@ Kalendae.Input = function (targetElement, options) {
 	//call our parent constructor
 	Kalendae.call(self, opts);
 	
+	//create the close button
+	if (opts.closeButton) {
+		var $closeButton = util.make('a', {'class':classes.closeButton}, self.container)
+		util.addEvent($closeButton, 'click', function () {
+			$input.blur();
+		});
+	}
+	
 	if (overwriteInput) $input.value = self.getSelected();
 	
 	var $container = self.container,
@@ -767,12 +782,13 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 	defaults : util.merge(Kalendae.prototype.defaults, {
 		format: 'MM/DD/YYYY',
 		side: 'bottom',
+		closeButton: true,
 		offsetLeft: 0,
 		offsetTop: 0
 	}),
 	classes : util.merge(Kalendae.prototype.classes, {
-		positioned : 'k-floating'
-		
+		positioned : 'k-floating',
+		closeButton: 'k-btn-close'
 	}),
 	
 	show : function () {
