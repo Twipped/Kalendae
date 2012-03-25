@@ -15,13 +15,13 @@ Kalendae is an attempt to do something that nobody has yet been able to do: make
 
 ##Screenshots
 
-Default calendar, no options defined.
+Default calendar, no options defined.  
 ![screenshot](http://i.imgur.com/Ig52z.png)
 
-Two month calendar attached to an input element.
+Two month calendar attached to an input element.  
 ![screenshot](http://i.imgur.com/GIR3g.png)
 
-Two month, range selection, future dates only, with weekends blacked out:
+Two month, range selection, future dates only, with weekends blacked out:  
 ![screenshot](http://i.imgur.com/JzBc7.png)
 
 ###[View The Demo Page](http://chipersoft.github.com/Kalendae/)
