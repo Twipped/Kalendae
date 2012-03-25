@@ -544,6 +544,16 @@ var util = Kalendae.util = {
 		return elem.offsetWidth > 0 || elem.offsetHeight > 0;
 	},
 	
+	getStyle: function (elem, styleProp) {
+		var y;
+		if (elem.currentStyle) {
+			y = elem.currentStyle[styleProp];
+		} else if (window.getComputedStyle) {
+			y = window.getComputedStyle(elem, null)[styleProp];
+		}
+		return y;
+	},
+	
 	domReady:function (f){/in/.test(document.readyState) ? setTimeout(function() {util.domReady(f);},9) : f()},
 
 	// Adds a listener callback to a DOM element which is fired on a specified
@@ -596,6 +606,13 @@ var util = Kalendae.util = {
 		elem.className = util.trimString(elem.className.replace(new RegExp("(^|\\s+)" + className + "(\\s+|$)"), ' '));
 	},
 
+	isFixed: function (elem) {
+		do {
+			if (util.getStyle(elem, 'position') === 'fixed') return true;
+		} while ((elem = elem.offsetParent));
+		return false;
+	},
+	
 	getPosition: function (elem, isInner) {
 		var x = elem.offsetLeft,
 			y = elem.offsetTop,
@@ -786,6 +803,8 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 				break;
 		}
 		
+		style.position = util.isFixed($input) ? 'fixed' : 'absolute';
+				
 	},
 	
 	hide : function () {

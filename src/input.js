@@ -96,6 +96,8 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 				break;
 		}
 		
+		style.position = util.isFixed($input) ? 'fixed' : 'absolute';
+				
 	},
 	
 	hide : function () {
