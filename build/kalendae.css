@@ -148,6 +148,14 @@
 	text-decoration:underline;
 }
 
+/** Selectable but not selected day  **/
+.kalendae .k-days span.k-active {
+	border-color:#ddd;
+	background-color:#fff;
+	cursor:pointer;
+	color:#333;
+}
+
 /** Selected day, when outside the selectable area **/
 .kalendae .k-days span.k-selected {
 	border-color:#1072A5;
@@ -170,14 +178,6 @@
 .kalendae .k-days span.k-range.k-active {
 	background:#C4D4F1;
 	border-color:#19AEFE;
-	color:#333;
-}
-
-/** Selectable but not selected day  **/
-.kalendae .k-days span.k-active {
-	border-color:#ddd;
-	background-color:#fff;
-	cursor:pointer;
 	color:#333;
 }
 
