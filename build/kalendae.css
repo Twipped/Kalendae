@@ -173,3 +173,11 @@
 /** Days outside of the month view (before the first day of the month, after the last day of the month) **/
 .kalendae .k-days span.k-out-of-month {color:#ddd;}
 
+
+
+/*-------------------------------------IE8 ONLY CODE BELOW THIS LINE--------------------------------------------*/
+
+.kalendae.ie8.k-floating {
+	border:1px solid #ccc;
+}
+
