@@ -21,6 +21,8 @@ var Kalendae = function (targetElement, options) {
 		i = 0,
 		j = opts.months;
 	
+	if (util.isIE8()) util.addClassName($container, 'ie8');
+	
 	//generate the column headers (Su, Mo, Tu, etc)
 	i = 7;
 	while (i--) {

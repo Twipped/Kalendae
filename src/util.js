@@ -1,5 +1,10 @@
 
 var util = Kalendae.util = {
+	
+	isIE8: function() {
+	    return !!( (/msie 8./i).test(navigator.appVersion) && !(/opera/i).test(navigator.userAgent) && window.ActiveXObject && XDomainRequest && !window.msPerformance );
+	},
+	
 // ELEMENT FUNCTIONS
 
 	$: function (elem) {
