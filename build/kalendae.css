@@ -64,24 +64,27 @@
 .kalendae .k-btn-previous-month,
 .kalendae .k-btn-next-month,
 .kalendae .k-btn-previous-year,
-.kalendae .k-btn-next-year {width:16px;height:16px;cursor:pointer;background:#777 url('arrows.png') no-repeat center left;position:absolute;top:0;}
+.kalendae .k-btn-next-year {width:16px;height:16px;cursor:pointer;position:absolute;top:0;color:#777;font-size:20px;line-height:14px;}
 
 .kalendae .k-btn-previous-year {left:0;}
 .kalendae .k-btn-previous-month {left:16px;}
 .kalendae .k-btn-next-month {right:16px;}
 .kalendae .k-btn-next-year {right:0;}
 
-.kalendae .k-btn-previous-year,
-.kalendae .k-btn-next-year {background-color:#333;}
+.kalendae .k-btn-previous-month:after {content:"\276E";}
+.kalendae .k-btn-next-month:after {content:"\276F";}
 
-.kalendae .k-btn-next-month,
-.kalendae .k-btn-next-year {background-position:center right;}
+.kalendae .k-btn-previous-year:after {content:"\276E\276E";}
+.kalendae .k-btn-next-year:after {content:"\276F\276F";}
+
+.kalendae .k-btn-previous-year,
+.kalendae .k-btn-next-year {letter-spacing:-4px;text-align:left;}
 
 .kalendae .k-btn-previous-month:hover,
-.kalendae .k-btn-next-month:hover {background-color:#7EA0E2;}
+.kalendae .k-btn-next-month:hover {color:#7EA0E2;}
 
 .kalendae .k-btn-previous-year:hover,
-.kalendae .k-btn-next-year:hover {background-color:#6FDF81;}
+.kalendae .k-btn-next-year:hover {color:#6FDF81;}
 
 /** Remove extra buttons when calendar shows multiple months **/
 .kalendae .k-first-month .k-btn-next-month,
@@ -201,4 +204,26 @@
 	background:url('close.png') no-repeat top left;
 }
 .kalendae.ie8 .k-btn-close:after {display:none;}
+
+.kalendae.ie8 .k-btn-previous-month,
+.kalendae.ie8 .k-btn-next-month,
+.kalendae.ie8 .k-btn-previous-year,
+.kalendae.ie8 .k-btn-next-year {width:16px;height:16px;cursor:pointer;background:#777 url('arrows.png') no-repeat center left;position:absolute;top:0;}
+
+.kalendae.ie8 .k-btn-next-month,
+.kalendae.ie8 .k-btn-next-year {background-position:center right;}
+
+.kalendae.ie8 .k-btn-previous-month:hover,
+.kalendae.ie8 .k-btn-next-month:hover {background-color:#7EA0E2;}
+
+.kalendae.ie8 .k-btn-previous-year,
+.kalendae.ie8 .k-btn-next-year {background-color:#333;}
+
+.kalendae.ie8 .k-btn-previous-year:hover,
+.kalendae.ie8 .k-btn-next-year:hover {background-color:#6FDF81;}
+
+.kalendae.ie8 .k-btn-previous-month:after,
+.kalendae.ie8 .k-btn-next-month:after,
+.kalendae.ie8 .k-btn-previous-year:after,
+.kalendae.ie8 .k-btn-next-year:after {display:none;}
 
