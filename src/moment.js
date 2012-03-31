@@ -1,10 +1,9 @@
-// Moment.js
+// moment.js
 // Altered slightly for use in Kalendae.js
-//
-// (c) 2011 Tim Wood
-// Moment.js is freely distributable under the terms of the MIT license.
-//
-// Version 1.3.0
+// version : 1.5.0
+// author : Tim Wood
+// license : MIT
+// momentjs.com
 
 var moment = Kalendae.moment = (function (Date, undefined) {
 
@@ -14,18 +13,27 @@ var moment = Kalendae.moment = (function (Date, undefined) {
         hasModule = (typeof module !== 'undefined'),
         paramsToParse = 'months|monthsShort|monthsParse|weekdays|weekdaysShort|longDateFormat|calendar|relativeTime|ordinal|meridiem'.split('|'),
         i,
+        jsonRegex = /^\/?Date\((\-?\d+)/i,
         charactersToReplace = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|dddd?|do?|w[o|w]?|YYYY|YY|a|A|hh?|HH?|mm?|ss?|zz?|ZZ?|LT|LL?L?L?)/g,
         nonuppercaseLetters = /[^A-Z]/g,
         timezoneRegex = /\([A-Za-z ]+\)|:[0-9]{2} [A-Z]{3} /g,
         tokenCharacters = /(\\)?(MM?M?M?|dd?d?d|DD?D?D?|YYYY|YY|a|A|hh?|HH?|mm?|ss?|ZZ?|T)/g,
         inputCharacters = /(\\)?([0-9]+|([a-zA-Z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+|([\+\-]\d\d:?\d\d))/gi,
+        isoRegex = /\d{4}.\d\d.\d\d(T(\d\d(.\d\d(.\d\d)?)?)?([\+\-]\d\d:?\d\d)?)?/,
+        isoFormat = 'YYYY-MM-DDTHH:mm:ssZ',
+        isoTimes = [
+            ['HH:mm:ss', /T\d\d:\d\d:\d\d/],
+            ['HH:mm', /T\d\d:\d\d/],
+            ['HH', /T\d\d/]
+        ],
         timezoneParseRegex = /([\+\-]|\d\d)/gi,
-        VERSION = "1.3.0",
+        VERSION = "1.5.0",
         shortcuts = 'Month|Date|Hours|Minutes|Seconds|Milliseconds'.split('|');
 
     // Moment prototype object
-    function Moment(date) {
+    function Moment(date, isUTC) {
         this._d = date;
+        this._isUTC = !!isUTC;
     }
 
     // left zero fill a number
@@ -44,7 +52,7 @@ var moment = Kalendae.moment = (function (Date, undefined) {
             input = isString ? {} : _input,
             ms, d, M, currentDate;
         if (isString && val) {
-            input[_input] = val;
+            input[_input] = +val;
         }
         ms = (input.ms || input.milliseconds || 0) +
             (input.s || input.seconds || 0) * 1e3 + // 1000
@@ -83,16 +91,15 @@ var moment = Kalendae.moment = (function (Date, undefined) {
     }
 
     // format date using native date object
-    function formatDate(date, inputString) {
-        var m = new Moment(date),
-            currentMonth = m.month(),
+    function formatMoment(m, inputString) {
+        var currentMonth = m.month(),
             currentDate = m.date(),
             currentYear = m.year(),
             currentDay = m.day(),
             currentHours = m.hours(),
             currentMinutes = m.minutes(),
             currentSeconds = m.seconds(),
-            currentZone = m.zone(),
+            currentZone = -m.zone(),
             ordinal = moment.ordinal,
             meridiem = moment.meridiem;
         // check if the character is a format
@@ -186,18 +193,18 @@ var moment = Kalendae.moment = (function (Date, undefined) {
             case 'zz' :
                 // depreciating 'zz' fall through to 'z'
             case 'z' :
-                return (date.toString().match(timezoneRegex) || [''])[0].replace(nonuppercaseLetters, '');
+                return (m._d.toString().match(timezoneRegex) || [''])[0].replace(nonuppercaseLetters, '');
             case 'Z' :
-                return (currentZone > 0 ? '+' : '-') + leftZeroFill(~~(Math.abs(currentZone) / 60), 2) + ':' + leftZeroFill(~~(Math.abs(currentZone) % 60), 2);
+                return (currentZone < 0 ? '-' : '+') + leftZeroFill(~~(Math.abs(currentZone) / 60), 2) + ':' + leftZeroFill(~~(Math.abs(currentZone) % 60), 2);
             case 'ZZ' :
-                return (currentZone > 0 ? '+' : '-') + leftZeroFill(~~(10 * Math.abs(currentZone) / 6), 4);
+                return (currentZone < 0 ? '-' : '+') + leftZeroFill(~~(10 * Math.abs(currentZone) / 6), 4);
             // LONG DATES
             case 'L' :
             case 'LL' :
             case 'LLL' :
             case 'LLLL' :
             case 'LT' :
-                return formatDate(date, moment.longDateFormat[input]);
+                return formatMoment(m, moment.longDateFormat[input]);
             // DEFAULT
             default :
                 return input.replace(/(^\[)|(\\)|\]$/g, "");
@@ -214,6 +221,7 @@ var moment = Kalendae.moment = (function (Date, undefined) {
             isUsingUTC = false,
             inputParts = string.match(inputCharacters),
             formatParts = format.match(tokenCharacters),
+            len = Math.min(inputParts.length, formatParts.length),
             i,
             isPm;
 
@@ -288,22 +296,22 @@ var moment = Kalendae.moment = (function (Date, undefined) {
                 // fall through to ZZ
             case 'ZZ' :
                 isUsingUTC = true;
-                a = input.match(timezoneParseRegex);
-                if (a[1]) {
+                a = (input || '').match(timezoneParseRegex);
+                if (a && a[1]) {
                     timezoneHours = ~~a[1];
                 }
-                if (a[2]) {
+                if (a && a[2]) {
                     timezoneMinutes = ~~a[2];
                 }
                 // reverse offsets
-                if (a[0] === '-') {
+                if (a && a[0] === '+') {
                     timezoneHours = -timezoneHours;
                     timezoneMinutes = -timezoneMinutes;
                 }
                 break;
             }
         }
-        for (i = 0; i < formatParts.length; i++) {
+        for (i = 0; i < len; i++) {
             addTime(formatParts[i], inputParts[i]);
         }
         // handle am pm
@@ -346,7 +354,7 @@ var moment = Kalendae.moment = (function (Date, undefined) {
             curScore;
         for (i = 0; i < formats.length; i++) {
             curDate = makeDateFromStringAndFormat(string, formats[i]);
-            curScore = compareArrays(inputParts, formatDate(curDate, formats[i]).match(inputCharacters));
+            curScore = compareArrays(inputParts, formatMoment(new Moment(curDate), formats[i]).match(inputCharacters));
             if (curScore < scoreToBeat) {
                 scoreToBeat = curScore;
                 output = curDate;
@@ -355,12 +363,57 @@ var moment = Kalendae.moment = (function (Date, undefined) {
         return output;
     }
 
+    // date from iso format
+    function makeDateFromString(string) {
+        var format = 'YYYY-MM-DDT',
+            i;
+        if (isoRegex.exec(string)) {
+            for (i = 0; i < 3; i++) {
+                if (isoTimes[i][1].exec(string)) {
+                    format += isoTimes[i][0];
+                    break;
+                }
+            }
+            return makeDateFromStringAndFormat(string, format + 'Z');
+        }
+        return new Date(string);
+    }
+
+    // helper function for _date.from() and _date.fromNow()
+    function substituteTimeAgo(string, number, withoutSuffix) {
+        var rt = moment.relativeTime[string];
+        return (typeof rt === 'function') ?
+            rt(number || 1, !!withoutSuffix, string) :
+            rt.replace(/%d/i, number || 1);
+    }
+
+    function relativeTime(milliseconds, withoutSuffix) {
+        var seconds = round(Math.abs(milliseconds) / 1000),
+            minutes = round(seconds / 60),
+            hours = round(minutes / 60),
+            days = round(hours / 24),
+            years = round(days / 365),
+            args = seconds < 45 && ['s', seconds] ||
+                minutes === 1 && ['m'] ||
+                minutes < 45 && ['mm', minutes] ||
+                hours === 1 && ['h'] ||
+                hours < 22 && ['hh', hours] ||
+                days === 1 && ['d'] ||
+                days <= 25 && ['dd', days] ||
+                days <= 45 && ['M'] ||
+                days < 345 && ['MM', round(days / 30)] ||
+                years === 1 && ['y'] || ['yy', years];
+        args[2] = withoutSuffix;
+        return substituteTimeAgo.apply({}, args);
+    }
+
     moment = function (input, format) {
-        if (input === null) {
+        if (input === null || input === '') {
             return null;
         }
-        var date;
-        // parse UnderscoreDate object
+        var date,
+            matched;
+        // parse Moment object
         if (input && input._d instanceof Date) {
             date = new Date(+input._d);
         // parse string and format
@@ -370,18 +423,67 @@ var moment = Kalendae.moment = (function (Date, undefined) {
             } else {
                 date = makeDateFromStringAndFormat(input, format);
             }
-        // parse everything else
+        // evaluate it as a JSON-encoded date
         } else {
+            matched = jsonRegex.exec(input);
             date = input === undefined ? new Date() :
+                matched ? new Date(+matched[1]) :
                 input instanceof Date ? input :
                 isArray(input) ? dateFromArray(input) :
+                typeof input === 'string' ? makeDateFromString(input) :
                 new Date(input);
         }
         return new Moment(date);
     };
 
+    // creating with utc
+    moment.utc = function (input, format) {
+        if (isArray(input)) {
+            return new Moment(new Date(Date.UTC.apply({}, input)), true);
+        }
+        return (format && input) ? moment(input + ' 0', format + ' Z').utc() : moment(input).utc();
+    };
+
+    // humanizeDuration
+    moment.humanizeDuration = function (num, type, withSuffix) {
+        var difference = +num,
+            rel = moment.relativeTime,
+            output;
+        switch (type) {
+        case "seconds" :
+            difference *= 1000; // 1000
+            break;
+        case "minutes" :
+            difference *= 60000; // 60 * 1000
+            break;
+        case "hours" :
+            difference *= 3600000; // 60 * 60 * 1000
+            break;
+        case "days" :
+            difference *= 86400000; // 24 * 60 * 60 * 1000
+            break;
+        case "weeks" :
+            difference *= 604800000; // 7 * 24 * 60 * 60 * 1000
+            break;
+        case "months" :
+            difference *= 2592000000; // 30 * 24 * 60 * 60 * 1000
+            break;
+        case "years" :
+            difference *= 31536000000; // 365 * 24 * 60 * 60 * 1000
+            break;
+        default :
+            withSuffix = !!type;
+            break;
+        }
+        output = relativeTime(difference, !withSuffix);
+        return withSuffix ? (difference <= 0 ? rel.past : rel.future).replace(/%s/i, output) : output;
+    };
+
     // version number
     moment.version = VERSION;
+
+    // default format
+    moment.defaultFormat = isoFormat;
 
     // language switching and caching
     moment.lang = function (key, values) {
@@ -460,33 +562,10 @@ var moment = Kalendae.moment = (function (Date, undefined) {
         }
     });
 
-    // helper function for _date.from() and _date.fromNow()
-    function substituteTimeAgo(string, number, withoutSuffix) {
-        var rt = moment.relativeTime[string];
-        return (typeof rt === 'function') ?
-            rt(number || 1, !!withoutSuffix, string) :
-            rt.replace(/%d/i, number || 1);
-    }
-
-    function relativeTime(milliseconds, withoutSuffix) {
-        var seconds = round(Math.abs(milliseconds) / 1000),
-            minutes = round(seconds / 60),
-            hours = round(minutes / 60),
-            days = round(hours / 24),
-            years = round(days / 365),
-            args = seconds < 45 && ['s', seconds] ||
-                minutes === 1 && ['m'] ||
-                minutes < 45 && ['mm', minutes] ||
-                hours === 1 && ['h'] ||
-                hours < 22 && ['hh', hours] ||
-                days === 1 && ['d'] ||
-                days <= 25 && ['dd', days] ||
-                days <= 45 && ['M'] ||
-                days < 345 && ['MM', round(days / 30)] ||
-                years === 1 && ['y'] || ['yy', years];
-        args[2] = withoutSuffix;
-        return substituteTimeAgo.apply({}, args);
-    }
+    // compare moment object
+    moment.isMoment = function (obj) {
+        return obj instanceof Moment;
+    };
 
     // shortcut for prototype
     moment.fn = Moment.prototype = {
@@ -499,7 +578,7 @@ var moment = Kalendae.moment = (function (Date, undefined) {
             return +this._d;
         },
 
-        nativeDate : function () {
+        'native' : function () {
             return this._d;
         },
 
@@ -511,8 +590,18 @@ var moment = Kalendae.moment = (function (Date, undefined) {
             return this._d;
         },
 
+        utc : function () {
+            this._isUTC = true;
+            return this;
+        },
+
+        local : function () {
+            this._isUTC = false;
+            return this;
+        },
+
         format : function (inputString) {
-            return formatDate(this._d, inputString);
+            return formatMoment(this, inputString ? inputString : moment.defaultFormat);
         },
 
         add : function (input, val) {
@@ -527,13 +616,14 @@ var moment = Kalendae.moment = (function (Date, undefined) {
 
         diff : function (input, val, asFloat) {
             var inputMoment = moment(input),
-                diff = this._d - inputMoment._d,
+                zoneDiff = (this.zone() - inputMoment.zone()) * 6e4,
+                diff = this._d - inputMoment._d - zoneDiff,
                 year = this.year() - inputMoment.year(),
                 month = this.month() - inputMoment.month(),
-                day = this.day() - inputMoment.day(),
+                date = this.date() - inputMoment.date(),
                 output;
             if (val === 'months') {
-                output = year * 12 + month + day / 30;
+                output = year * 12 + month + date / 30;
             } else if (val === 'years') {
                 output = year + month / 12;
             } else {
@@ -542,16 +632,13 @@ var moment = Kalendae.moment = (function (Date, undefined) {
                     val === 'hours' ? diff / 36e5 : // 1000 * 60 * 60
                     val === 'days' ? diff / 864e5 : // 1000 * 60 * 60 * 24
                     val === 'weeks' ? diff / 6048e5 : // 1000 * 60 * 60 * 24 * 7
-                    val === 'days' ? diff / 3600 : diff;
+                    diff;
             }
             return asFloat ? output : round(output);
         },
 
         from : function (time, withoutSuffix) {
-            var difference = this.diff(time),
-                rel = moment.relativeTime,
-                output = relativeTime(difference, withoutSuffix);
-            return withoutSuffix ? output : (difference <= 0 ? rel.past : rel.future).replace(/%s/i, output);
+            return moment.humanizeDuration(this.diff(time), !withoutSuffix);
         },
 
         fromNow : function (withoutSuffix) {
@@ -559,9 +646,7 @@ var moment = Kalendae.moment = (function (Date, undefined) {
         },
 
         calendar : function () {
-            var today = moment(),
-                todayAtZeroHour = moment([today.year(), today.month(), today.date()]),
-                diff = this.diff(todayAtZeroHour, 'days', true),
+            var diff = this.diff(moment().sod(), 'days', true),
                 calendar = moment.calendar,
                 allElse = calendar.sameElse,
                 format = diff < -6 ? allElse :
@@ -579,24 +664,50 @@ var moment = Kalendae.moment = (function (Date, undefined) {
         },
 
         isDST : function () {
-            return this.zone() !== moment([this.year()]).zone();
+            return (this.zone() < moment([this.year()]).zone() || 
+                this.zone() < moment([this.year(), 5]).zone());
         },
 
         day : function (input) {
             var day = this._d.getDay();
             return (typeof input === 'undefined') ? day :
                 this.add({ d : input - day });
+        },
+
+        sod: function () {
+            return this.clone()
+                .hours(0)
+                .minutes(0)
+                .seconds(0)
+                .milliseconds(0);
+        },
+
+        eod: function () {
+            // end of day = start of day plus 1 day, minus 1 millisecond
+            return this.sod().add({
+                d : 1,
+                ms : -1
+            });
+        },
+
+        zone : function () {
+            return this._isUTC ? 0 : this._d.getTimezoneOffset();
+        },
+
+        daysInMonth : function () {
+            return this.clone().month(this.month() + 1).date(0).date();
         }
     };
 
     // helper for adding shortcuts
     function makeShortcut(name, key) {
         moment.fn[name] = function (input) {
+            var utc = this._isUTC ? 'UTC' : '';
             if (typeof input !== 'undefined') {
-                this._d['set' + key](input);
+                this._d['set' + utc + key](input);
                 return this;
             } else {
-                return this._d['get' + key]();
+                return this._d['get' + utc + key]();
             }
         };
     }
@@ -609,11 +720,5 @@ var moment = Kalendae.moment = (function (Date, undefined) {
     // add shortcut for year (uses different syntax than the getter/setter 'year' == 'FullYear')
     makeShortcut('year', 'FullYear');
 
-    // add shortcut for timezone offset (no setter)
-    moment.fn.zone = function () {
-        return this._d.getTimezoneOffset();
-    };
-
 	return moment;
 })(Date);
-
