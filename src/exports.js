@@ -1,7 +1,7 @@
 window['moment'] = moment;
 moment.prototype['clone'] = moment.prototype.clone;
 moment.prototype['valueOf'] = moment.prototype.valueOf;
-moment.prototype['nativeDate'] = moment.prototype.nativeDate;
+moment.prototype['native'] = moment.prototype.native;
 moment.prototype['toString'] = moment.prototype.toString;
 moment.prototype['toDate'] = moment.prototype.toDate;
 moment.prototype['format'] = moment.prototype.format;
