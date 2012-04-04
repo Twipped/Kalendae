@@ -268,7 +268,7 @@ Kalendae.prototype = {
 		var out = [];
 		var i=0, c = this._sel.length;
 		for (;i<c;i++) {
-			out.push(this._sel[i].native());
+			out.push(this._sel[i].toDate());
 		}
 		return out;
 	},
