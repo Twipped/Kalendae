@@ -64,21 +64,18 @@
 .kalendae .k-btn-previous-month,
 .kalendae .k-btn-next-month,
 .kalendae .k-btn-previous-year,
-.kalendae .k-btn-next-year {width:16px;height:16px;cursor:pointer;position:absolute;top:0;color:#777;font-size:20px;line-height:14px;}
+.kalendae .k-btn-next-year {width:16px;height:16px;cursor:pointer;position:absolute;top:-3px;color:#777;font-size:26px; line-height: 18px; font-weight: bold; font-family: arial}
 
 .kalendae .k-btn-previous-year {left:0;}
 .kalendae .k-btn-previous-month {left:16px;}
 .kalendae .k-btn-next-month {right:16px;}
 .kalendae .k-btn-next-year {right:0;}
 
-.kalendae .k-btn-previous-month:after {content:"\276E";}
-.kalendae .k-btn-next-month:after {content:"\276F";}
+.kalendae .k-btn-previous-month:after {content:"\2039";}
+.kalendae .k-btn-next-month:after {content:"\203A";}
 
-.kalendae .k-btn-previous-year:after {content:"\276E\276E";}
-.kalendae .k-btn-next-year:after {content:"\276F\276F";}
-
-.kalendae .k-btn-previous-year,
-.kalendae .k-btn-next-year {letter-spacing:-4px;text-align:left;}
+.kalendae .k-btn-previous-year:after {content:"\00AB";}
+.kalendae .k-btn-next-year:after {content:"\00BB";}
 
 .kalendae .k-btn-previous-month:hover,
 .kalendae .k-btn-next-month:hover {color:#7EA0E2;}
