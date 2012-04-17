@@ -49,7 +49,7 @@ ifneq ($(UGLIFYJS), "")
 else
 	curl -s \
 		--data-urlencode 'js_code@build/kalendae.js' \
-	 	--data-urlencode 'output_format=text' \
+		--data-urlencode 'output_format=text' \
 		--data-urlencode 'output_info=errors' \
 		http://closure-compiler.appspot.com/compile
 endif
