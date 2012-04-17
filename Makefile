@@ -1,3 +1,4 @@
+UGLIFYJS=$(shell which uglifyjs)
 
 kal=src/main.js \
 	src/util.js \
@@ -10,13 +11,15 @@ kal=src/main.js \
 
 all: build/kalendae.js
 
+clean:
+	rm -f build/*.js
+
 minified: build/kalendae.min.js
 
 minified-test: build/kalendae.min.errors
 
 
 build/kalendae.js: $(kal)
-	rm -f $@
 	cat src/header.js >> $@
 	echo "(function (undefined) {" >> $@
 	echo "" >> $@
@@ -25,21 +28,28 @@ build/kalendae.js: $(kal)
 	echo "})();" >> $@
 
 build/kalendae.min.js: build/kalendae.js
-	rm -f $@
 	cat src/header.js >> $@
+ifneq ($(UGLIFYJS), "")
+	$(UGLIFYJS) build/kalendae.js >> $@
+else
 	curl -s \
 		--data-urlencode 'js_code@build/kalendae.js' \
-	 	--data-urlencode 'output_format=text' \
+		--data-urlencode 'output_format=text' \
 		--data-urlencode 'output_info=compiled_code' \
+		#--data-urlencode 'compilation_level=ADVANCED_OPTIMIZATIONS' \
 		http://closure-compiler.appspot.com/compile \
 		>> $@
+endif
 	gzip -c build/kalendae.min.js | wc -c
 
-	#--data-urlencode 'compilation_level=ADVANCED_OPTIMIZATIONS' \
 
 build/kalendae.min.errors: build/kalendae.js
+ifneq ($(UGLIFYJS), "")
+	$(UGLIFYJS) build/kalendae.js 1>/dev/null
+else
 	curl -s \
 		--data-urlencode 'js_code@build/kalendae.js' \
 	 	--data-urlencode 'output_format=text' \
 		--data-urlencode 'output_info=errors' \
 		http://closure-compiler.appspot.com/compile
+endif
