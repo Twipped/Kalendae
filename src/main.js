@@ -467,7 +467,7 @@ Kalendae.prototype = {
 			
 				
 			if (opts.direction==='today-past' || opts.direction==='past') {
-				if (month.add({Y:1}).diff(moment(), 'years') < 0) {
+				if (month.add({y:1}).diff(moment(), 'months') <= 0) {
 					this.disableNextYear = false;
 					util.removeClassName(this.container, classes.disableNextYear);
 				} else {
@@ -476,7 +476,7 @@ Kalendae.prototype = {
 				}
 
 			} else if (opts.direction==='today-future' || opts.direction==='future') {
-				if (month.subtract({Y:1}).diff(moment(), 'years') > 0) {
+				if ((month.subtract({y:1}).diff(moment(), 'months') - (opts.months-1)) >= 0) {
 					this.disablePreviousYear = false;
 					util.removeClassName(this.container, classes.disablePreviousYear);
 				} else {
