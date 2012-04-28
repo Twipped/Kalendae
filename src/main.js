@@ -2,7 +2,14 @@ var today;
 
 var Kalendae = function (targetElement, options) {
 	//if the first argument isn't an element and isn't a string, assume that it is the options object
-	if (!(targetElement instanceof Element || typeof targetElement === 'string')) options = targetElement;
+  var is_element = false;
+  try { 
+    is_element = targetElement instanceof Element;
+  }
+  catch (err) {
+    is_element = !!targetElement && is_element.nodeType === 1;
+  }
+  if (!(is_element || typeof(targetElement) === 'string')) options = targetElement;
 	
 	var self = this,
 		classes = self.classes,
