@@ -41,8 +41,14 @@ Once this is done you can initialize kalendae a number of ways.  The easiest met
 This works for input elements as well, providing a popup calendar.    
 
 	<input type="text" class="auto-kal">
-	
-If you want to override the default settings, however, you must initialize Kalendae manually via JavaScript code.  This should be done either at the end of the page, or in the DOMReady/Load event.  To do this you must instantiate one of two objects, the widget class `Kalendae`, or the input element popup class `Kalendae.Input`.  Both objects take two arguments:
+
+If you want to override the default settings, you can use data-kal attribute.
+
+    <div class="auto-kal" data-kal="months: 3"></div>
+
+Again, this will work for input elements as well.
+
+You can also setup Kalendae manually via JavaScript code. This should be done either at the end of the page, or in the DOMReady/Load event. To do this you must instantiate one of two objects, the widget class `Kalendae`, or the input element popup class `Kalendae.Input`.  Both objects take two arguments:
 
 1. targetElement - This is either an Element object, or the element's ID as a string.
 2. options - An object containing the new options.  Any option omitted will revert to the default setting.
