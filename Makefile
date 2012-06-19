@@ -20,7 +20,7 @@ minified-test: build/kalendae.min.errors
 
 
 build/kalendae.js: $(kal)
-	cat src/header.js >> $@
+	cat src/header.js > $@
 	echo "(function (undefined) {" >> $@
 	echo "" >> $@
 	cat $(kal) >> $@
@@ -28,10 +28,10 @@ build/kalendae.js: $(kal)
 	echo "})();" >> $@
 
 build/kalendae.min.js: build/kalendae.js
-	cat src/header.js >> $@
 ifneq ($(UGLIFYJS), "")
 	$(UGLIFYJS) build/kalendae.js >> $@
 else
+	cat src/header.js > $@
 	curl -s \
 		--data-urlencode 'js_code@build/kalendae.js' \
 		--data-urlencode 'output_format=text' \
