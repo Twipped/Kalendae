@@ -36,7 +36,6 @@ else
 		--data-urlencode 'js_code@build/kalendae.js' \
 		--data-urlencode 'output_format=text' \
 		--data-urlencode 'output_info=compiled_code' \
-		#--data-urlencode 'compilation_level=ADVANCED_OPTIMIZATIONS' \
 		http://closure-compiler.appspot.com/compile \
 		>> $@
 endif
