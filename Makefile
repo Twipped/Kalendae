@@ -17,7 +17,7 @@ minified: build/kalendae.min.js
 minified-test: build/kalendae.min.errors
 
 
-build/kalendae.js: $(kal)
+build/kalendae.js: $(kal) src/header.js
 	cat src/header.js > $@
 	echo "(function (undefined) {" >> $@
 	echo "" >> $@
