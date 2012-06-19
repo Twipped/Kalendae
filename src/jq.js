@@ -1,5 +1,5 @@
 
-if (typeof jQuery !== 'undefined') {
+if (typeof jQuery !== 'undefined' && typeof document.addEventListener === 'function') {
 	jQuery.fn.kalendae = function (options) {
 		this.each(function (i, e) {
 			if (e.tagName === 'INPUT') {

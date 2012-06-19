@@ -1,5 +1,7 @@
 
 Kalendae.Input = function (targetElement, options) {
+	if (typeof document.addEventListener !== 'function') return;
+
 	var $input = this.input = util.$(targetElement),
 		overwriteInput;
 

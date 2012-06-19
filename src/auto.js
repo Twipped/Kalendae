@@ -1,6 +1,6 @@
 
 //auto-initializaiton code
-Kalendae.util.domReady(function () {
+if (typeof document.addEventListener === 'function') Kalendae.util.domReady(function () {
 	var els = util.$$('.auto-kal'),
 		i = els.length,
 		e,

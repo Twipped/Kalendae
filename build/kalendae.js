@@ -2,7 +2,7 @@
  *	Kalendae, a framework agnostic javascript date picker           *
  *	Copyright(c) 2012 Jarvis Badgley (chipersoft@gmail.com)         *
  *	http://github.com/ChiperSoft/Kalendae                           *
- *	Version 0.2.5                                                   *
+ *	Version 0.2.6                                                   *
  ********************************************************************/
 
 (function (undefined) {
@@ -10,6 +10,8 @@
 var today;
 
 var Kalendae = function (targetElement, options) {
+	if (typeof document.addEventListener !== 'function') return;
+	
 	//if the first argument isn't an element and isn't a string, assume that it is the options object
 	var is_element = false;
 	try { 
@@ -702,7 +704,7 @@ var util = Kalendae.util = {
 
 
 //auto-initializaiton code
-Kalendae.util.domReady(function () {
+if (typeof document.addEventListener === 'function') Kalendae.util.domReady(function () {
 	var els = util.$$('.auto-kal'),
 		i = els.length,
 		e,
@@ -726,6 +728,8 @@ Kalendae.util.domReady(function () {
 });
 
 Kalendae.Input = function (targetElement, options) {
+	if (typeof document.addEventListener !== 'function') return;
+
 	var $input = this.input = util.$(targetElement),
 		overwriteInput;
 
@@ -1669,7 +1673,7 @@ moment.fn.yearDay = function (input) {
 
 today = moment().stripTime();
 
-if (typeof jQuery !== 'undefined') {
+if (typeof jQuery !== 'undefined' && typeof document.addEventListener === 'function') {
 	jQuery.fn.kalendae = function (options) {
 		this.each(function (i, e) {
 			if (e.tagName === 'INPUT') {
