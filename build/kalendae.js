@@ -2,7 +2,7 @@
  *	Kalendae, a framework agnostic javascript date picker           *
  *	Copyright(c) 2012 Jarvis Badgley (chipersoft@gmail.com)         *
  *	http://github.com/ChiperSoft/Kalendae                           *
- *	Version 0.2                                                     *
+ *	Version 0.2.5                                                   *
  ********************************************************************/
 
 (function (undefined) {
@@ -11,7 +11,14 @@ var today;
 
 var Kalendae = function (targetElement, options) {
 	//if the first argument isn't an element and isn't a string, assume that it is the options object
-	if (!(targetElement instanceof Element || typeof targetElement === 'string')) options = targetElement;
+	var is_element = false;
+	try { 
+		is_element = targetElement instanceof Element;
+	}
+	catch (err) {
+		is_element = !!targetElement && is_element.nodeType === 1;
+	}
+	if (!(is_element || typeof(targetElement) === 'string')) options = targetElement;
 	
 	var self = this,
 		classes = self.classes,
@@ -698,16 +705,21 @@ var util = Kalendae.util = {
 Kalendae.util.domReady(function () {
 	var els = util.$$('.auto-kal'),
 		i = els.length,
-		e;
+		e,
+		options,
+		optionsRaw;
 
 	while (i--) {
 		e = els[i];
+		optionsRaw = e.getAttribute('data-kal');
+		options = (optionsRaw == null || optionsRaw == "") ? {} : (new Function('return {' + optionsRaw + '};'))();
+
 		if (e.tagName === 'INPUT') {
 			//if element is an input, bind a popup calendar to the input.
-			new Kalendae.Input(e);
+			new Kalendae.Input(e, options);
 		} else {
 			//otherwise, insert a flat calendar into the element.
-			new Kalendae({attachTo:e});
+			new Kalendae(util.merge(options, {attachTo:e}));
 		}
 		
 	}
