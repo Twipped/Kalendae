@@ -120,6 +120,8 @@ The following options are available for configuration.
     - Note that this property uses the `dayAttributeFormat` option, NOT the format option, for date strings.
     - Default is `null`.
 
+- `useYearNav`: Include the double-arrow year navigation. Default is `true`.
+
 ###Advanced Behavior Options
     
 The following settings alter the internal behavior of Kalendae and should only be changed by advanced users.
