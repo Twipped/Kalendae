@@ -117,7 +117,7 @@ var Kalendae = function (targetElement, options) {
 		
 		//title bar
 		$title = util.make('div', {'class':classes.title}, $cal);
-		if(opts.disableYearNav){
+		if(!opts.useYearNav){
 			util.addClassName($title, classes.disableYearNav);
 		}
 		util.make('a', {'class':classes.previousYear}, $title);	//previous button
@@ -243,7 +243,7 @@ Kalendae.prototype = {
 		parseSplitDelimiter:	/,\s*|\s+-\s+/,	/* regex to use for splitting multiple dates from a passed string */
 		rangeDelimiter:			' - ',			/* string to use between dates when outputting in range mode */
 		multipleDelimiter:		', ',			/* string to use between dates when outputting in multiple mode */
-		disableYearNav: 		false,
+		useYearNav: 			true,
 		
 		dateClassMap:			{}
 	},

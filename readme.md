@@ -120,7 +120,7 @@ The following options are available for configuration.
     - Note that this property uses the `dayAttributeFormat` option, NOT the format option, for date strings.
     - Default is `null`.
 
-- `disableYearNav`: Disable the double-arrow year navigation. Default is `false`.
+- `useYearNav`: Include the double-arrow year navigation. Default is `true`.
 
 ###Advanced Behavior Options
     
