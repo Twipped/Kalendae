@@ -186,7 +186,7 @@ var Kalendae = function (targetElement, options) {
 
 
 			
-		} else if (util.hasClassName(target.parentNode, classes.days) && util.hasClassName(target, classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
+		} else if (util.hasClassName(target.parentNode, classes.days) && (util.hasClassName(target, classes.dayActive) || (util.hasClassName(target, classes.dayOutOfMonth) && opts.dayOutOfMonthClickable)) && (clickedDate = target.getAttribute('data-date'))) {
 		//DAY CLICK
 			clickedDate = moment(clickedDate, opts.dayAttributeFormat).hours(12);
 			if (self.publish('date-clicked', self, [clickedDate]) !== false) {
@@ -230,6 +230,7 @@ Kalendae.prototype = {
 		blackout:				null,			/* array of dates, or function to be passed a date */
 		selected:				null,			/* dates already selected.  can be string, date, or array of strings or dates. */
 		mode:					'single',		/* single, multiple, range */
+		dayOutOfMonthClickable: false,
 		format:					null,			/* string used for parsing dates. */
 		subscribe:				null,			/* object containing events to subscribe to */
 
