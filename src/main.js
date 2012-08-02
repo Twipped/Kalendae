@@ -177,7 +177,7 @@ var Kalendae = function (targetElement, options) {
 
 
 			
-		} else if (util.hasClassName(target.parentNode, classes.days) && (util.hasClassName(target, classes.dayActive) || (util.hasClassName(target, classes.dayOutOfMonth) && opts.dayOutOfMonthClickable)) && (clickedDate = target.getAttribute('data-date'))) {
+		} else if (util.hasClassName(target.parentNode, classes.days) && util.hasClassName(target, classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
 		//DAY CLICK
 			clickedDate = moment(clickedDate, opts.dayAttributeFormat).hours(12);
 			if (self.publish('date-clicked', self, [clickedDate]) !== false) {
@@ -250,6 +250,7 @@ Kalendae.prototype = {
 		header			:'k-header',
 		days			:'k-days',
 		dayOutOfMonth	:'k-out-of-month',
+		dayInMonth: 'k-in-month',
 		dayActive		:'k-active',
 		daySelected		:'k-selected',
 		dayInRange		:'k-range',
@@ -434,7 +435,9 @@ Kalendae.prototype = {
 				if (s) klass.push(({'-1':classes.dayInRange,'1':classes.daySelected, 'true':classes.daySelected})[s]);
 
 				if (day.month() != month.month()) klass.push(classes.dayOutOfMonth);
-				else if (!(this.blackout(day) || this.direction(day)) || s>0) klass.push(classes.dayActive);
+				else klass.push(classes.dayInMonth);
+				
+				if (!(this.blackout(day) || this.direction(day) || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0) klass.push(classes.dayActive);
 
 				if (day.yearDay() === today.yearDay()) klass.push(classes.dayToday);
 
