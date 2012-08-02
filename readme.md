@@ -120,6 +120,8 @@ The following options are available for configuration.
     - Note that this property uses the `dayAttributeFormat` option, NOT the format option, for date strings.
     - Default is `null`.
 
+- `dayOutOfMonthClickable`: Allow clicks on days that fall outside of the currently focused month. Default is `false`.
+
 ###Advanced Behavior Options
     
 The following settings alter the internal behavior of Kalendae and should only be changed by advanced users.
