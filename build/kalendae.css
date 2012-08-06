@@ -145,12 +145,18 @@
 	text-decoration:underline;
 }
 
-/** Selectable but not selected day  **/
-.kalendae .k-days span.k-active {
+/** Days inside of the month view **/
+.kalendae .k-days span.k-in-month.k-active {
 	border-color:#ddd;
 	background-color:#fff;
-	cursor:pointer;
 	color:#333;
+}
+/** Days outside of the month view (before the first day of the month, after the last day of the month) **/
+.kalendae .k-days span.k-out-of-month {color:#ddd;}
+
+/** Selectable  **/
+.kalendae .k-days span.k-active {
+	cursor:pointer;
 }
 
 /** Selected day, when outside the selectable area **/
@@ -172,7 +178,7 @@
 }
 
 /** Days between the start and end points on a range, inside of the selectable area **/
-.kalendae .k-days span.k-range.k-active {
+.kalendae .k-days span.k-range.k-in-month {
 	background:#C4D4F1;
 	border-color:#19AEFE;
 	color:#333;
@@ -182,10 +188,6 @@
 .kalendae .k-days span.k-active:hover {
 	border-color:#666;
 }
-
-/** Days outside of the month view (before the first day of the month, after the last day of the month) **/
-.kalendae .k-days span.k-out-of-month {color:#ddd;}
-
 
 
 /*-------------------------------------IE8 ONLY CODE BELOW THIS LINE--------------------------------------------*/
