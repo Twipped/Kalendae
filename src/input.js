@@ -59,6 +59,16 @@ Kalendae.Input = function (targetElement, options) {
 	util.addEvent($input, 'keyup', function (event) {
 		self.setSelected(this.value);
 	});
+
+	var $scrollContainer = util.scrollContainer($input);
+
+	if( $scrollContainer ) {
+
+		// Hide calendar when $scrollContainer is scrolled
+		util.addEvent($scrollContainer, 'scroll', function (event) {
+			$input.blur();
+		});
+	}
 	
 	self.subscribe('change', function () {
 		$input.value = self.getSelected();
@@ -83,27 +93,29 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 		var $container = this.container,
 			style = $container.style,
 			$input = this.input,
-			pos = util.getPosition($input);
-		
+			pos = util.getPosition($input),
+			$scrollContainer = util.scrollContainer($input),
+			scrollTop = $scrollContainer ? $scrollContainer.scrollTop : 0;
+
 		style.display = '';
 		switch (opts.side) {
 			case 'left':
 				style.left = (pos.left - util.getWidth($container) + this.settings.offsetLeft) + 'px';
-				style.top  = (pos.top + this.settings.offsetTop) + 'px';
+				style.top  = (pos.top + this.settings.offsetTop - scrollTop) + 'px';
 				break;
 			case 'right':
 				style.left = (pos.left + util.getWidth($input)) + 'px';
-				style.top  = (pos.top + this.settings.offsetTop) + 'px';
+				style.top  = (pos.top + this.settings.offsetTop - scrollTop) + 'px';
 				break;
 			case 'top':
 				style.left = (pos.left + this.settings.offsetLeft) + 'px';
-				style.top  = (pos.top - util.getHeight($container) + this.settings.offsetTop) + 'px';
+				style.top  = (pos.top - util.getHeight($container) + this.settings.offsetTop - scrollTop) + 'px';
 				break;
 			case 'bottom':
 				/* falls through */
 			default:
 				style.left = (pos.left + this.settings.offsetLeft) + 'px';
-				style.top  = (pos.top + util.getHeight($input) + this.settings.offsetTop) + 'px';
+				style.top  = (pos.top + util.getHeight($input) + this.settings.offsetTop - scrollTop) + 'px';
 				break;
 		}
 		

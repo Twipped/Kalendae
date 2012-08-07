@@ -97,6 +97,14 @@ var util = Kalendae.util = {
 		} while ((elem = elem.offsetParent));
 		return false;
 	},
+
+	scrollContainer: function (elem) {
+		do {
+			var overflow = util.getStyle(elem, 'overflow');
+			if (overflow === 'auto' || overflow === 'scroll') return elem;
+		} while ((elem = elem.parentNode) && elem != window.document.body);
+		return null;
+	},
 	
 	getPosition: function (elem, isInner) {
 		var x = elem.offsetLeft,
