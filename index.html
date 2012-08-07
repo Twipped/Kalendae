@@ -139,6 +139,26 @@
 			months:2
 		});
 	</script>
+
+	<hr>
+	This calendar respects <code>overflow:auto;</code>
+	<div style="overflow: auto; width: 300px; max-height:80px; margin: 10px; padding: 10px; border: 1px solid #DADADA;">
+		<input id="input2" type="text">
+		<br/>
+		<br/>Hey!
+		<br/>Why don't you keep scrolling?
+		<br/>Now a little bit more!
+		<br/>Keep it...
+		<br/>Okay!
+		<br/>You can stop now...
+		<br/>I said stop!!
+		<br/>STOP!!
+		<br/><br/><input id="input3" type="text">
+	</div>
+	<script type="text/javascript" charset="utf-8">
+		new Kalendae.Input('input2');
+		new Kalendae.Input('input3');
+	</script>
 	
 	<hr>
 	This calendar is auto-created.
