@@ -362,6 +362,9 @@ Kalendae.prototype = {
 	
 	addSelected : function (date, draw) {
 		date = moment(date).hours(12);
+
+		if(this.settings.dayOutOfMonthClickable && this.settings.mode !== 'range'){ this.makeSelectedDateVisible(date); }
+
 		switch (this.settings.mode) {
 			case 'multiple':
 				if (!this.isSelected(date)) this._sel.push(date);
@@ -386,7 +389,18 @@ Kalendae.prototype = {
 		if (draw !== false) this.draw();
 		return true;
 	},
-	
+
+	makeSelectedDateVisible: function (date) {
+		outOfViewMonth = moment(date).date('1').diff(this.viewStartDate,'months')
+
+		if(outOfViewMonth < 0){
+			this.viewStartDate.subtract('months',1);
+		}
+		else if(outOfViewMonth > 0 && outOfViewMonth >= this.settings.months){
+			this.viewStartDate.add('months',1);
+		}
+	},
+
 	removeSelected : function (date, draw) {
 		date = moment(date).yearDay();
 		var i = this._sel.length;
