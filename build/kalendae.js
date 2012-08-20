@@ -10,7 +10,7 @@
 var today;
 
 var Kalendae = function (targetElement, options) {
-	if (typeof document.addEventListener !== 'function') return;
+	if (typeof document.addEventListener !== 'function' && !util.isIE8()) return;
 	
 	//if the first argument isn't an element and isn't a string, assume that it is the options object
 	var is_element = false;
