@@ -93,6 +93,12 @@
 .kalendae .k-middle-month .k-btn-previous-year,
 .kalendae .k-last-month .k-btn-previous-year {display:none;}
 
+/** Disable year nav option **/
+.kalendae .k-title.k-disable-year-nav .k-btn-next-year,
+.kalendae .k-title.k-disable-year-nav .k-btn-previous-year { display: none; }
+.kalendae .k-title.k-disable-year-nav .k-btn-next-month { right: 0; }
+.kalendae .k-title.k-disable-year-nav .k-btn-previous-month { left: 0; }
+
 /** Force specific width for month container contents **/
 .kalendae .k-title,
 .kalendae .k-header,
