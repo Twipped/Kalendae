@@ -2,7 +2,7 @@
  *	Kalendae, a framework agnostic javascript date picker           *
  *	Copyright(c) 2012 Jarvis Badgley (chipersoft@gmail.com)         *
  *	http://github.com/ChiperSoft/Kalendae                           *
- *	Version 0.2.6                                                   *
+ *	Version 0.3                                                     *
  ********************************************************************/
 
 (function (undefined) {
@@ -651,6 +651,14 @@ var util = Kalendae.util = {
 		} while ((elem = elem.offsetParent));
 		return false;
 	},
+
+	scrollContainer: function (elem) {
+		do {
+			var overflow = util.getStyle(elem, 'overflow');
+			if (overflow === 'auto' || overflow === 'scroll') return elem;
+		} while ((elem = elem.parentNode) && elem != window.document.body);
+		return null;
+	},
 	
 	getPosition: function (elem, isInner) {
 		var x = elem.offsetLeft,
@@ -810,6 +818,16 @@ Kalendae.Input = function (targetElement, options) {
 	util.addEvent($input, 'keyup', function (event) {
 		self.setSelected(this.value);
 	});
+
+	var $scrollContainer = util.scrollContainer($input);
+
+	if( $scrollContainer ) {
+
+		// Hide calendar when $scrollContainer is scrolled
+		util.addEvent($scrollContainer, 'scroll', function (event) {
+			$input.blur();
+		});
+	}
 	
 	self.subscribe('change', function () {
 		$input.value = self.getSelected();
@@ -834,27 +852,29 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 		var $container = this.container,
 			style = $container.style,
 			$input = this.input,
-			pos = util.getPosition($input);
-		
+			pos = util.getPosition($input),
+			$scrollContainer = util.scrollContainer($input),
+			scrollTop = $scrollContainer ? $scrollContainer.scrollTop : 0;
+
 		style.display = '';
 		switch (opts.side) {
 			case 'left':
 				style.left = (pos.left - util.getWidth($container) + this.settings.offsetLeft) + 'px';
-				style.top  = (pos.top + this.settings.offsetTop) + 'px';
+				style.top  = (pos.top + this.settings.offsetTop - scrollTop) + 'px';
 				break;
 			case 'right':
 				style.left = (pos.left + util.getWidth($input)) + 'px';
-				style.top  = (pos.top + this.settings.offsetTop) + 'px';
+				style.top  = (pos.top + this.settings.offsetTop - scrollTop) + 'px';
 				break;
 			case 'top':
 				style.left = (pos.left + this.settings.offsetLeft) + 'px';
-				style.top  = (pos.top - util.getHeight($container) + this.settings.offsetTop) + 'px';
+				style.top  = (pos.top - util.getHeight($container) + this.settings.offsetTop - scrollTop) + 'px';
 				break;
 			case 'bottom':
 				/* falls through */
 			default:
 				style.left = (pos.left + this.settings.offsetLeft) + 'px';
-				style.top  = (pos.top + util.getHeight($input) + this.settings.offsetTop) + 'px';
+				style.top  = (pos.top + util.getHeight($input) + this.settings.offsetTop - scrollTop) + 'px';
 				break;
 		}
 		
