@@ -122,6 +122,8 @@ The following options are available for configuration.
 
 - `dayOutOfMonthClickable`: Allow clicks on days that fall outside of the currently focused month. Default is `false`.
 
+- `useYearNav`: Include the double-arrow year navigation. Default is `true`.
+
 ###Advanced Behavior Options
     
 The following settings alter the internal behavior of Kalendae and should only be changed by advanced users.
