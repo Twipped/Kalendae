@@ -120,11 +120,13 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 		}
 		
 		style.position = util.isFixed($input) ? 'fixed' : 'absolute';
-				
+		
+		this.publish('show', this);
 	},
 	
 	hide : function () {
 		this.container.style.display = 'none';
+		this.publish('hide', this);
 	}
 	
 });

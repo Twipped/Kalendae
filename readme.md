@@ -214,6 +214,12 @@ Kalendae offers the following events:
 
 - `view-changed` - Fires when the user has clicked the next or previous month button, but before the calendar is redrawn.  Returning false will prevent the change.
 
+Additionally, Kalendae.Input provides the following events:
+
+- `show` - Fires when the calendar appears due to the input gaining focus
+
+- `hide` - Fires when the calendar hides due to the input blurring
+
 
 ##Skinning Kalendae
 
