@@ -757,9 +757,8 @@ if (typeof document.addEventListener === 'function') Kalendae.util.domReady(func
 		
 	}
 });
-
 Kalendae.Input = function (targetElement, options) {
-	if (typeof document.addEventListener !== 'function') return;
+	if (typeof document.addEventListener !== 'function'  && !util.isIE8()) return;
 
 	var $input = this.input = util.$(targetElement),
 		overwriteInput;
