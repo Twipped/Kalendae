@@ -41,6 +41,7 @@
 	border-radius:10px;
 	box-shadow:0 1px 3px rgba(0,0,0,0.75);
 	cursor:pointer;
+	text-decoration:none;
 }
 .kalendae .k-btn-close:after {content:"\2716";}
 .kalendae .k-btn-close:hover {
@@ -75,6 +76,7 @@
 	line-height: 18px;
 	font-weight: bold;
 	font-family: arial;
+	text-decoration:none;
 }
 
 .kalendae .k-btn-previous-year {left:0;}
