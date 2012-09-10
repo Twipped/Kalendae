@@ -64,7 +64,18 @@
 .kalendae .k-btn-previous-month,
 .kalendae .k-btn-next-month,
 .kalendae .k-btn-previous-year,
-.kalendae .k-btn-next-year {width:16px;height:16px;cursor:pointer;position:absolute;top:-3px;color:#777;font-size:26px; line-height: 18px; font-weight: bold; font-family: arial}
+.kalendae .k-btn-next-year {
+	width:16px;
+	height:16px;
+	cursor:pointer;
+	position:absolute;
+	top:-3px;
+	color:#777;
+	font-size:26px;
+	line-height: 18px;
+	font-weight: bold;
+	font-family: arial;
+}
 
 .kalendae .k-btn-previous-year {left:0;}
 .kalendae .k-btn-previous-month {left:16px;}
