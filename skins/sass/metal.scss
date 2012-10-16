@@ -1,0 +1,318 @@
+/*! ------------------------------------------
+ * Kalendae Metal Skin
+ * ------------------------------------------
+ * Author: 
+ * Anas Nakawa - @anasnakawa - anas.nakawa@gmail.com
+ * Credits:
+ * Kalendae plugin: Jarvis Badgley - chiper@chipersoft.com
+ * Skin inspiration: Orman Clark - http://www.premiumpixels.com
+ * License: 
+ * MIT License - http://opensource.org/licenses/mit-license.php
+ * ------------------------------------------
+ */ 
+
+// ------------------------------------------
+// ------------------------------------------
+// table of contents:
+// ------------------
+//	1. imports
+//	2. theme settings
+//  3. mixins
+//  4. skin
+// ------------------------------------------
+// ------------------------------------------
+
+// 1. imports
+// ------------------------------------------
+  @import "compass/css3";
+
+// 2. theme settings
+// ------------------------------------------
+  // svg gradient support (mainly for IE)
+  $experimental-support-for-svg:          true;
+  
+  // kalendae
+  $kalendae-background-color:             #f7f7f7;
+  $kalendae-border-color:                 #bbbbbb;
+  $kalendae-extend-shadow:                0 0 15px rgba(0, 0, 0, 0.3);
+
+  // title
+  $title-background-color:                #393939;
+  $title-background-start-color:          $title-background-color;
+  $title-background-stop-color:           darken($title-background-start-color, 10);
+  $title-border-color:                    black;
+  $title-text-color:                      #e0e0e0;
+  $title-box-shadow:                      0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 1px rgba(0, 0, 0, 0.3);
+  $title-text-shadow:                     0 -1px 0 rgba(0, 0, 0, 0.9);
+  $title-border-radius:                   3px;
+
+  // header
+  $header-background-start-color:         $kalendae-background-color;
+  $header-background-stop-color:          #f1f1f1;
+  $header-text-color:                     #666666;
+  $header-text-shadow:                    0 1px 0 rgba(255, 255, 255, 0.5);
+
+  // days
+  $days-border-color:                     $kalendae-border-color;
+  $days-background-start-color:           darken(#ececec, 2);
+  $days-background-stop-color:            darken(#dedede, 2);
+  $days-box-shadow:                       1px 1px 0 white inset;
+  $days-text-color:                       $header-text-color;
+  $days-text-shadow:                      $header-text-shadow;
+
+  // selected day
+  $selected-box-shadow:                   0 2px 10px rgba(0, 0, 0, 0.3) inset;
+  $selected-background-color:             #148ad3;
+  $selected-border-color:                 darken($selected-background-color, 20);
+  $selected-background-start-color:       $selected-background-color;
+  $selected-background-stop-color:        lighten($selected-background-start-color, 20);
+  $selected-text-shadow:                  0 1px 0 rgba(0, 0, 0, 0.7);
+  $selected-text-color:                   white;
+
+  // blacked out days
+  $black-out-lighten-amount:              20;
+  $black-out-background-start-color:      lighten($days-background-start-color, $black-out-lighten-amount);
+  $black-out-background-stop-color:       lighten($days-background-stop-color, $black-out-lighten-amount);
+  $black-out-text-color:                  lighteb($days-text-color, $black-out-lighten-amount);
+  $black-out-border-color:                lighten($days-border-color, $black-out-lighten-amount);
+
+  // out of month
+  $out-of-month-background-start-color:   #f5f5f5;
+  $out-of-month-background-color:         $out-of-month-background-start-color;
+  $out-of-month-background-end-color:     #ececec;
+  $out-of-month-border-color:             $days-border-color;
+  $out-of-month-text-color:               #666666;
+  $out-of-month-lighten:                  30;
+  $out-of-month-text-shadow:              0 1px 0 rgba(255, 255, 255, 0.5);
+
+// 3. mixins
+// ------------------------------------------
+  // clearfix
+  @mixin clearfix {
+    &:after {
+      visibility: hidden;
+      display: block;
+      font-size: 0;
+      content: " ";
+      clear: both;
+      height: 0;
+    }
+    display: inline-block;
+    /* start commented backslash hack \*/
+    * html & { height: 1%; }
+    display: block;
+    /* close commented backslash hack */
+  }
+  
+  // sheet style
+  @mixin stacked-sheets($sheet-color, $border-color, $extend-shadow) {
+    @include box-shadow((
+        0 5px  0 -4px  $sheet-color  /* 1st sheet color */
+      , 0 5px  0 -3px  $border-color /* 1st sheet border */
+      , 0 11px 0 -8px  $sheet-color  /* 2nd sheet color */
+      , 0 11px 0 -7px  $border-color /* 2nd sheet border */
+      //, 0 17px 0 -12px $sheet-color  /* 3rd sheet color */
+      //, 0 17px 0 -11px $border-color  /* 3rd sheet border */
+      , $extend-shadow
+    ));
+  }
+
+// 4. skin
+// ------------------------------------------
+  .kalendae {
+  	// reset padding & borders
+  	@include border-radius(0);
+  	padding: 0;
+  
+  	// generic styles
+  	border-bottom: 1px solid $kalendae-border-color;
+  
+  	// some goodness
+  	@include stacked-sheets($sheet-color: $kalendae-background-color, $border-color: $kalendae-border-color, $extend-shadow: $kalendae-extend-shadow);
+  
+  	// kaledar wrapper
+  	.k-calendar {
+  		width: 210px;
+  	}
+  
+  	// general padding
+  	.k-title,
+  	.k-header,
+  	.k-days {
+  		width: auto;
+  	}
+  
+  	// title
+  	.k-title {
+  		@include background(
+  		  linear-gradient($title-background-start-color, $title-background-stop-color)
+  		);
+  		@include box-shadow($title-box-shadow);
+  		@include border-radius($title-border-radius $title-border-radius 0 0);
+  
+  		background-color: $title-background-color;
+  		border: 1px solid $title-border-color;
+  		color: $title-text-color;
+  		text-shadow: $title-text-shadow;
+  
+  		padding: 5px;
+  		line-height: 25px;
+  		height: 25px;
+  
+  		// caption
+  		.k-caption {
+  			font-weight: bold;
+  		}
+  
+  		// arrows
+  		a {
+  			// reseting some values
+  			&:after {
+  				content: none;
+  			}
+  
+  			// generic styles
+  			background-image: inline_image("images/kalendae-arrows.png", "image/png");
+  			background-repeat: no-repeat;
+  
+  			// margins
+  			margin-top: 9px;
+  
+  			// previous only
+  			&.k-btn-previous-year,
+  			&.k-btn-previous-month {
+  				margin-left: 5px;
+  			}
+  
+  			// next only
+  			&.k-btn-next-year,
+  			&.k-btn-next-month {
+  				margin-right: 5px;
+  			}
+  
+  			&.k-btn-previous-year {
+  				background-position: -16px -16px;
+  			}
+  			&.k-btn-previous-month {
+  				background-position: 0 -16px;
+  			}
+  			&.k-btn-next-year {
+  				background-position: -16px 0;
+  			}
+  			&.k-btn-next-month {
+  				background-position: 0 0;
+  			}
+  		}
+  	}
+  
+  	// header
+  	.k-header {
+  	  @include background(
+        linear-gradient($header-background-start-color, $header-background-stop-color)
+      );
+  
+  		color: $header-text-color;
+  		text-shadow: $header-text-shadow;
+  
+  		span {
+  			width: 30px;
+  			line-height: 20px;
+  			text-transform: uppercase;
+  		}
+  	}
+  
+  	.k-header,
+  	.k-days {
+  		span {
+  			margin: 0;
+  		}
+  	}
+  
+  	// days
+  	.k-days {
+  		// blacked out and generic setting
+  		span {
+  		  
+  			@include background(
+  				linear-gradient($black-out-background-start-color, $black-out-background-stop-color)
+  			);
+  			@include box-shadow($days-box-shadow);
+  			@include border-radius(0);
+  
+  			color: $black-out-text-color;
+  			
+  			text-shadow: $days-text-shadow;
+  			border-bottom: 1px solid $black-out-border-color;
+  			border-left: 1px solid $black-out-border-color;
+  
+  			width: 23px;
+  			height: 23px;
+  			line-height: 23px;
+  			padding-top: 2px;
+  			text-align: center;
+  		}
+  
+  		// active one
+  		span.k-active {
+  			
+  			@include background(
+  				linear-gradient($days-background-start-color, $days-background-stop-color)
+  			);
+  
+  			color: $days-text-color;
+  			border-bottom:	 1px solid $days-border-color;
+  			border-left: 1px solid $days-border-color;
+  
+  			// selected style
+  			&.k-selected,
+  			&.k-range {
+  				@include box-shadow($selected-box-shadow);
+  				@include background(
+  					linear-gradient($selected-background-start-color, $selected-background-stop-color)
+  				);
+  
+  				background-color: $selected-background-color;
+  				border-color: $selected-border-color;
+  				text-shadow: $selected-text-shadow;
+  				color: $selected-text-color;
+  				&.k-out-of-month {
+  					@include background(
+  						linear-gradient($out-of-month-background-start-color, $out-of-month-background-end-color)
+  					);
+  					color: $out-of-month-text-color;
+  					text-shadow: $out-of-month-text-shadow;
+  					background-color: $out-of-month-background-color;
+  					border-color: $out-of-month-border-color;
+  				}
+  			}
+  		}
+  		// out of month
+  		span.k-out-of-month {
+  			@extend .k-active;
+  			
+  			@include background(
+  				linear-gradient($out-of-month-background-start-color, $out-of-month-background-end-color)
+  			);
+  
+  			border-bottom:  1px solid $out-of-month-border-color;
+  			border-left: 1px solid $out-of-month-border-color;
+  			color: $out-of-month-text-color;
+  		}
+  	}
+  }
+  
+  // 3. multi opened calendar mode
+  .k-title {
+  	.kalendae .k-calendar.k-first-month  & { @include border-radius($title-border-radius 0 0 0); }
+  	.kalendae .k-calendar.k-middle-month & { @include border-radius(0); }
+  	.kalendae .k-calendar.k-last-month   & { @include border-radius(0 $title-border-radius 0 0); }
+  }
+  
+  .kalendae {
+  	.k-separator {
+  		background: #CCCCCC;
+  		height: 233px;
+  		margin: 0;
+  		width: 2px;
+  	}
+  }
