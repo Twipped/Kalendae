@@ -47,18 +47,18 @@
   $title-border-radius:                   3px;
 
   // header
-  $header-background-start-color:         $kalendae-background-color;
-  $header-background-stop-color:          #f1f1f1;
-  $header-text-color:                     #666666;
-  $header-text-shadow:                    0 1px 0 rgba(255, 255, 255, 0.5);
+  $header-background-start-color:         #222222;
+  $header-background-stop-color:          #555555;
+  $header-text-color:                     #DADADA;
+  $header-text-shadow:                    0 1px 0 black;
 
   // days
   $days-border-color:                     $kalendae-border-color;
   $days-background-start-color:           darken(#ececec, 2);
   $days-background-stop-color:            darken(#dedede, 2);
   $days-box-shadow:                       1px 1px 0 white inset;
-  $days-text-color:                       $header-text-color;
-  $days-text-shadow:                      $header-text-shadow;
+  $days-text-color:                       #666666;
+  $days-text-shadow:                      0 1px 0 rgba(255, 255, 255, 0.5);
 
   // selected day
   $selected-box-shadow:                   0 2px 10px rgba(0, 0, 0, 0.3) inset;
@@ -215,6 +215,7 @@
   		text-shadow: $header-text-shadow;
   
   		span {
+  		  color: $header-text-color;
   			width: 30px;
   			line-height: 20px;
   			text-transform: uppercase;
@@ -229,7 +230,7 @@
   	}
   
   	// days
-  	.k-days {
+  	.k-calendar .k-days {
   		// blacked out and generic setting
   		span {
   		  
@@ -260,8 +261,15 @@
   			);
   
   			color: $days-text-color;
+  			border-top-color: transparent;
+  			border-right-color: transparent;
   			border-bottom:	 1px solid $days-border-color;
   			border-left: 1px solid $days-border-color;
+  			
+  			// hover
+  			&:hover {
+  			  border-color: darken($days-border-color, 20%);
+  			}
   
   			// selected style
   			&.k-selected,
@@ -310,9 +318,9 @@
   
   .kalendae {
   	.k-separator {
-  		background: #CCCCCC;
+  		background: none;
   		height: 233px;
   		margin: 0;
-  		width: 2px;
+  		width: 0;
   	}
   }
