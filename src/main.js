@@ -390,7 +390,7 @@ Kalendae.prototype = {
 				break;
 		}
 		this._sel.sort(function (a,b) {return a.yearDay() - b.yearDay();});
-		this.publish('change', this);
+		this.publish('change', this, [date]);
 		if (draw !== false) this.draw();
 		return true;
 	},
@@ -407,12 +407,12 @@ Kalendae.prototype = {
 	},
 
 	removeSelected : function (date, draw) {
-		date = moment(date).yearDay();
+		date = moment(date).hours(12);
 		var i = this._sel.length;
 		while (i--) {
-			if (this._sel[i].yearDay() === date) {
+			if (this._sel[i].yearDay() === date.yearDay()) {
 				this._sel.splice(i,1);
-				this.publish('change', this);
+				this.publish('change', this, [date]);
 				if (draw !== false) this.draw();
 				return true;
 			}
