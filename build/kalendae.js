@@ -399,7 +399,7 @@ Kalendae.prototype = {
 				break;
 		}
 		this._sel.sort(function (a,b) {return a.yearDay() - b.yearDay();});
-		this.publish('change', this);
+		this.publish('change', this, [date, 'select']);
 		if (draw !== false) this.draw();
 		return true;
 	},
@@ -421,7 +421,7 @@ Kalendae.prototype = {
 		while (i--) {
 			if (this._sel[i].yearDay() === date) {
 				this._sel.splice(i,1);
-				this.publish('change', this);
+				this.publish('change', this, [date, 'remove']);
 				if (draw !== false) this.draw();
 				return true;
 			}
