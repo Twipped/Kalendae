@@ -416,10 +416,10 @@ Kalendae.prototype = {
 	},
 
 	removeSelected : function (date, draw) {
-		date = moment(date).yearDay();
+		date = moment(date).hours(12);
 		var i = this._sel.length;
 		while (i--) {
-			if (this._sel[i].yearDay() === date) {
+			if (this._sel[i].yearDay() === date.yearDay()) {
 				this._sel.splice(i,1);
 				this.publish('change', this, [date, 'remove']);
 				if (draw !== false) this.draw();
