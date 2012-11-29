@@ -192,16 +192,16 @@ The following properties are exposed on the instantiated `Kalendae` and `Kalenda
 Kalendae uses a publish/subscribe event system.  To receive events from a Kalendae instance you can call the `subscribe()` function on the Kalendae instance, passing the event name and a callback function.  Example:
 
     var k = new Kalendae('myDiv');
-    k.subscribe('change', function () {
-       console.log(this.getSelected());
+    k.subscribe('change', function (date, action) {
+       console.log(date, action, this.getSelected());
     });
     
 Callbacks can also be passed in the options object:
 
     new Kalendae('myDiv', {
        subscribe: {
-           'change': function () {
-               console.log(this.getSelected());
+           'change': function (date, action) {
+               console.log(date, action, this.getSelected());
            }
        } 
     });
