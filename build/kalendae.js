@@ -11,17 +11,17 @@ var today;
 
 var Kalendae = function (targetElement, options) {
 	if (typeof document.addEventListener !== 'function' && !util.isIE8()) return;
-	
+
 	//if the first argument isn't an element and isn't a string, assume that it is the options object
 	var is_element = false;
-	try { 
+	try {
 		is_element = targetElement instanceof Element;
 	}
 	catch (err) {
 		is_element = !!targetElement && is_element.nodeType === 1;
 	}
 	if (!(is_element || typeof(targetElement) === 'string')) options = targetElement;
-	
+
 	var self = this,
 		classes = self.classes,
 		opts = self.settings = util.merge(self.defaults, {attachTo:targetElement}, options || {}),
@@ -38,16 +38,16 @@ var Kalendae = function (targetElement, options) {
 		$span,
 		i = 0,
 		j = opts.months;
-	
+
 	if (util.isIE8()) util.addClassName($container, 'ie8');
-	
+
 	//generate the column headers (Su, Mo, Tu, etc)
 	i = 7;
 	while (i--) {
 		columnHeaders.push( startDay.format('ddd').substr(0,opts.columnHeaderLength) );
 		startDay.add('days',1);
 	}
-	
+
 	//setup publish/subscribe and apply any subscriptions passed in settings
 	MinPubSub(self);
 	if (typeof opts.subscribe === 'object') {
@@ -55,7 +55,7 @@ var Kalendae = function (targetElement, options) {
 			self.subscribe(i, opts.subscribe[i]);
 		}
 	}
-	
+
 	//process default selected dates
 	self._sel = [];
 	if (!!opts.selected) self.setSelected(opts.selected, false);
@@ -69,7 +69,7 @@ var Kalendae = function (targetElement, options) {
 		vsd = moment();
 	}
 	self.viewStartDate = vsd.date(1);
-	
+
 	var viewDelta = ({
 		'past'			: opts.months-1,
 		'today-past'	: opts.months-1,
@@ -93,28 +93,28 @@ var Kalendae = function (targetElement, options) {
 			if (input < 1 || !self._sel || self._sel.length < 1) return false;
 			var i = bdates.length;
 			while (i--) if (bdates[i].yearDay() === input) return true;
-			return false;			
+			return false;
 		}
 	} else {
 		self.blackout = function () {return false;}
 	}
-	
-	
+
+
 	self.direction = self.directions[opts.direction] ? self.directions[opts.direction] : self.directions['any'];
-	
-	
+
+
 	//for the total months setting, generate N calendar views and add them to the container
 	j = Math.max(opts.months,1);
 	while (j--) {
 		$cal = util.make('div', {'class':classes.calendar}, $container);
-		
+
 		$cal.setAttribute('data-cal-index', j);
 		if (opts.months > 1) {
 			if (j == Math.max(opts.months-1,1)) util.addClassName($cal, classes.monthFirst);
 			else if (j === 0) util.addClassName($cal, classes.monthLast);
 			else util.addClassName($cal, classes.monthMiddle);
 		}
-		
+
 		//title bar
 		$title = util.make('div', {'class':classes.title}, $cal);
 		if(!opts.useYearNav){
@@ -125,7 +125,7 @@ var Kalendae = function (targetElement, options) {
 		util.make('a', {'class':classes.nextYear}, $title);		//next button
 		util.make('a', {'class':classes.nextMonth}, $title);		//next button
 		$caption = util.make('span', {'class':classes.caption}, $title);	//title caption
-		
+
 		//column headers
 		$header = util.make('div', {'class':classes.header}, $cal);
 		i = 0;
@@ -147,12 +147,12 @@ var Kalendae = function (targetElement, options) {
 			caption:$caption,
 			days:dayNodes
 		});
-		
+
 		if (j) util.make('div', {'class':classes.monthSeparator}, $container);
 	}
-	
+
 	self.draw();
-	
+
 	util.addEvent($container, 'mousedown', function (event, target) {
 		var clickedDate;
 		if (util.hasClassName(target, classes.nextMonth)) {
@@ -161,8 +161,8 @@ var Kalendae = function (targetElement, options) {
 				self.viewStartDate.add('months',1);
 				self.draw();
 			}
-			return false;			
-			
+			return false;
+
 		} else if (util.hasClassName(target, classes.previousMonth)) {
 		//PREVIOUS MONTH BUTTON
 			if (!self.disablePreviousMonth && self.publish('view-changed', self, ['previous-month']) !== false) {
@@ -170,14 +170,14 @@ var Kalendae = function (targetElement, options) {
 				self.draw();
 			}
 			return false;
-			
+
 		} else if (util.hasClassName(target, classes.nextYear)) {
 		//NEXT MONTH BUTTON
 			if (!self.disableNext && self.publish('view-changed', self, ['next-year']) !== false) {
 				self.viewStartDate.add('years',1);
 				self.draw();
 			}
-			return false;			
+			return false;
 
 		} else if (util.hasClassName(target, classes.previousYear)) {
 		//PREVIOUS MONTH BUTTON
@@ -188,12 +188,12 @@ var Kalendae = function (targetElement, options) {
 			return false;
 
 
-			
+
 		} else if (util.hasClassName(target.parentNode, classes.days) && util.hasClassName(target, classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
 		//DAY CLICK
 			clickedDate = moment(clickedDate, opts.dayAttributeFormat).hours(12);
 			if (self.publish('date-clicked', self, [clickedDate]) !== false) {
-			
+
 				switch (opts.mode) {
 					case 'multiple':
 						if (!self.addSelected(clickedDate)) self.removeSelected(clickedDate);
@@ -210,16 +210,16 @@ var Kalendae = function (targetElement, options) {
 
 			}
 			return false;
-			
+
 		}
 		return false;
 	});
-	
+
 
 	if (!!(opts.attachTo = util.$(opts.attachTo))) {
 		opts.attachTo.appendChild($container);
 	}
-	
+
 };
 
 Kalendae.prototype = {
@@ -245,7 +245,7 @@ Kalendae.prototype = {
 		rangeDelimiter:			' - ',			/* string to use between dates when outputting in range mode */
 		multipleDelimiter:		', ',			/* string to use between dates when outputting in multiple mode */
 		useYearNav: 			true,
-		
+
 		dateClassMap:			{}
 	},
 	classes : {
@@ -275,20 +275,20 @@ Kalendae.prototype = {
 		disableNextYear			:'k-disable-next-year-btn',
 		disableYearNav 			:'k-disable-year-nav'
 	},
-	
+
 	disablePreviousMonth: false,
 	disableNextMonth: false,
 	disablePreviousYear: false,
 	disableNextYear: false,
-	
+
 	directions: {
-		'past'			:function (date) {return moment(date).yearDay() >= today.yearDay();}, 
-		'today-past'	:function (date) {return moment(date).yearDay() > today.yearDay();}, 
-		'any'			:function (date) {return false;}, 
-		'today-future'	:function (date) {return moment(date).yearDay() < today.yearDay();}, 
+		'past'			:function (date) {return moment(date).yearDay() >= today.yearDay();},
+		'today-past'	:function (date) {return moment(date).yearDay() > today.yearDay();},
+		'any'			:function (date) {return false;},
+		'today-future'	:function (date) {return moment(date).yearDay() < today.yearDay();},
 		'future'		:function (date) {return moment(date).yearDay() <= today.yearDay();}
 	},
-	
+
 	getSelectedAsDates : function () {
 		var out = [];
 		var i=0, c = this._sel.length;
@@ -297,7 +297,7 @@ Kalendae.prototype = {
 		}
 		return out;
 	},
-	
+
 	getSelectedAsText : function (format) {
 		var out = [];
 		var i=0, c = this._sel.length;
@@ -306,7 +306,7 @@ Kalendae.prototype = {
 		}
 		return out;
 	},
-	
+
 	getSelectedRaw : function () {
 		var out = [];
 		var i=0, c = this._sel.length;
@@ -315,7 +315,7 @@ Kalendae.prototype = {
 		}
 		return out;
 	},
-	
+
 	getSelected : function (format) {
 		var sel = this.getSelectedAsText(format);
 		switch (this.settings.mode) {
@@ -332,7 +332,7 @@ Kalendae.prototype = {
 				return sel[0];
 		}
 	},
-	
+
 	isSelected : function (input) {
 		input = moment(input).yearDay();
 		if (input < 1 || !this._sel || this._sel.length < 1) return false;
@@ -366,14 +366,14 @@ Kalendae.prototype = {
 
 		return false;
 	},
-	
+
 	setSelected : function (input, draw) {
 		this._sel = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
 		this._sel.sort(function (a,b) {return a.yearDay() - b.yearDay();});
 
 		if (draw !== false) this.draw();
 	},
-	
+
 	addSelected : function (date, draw) {
 		date = moment(date).hours(12);
 
@@ -428,7 +428,7 @@ Kalendae.prototype = {
 		}
 		return false;
 	},
-	
+
 	draw : function draw() {
 		// return;
 		var month = moment(this.viewStartDate).hours(12), //force middle of the day to avoid any weird date shifts
@@ -447,7 +447,7 @@ Kalendae.prototype = {
 
 		do {
 			day = moment(month).date(1);
-			day.day( day.day() < this.settings.weekStart ? this.settings.weekStart-7 : this.settings.weekStart); 
+			day.day( day.day() < this.settings.weekStart ? this.settings.weekStart-7 : this.settings.weekStart);
 			//if the first day of the month is less than our week start, back up a week
 
 			cal = this.calendars[i];
@@ -464,7 +464,7 @@ Kalendae.prototype = {
 
 				if (day.month() != month.month()) klass.push(classes.dayOutOfMonth);
 				else klass.push(classes.dayInMonth);
-				
+
 				if (!(this.blackout(day) || this.direction(day) || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0) klass.push(classes.dayActive);
 
 				if (day.yearDay() === today.yearDay()) klass.push(classes.dayToday);
@@ -475,15 +475,15 @@ Kalendae.prototype = {
 				$span.innerHTML = day.format(opts.dayNumberFormat);
 				$span.className = klass.join(' ');
 				$span.setAttribute('data-date', dateString);
-				
+
 
 				day.add('days',1);
 			} while (++j < 42);
 			month.add('months',1);
 		} while (++i < c);
-		
+
 		if (opts.directionScrolling) {
-			var diff = -(moment().diff(month, 'months'));		
+			var diff = -(moment().diff(month, 'months'));
 			if (opts.direction==='today-past' || opts.direction==='past') {
 
 				if (diff < 0) {
@@ -505,8 +505,8 @@ Kalendae.prototype = {
 				}
 
 			}
-			
-				
+
+
 			if (opts.direction==='today-past' || opts.direction==='past') {
 				if (month.add({y:1}).diff(moment(), 'months') <= 0) {
 					this.disableNextYear = false;
@@ -526,26 +526,26 @@ Kalendae.prototype = {
 				}
 
 			}
-			
+
 		}
 	}
 }
 
 var parseDates = function (input, delimiter, format) {
 	var output = [];
-	
+
 	if (typeof input === 'string') {
-		input = input.split(delimiter);		
+		input = input.split(delimiter);
 	} else if (!util.isArray(input)) {
 		input = [input];
 	}
-	
+
 	var c = input.length;
 	i = 0;
 	do {
 		if (input[i]) output.push( moment(input[i], format).hours(12) );
 	} while (++i < c);
-	
+
 	return output;
 }
 
@@ -554,21 +554,21 @@ var parseDates = function (input, delimiter, format) {
 window.Kalendae = Kalendae;
 
 var util = Kalendae.util = {
-	
+
 	isIE8: function() {
 	    return !!( (/msie 8./i).test(navigator.appVersion) && !(/opera/i).test(navigator.userAgent) && window.ActiveXObject && XDomainRequest && !window.msPerformance );
 	},
-	
+
 // ELEMENT FUNCTIONS
 
 	$: function (elem) {
 		return (typeof elem == 'string') ? document.getElementById(elem) : elem;
 	},
-	
+
 	$$: function (selector) {
 		return document.querySelectorAll(selector);
 	},
-	
+
 	make: function (tagName, attributes, attach) {
 		var k, e = document.createElement(tagName);
 		if (!!attributes) for (k in attributes) if (attributes.hasOwnProperty(k)) e.setAttribute(k, attributes[k]);
@@ -582,7 +582,7 @@ var util = Kalendae.util = {
 		// shamelessly copied from jQuery
 		return elem.offsetWidth > 0 || elem.offsetHeight > 0;
 	},
-	
+
 	getStyle: function (elem, styleProp) {
 		var y;
 		if (elem.currentStyle) {
@@ -592,7 +592,7 @@ var util = Kalendae.util = {
 		}
 		return y;
 	},
-	
+
 	domReady:function (f){/in/.test(document.readyState) ? setTimeout(function() {util.domReady(f);},9) : f()},
 
 	// Adds a listener callback to a DOM element which is fired on a specified
@@ -628,7 +628,7 @@ var util = Kalendae.util = {
 			elem.removeEventListener(event, listener, false);
 		}
 	},
-	
+
 	hasClassName: function(elem, className) { //copied and modified from Prototype.js
 		if (!(elem = util.$(elem))) return false;
 		var eClassName = elem.className;
@@ -659,19 +659,19 @@ var util = Kalendae.util = {
 		} while ((elem = elem.parentNode) && elem != window.document.body);
 		return null;
 	},
-	
+
 	getPosition: function (elem, isInner) {
 		var x = elem.offsetLeft,
 			y = elem.offsetTop,
 			r = {};
-			
+
 		if (!isInner) {
 			while ((elem = elem.offsetParent)) {
 				x += elem.offsetLeft;
 				y += elem.offsetTop;
 			}
 		}
-		
+
 		r[0] = r.left = x;
 		r[1] = r.top = y;
 		return r;
@@ -684,15 +684,15 @@ var util = Kalendae.util = {
 	getWidth: function (elem) {
 		return elem.offsetWidth || elem.scrollWidth;
 	},
-	
-	
-// TEXT FUNCTIONS	
-	
+
+
+// TEXT FUNCTIONS
+
 	trimString: function (input) {
 		return input.replace(/^\s+/, '').replace(/\s+$/, '');
 	},
-	
-	
+
+
 // OBJECT FUNCTIONS
 
 	merge: function () {
@@ -700,7 +700,7 @@ var util = Kalendae.util = {
 		 * Syntax: util.extend([true], object1, object2, ... objectN)
 		 * If first argument is true, function will merge recursively.
 		 */
-		
+
 		var deep = (arguments[0]===true),
 			d = {},
 			i = deep?1:0;
@@ -720,15 +720,15 @@ var util = Kalendae.util = {
 		}
 		return d;
 	},
-	
+
 	isArray: function (array) {
 		return !(
-			!array || 
-			(!array.length || array.length === 0) || 
-			typeof array !== 'object' || 
-			!array.constructor || 
-			array.nodeType || 
-			array.item 
+			!array ||
+			(!array.length || array.length === 0) ||
+			typeof array !== 'object' ||
+			!array.constructor ||
+			array.nodeType ||
+			array.item
 		);
 	}
 };
@@ -754,7 +754,7 @@ if (typeof document.addEventListener === 'function') Kalendae.util.domReady(func
 			//otherwise, insert a flat calendar into the element.
 			new Kalendae(util.merge(options, {attachTo:e}));
 		}
-		
+
 	}
 });
 Kalendae.Input = function (targetElement, options) {
@@ -764,21 +764,21 @@ Kalendae.Input = function (targetElement, options) {
 		overwriteInput;
 
 	if (!$input || $input.tagName !== 'INPUT') throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
-	
+
 	var self = this,
 		classes = self.classes
 		opts = self.settings = util.merge(self.defaults, options);
-	
+
 	//force attachment to the body
 	opts.attachTo = window.document.body;
 
 	//if no override provided, use the input's contents
 	if (!opts.selected) opts.selected = $input.value;
 	else overwriteInput = true;
-	
+
 	//call our parent constructor
 	Kalendae.call(self, opts);
-	
+
 	//create the close button
 	if (opts.closeButton) {
 		var $closeButton = util.make('a', {'class':classes.closeButton}, self.container)
@@ -786,15 +786,15 @@ Kalendae.Input = function (targetElement, options) {
 			$input.blur();
 		});
 	}
-	
+
 	if (overwriteInput) $input.value = self.getSelected();
-	
+
 	var $container = self.container,
 		noclose = false;
-	
+
 	$container.style.display = 'none';
 	util.addClassName($container, classes.positioned);
-	
+
 	util.addEvent($container, 'mousedown', function (event, target) {
 		noclose = true; //IE8 doesn't obey event blocking when it comes to focusing, so we have to do this shit.
 	});
@@ -806,7 +806,7 @@ Kalendae.Input = function (targetElement, options) {
 		self.setSelected(this.value);
 		self.show();
 	});
-	
+
 	util.addEvent($input, 'blur', function () {
 		if (noclose) {
 			noclose = false;
@@ -827,11 +827,11 @@ Kalendae.Input = function (targetElement, options) {
 			$input.blur();
 		});
 	}
-	
+
 	self.subscribe('change', function () {
 		$input.value = self.getSelected();
 	});
-	
+
 };
 
 Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
@@ -846,7 +846,7 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 		positioned : 'k-floating',
 		closeButton: 'k-btn-close'
 	}),
-	
+
 	show : function () {
 		var $container = this.container,
 			style = $container.style,
@@ -876,17 +876,17 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 				style.top  = (pos.top + util.getHeight($input) + this.settings.offsetTop - scrollTop) + 'px';
 				break;
 		}
-		
+
 		style.position = util.isFixed($input) ? 'fixed' : 'absolute';
-		
+
 		this.publish('show', this);
 	},
-	
+
 	hide : function () {
 		this.container.style.display = 'none';
 		this.publish('hide', this);
 	}
-	
+
 });
 
 
@@ -903,22 +903,22 @@ var MinPubSub = function(d){
 
 	// the topic/subscription hash
 	var cache = d.c_ || {}; //check for "c_" cache for unit testing
-	
+
 	d.publish = function(/* String */ topic, /* Object */ target, /* Array? */ args){
-		// summary: 
+		// summary:
 		//		Publish some data on a named topic.
 		// topic: String
 		//		The channel to publish on
 		// args: Array?
 		//		The data to publish. Each array item is converted into an ordered
-		//		arguments on the subscribed functions. 
+		//		arguments on the subscribed functions.
 		//
 		// example:
 		//		Publish stuff on '/some/topic'. Anything subscribed will be called
 		//		with a function signature like: function(a,b,c){ ... }
 		//
 		//		publish("/some/topic", ["a","b","c"]);
-		
+
 		var subs = cache[topic],
 			len = subs ? subs.length : 0,
 			r;
@@ -936,13 +936,13 @@ var MinPubSub = function(d){
 		// topic: String
 		//		The channel to subscribe to
 		// callback: Function
-		//		The handler event. Anytime something is publish'ed on a 
+		//		The handler event. Anytime something is publish'ed on a
 		//		subscribed channel, the callback will be called with the
 		//		published array as ordered arguments.
 		//
 		// returns: Array
 		//		A handle which can be used to unsubscribe this particular subscription.
-		//	
+		//
 		// example:
 		//		subscribe("/some/topic", function(a, b, c){ /* handle data */ });
 
@@ -964,11 +964,11 @@ var MinPubSub = function(d){
 		// example:
 		//		var handle = subscribe("/some/topic", function(){});
 		//		unsubscribe(handle);
-		
+
 		var subs = cache[handle[0]],
 			callback = handle[1],
 			len = subs ? subs.length : 0;
-		
+
 		while(len--){
 			if(subs[len] === callback){
 				subs.splice(len, 1);
@@ -976,7 +976,8 @@ var MinPubSub = function(d){
 		}
 	};
 
-};Kalendae.moment = moment;
+};
+Kalendae.moment = moment;
 
 //function to reset the date object to 00:00 GMT
 moment.fn.stripTime = function () {

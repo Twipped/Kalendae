@@ -5,21 +5,21 @@ Kalendae.Input = function (targetElement, options) {
 		overwriteInput;
 
 	if (!$input || $input.tagName !== 'INPUT') throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
-	
+
 	var self = this,
 		classes = self.classes
 		opts = self.settings = util.merge(self.defaults, options);
-	
+
 	//force attachment to the body
 	opts.attachTo = window.document.body;
 
 	//if no override provided, use the input's contents
 	if (!opts.selected) opts.selected = $input.value;
 	else overwriteInput = true;
-	
+
 	//call our parent constructor
 	Kalendae.call(self, opts);
-	
+
 	//create the close button
 	if (opts.closeButton) {
 		var $closeButton = util.make('a', {'class':classes.closeButton}, self.container)
@@ -27,15 +27,15 @@ Kalendae.Input = function (targetElement, options) {
 			$input.blur();
 		});
 	}
-	
+
 	if (overwriteInput) $input.value = self.getSelected();
-	
+
 	var $container = self.container,
 		noclose = false;
-	
+
 	$container.style.display = 'none';
 	util.addClassName($container, classes.positioned);
-	
+
 	util.addEvent($container, 'mousedown', function (event, target) {
 		noclose = true; //IE8 doesn't obey event blocking when it comes to focusing, so we have to do this shit.
 	});
@@ -47,7 +47,7 @@ Kalendae.Input = function (targetElement, options) {
 		self.setSelected(this.value);
 		self.show();
 	});
-	
+
 	util.addEvent($input, 'blur', function () {
 		if (noclose) {
 			noclose = false;
@@ -68,11 +68,11 @@ Kalendae.Input = function (targetElement, options) {
 			$input.blur();
 		});
 	}
-	
+
 	self.subscribe('change', function () {
 		$input.value = self.getSelected();
 	});
-	
+
 };
 
 Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
@@ -87,7 +87,7 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 		positioned : 'k-floating',
 		closeButton: 'k-btn-close'
 	}),
-	
+
 	show : function () {
 		var $container = this.container,
 			style = $container.style,
@@ -117,16 +117,16 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 				style.top  = (pos.top + util.getHeight($input) + this.settings.offsetTop - scrollTop) + 'px';
 				break;
 		}
-		
+
 		style.position = util.isFixed($input) ? 'fixed' : 'absolute';
-		
+
 		this.publish('show', this);
 	},
-	
+
 	hide : function () {
 		this.container.style.display = 'none';
 		this.publish('hide', this);
 	}
-	
+
 });
 

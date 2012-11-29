@@ -28,7 +28,7 @@
 			mode:'single',
 			selected:Kalendae.moment().subtract({M:1})
 		});
-		
+
 		new Kalendae({
 			attachTo:document.body,
 			months:3,
@@ -36,8 +36,8 @@
 			selected:Kalendae.moment().subtract({M:1})
 		});
 	</script>
-		
-	<p>Range Select</p>	
+
+	<p>Range Select</p>
 	<script type="text/javascript" charset="utf-8">
 		new Kalendae(document.body, {
 			months:1,
@@ -51,7 +51,7 @@
 			mode:'range',
 			selected:[Kalendae.moment().subtract({M:1}), Kalendae.moment().add({M:1})]
 		});
-		
+
 		new Kalendae({
 			attachTo:document.body,
 			months:3,
@@ -74,20 +74,20 @@
 			mode:'multiple',
 			selected:[Kalendae.moment().subtract({M:1}), Kalendae.moment().add({M:1})]
 		});
-		
+
 		new Kalendae({
 			attachTo:document.body,
 			months:3,
 			mode:'multiple',
 			selected:[Kalendae.moment().subtract({M:1}), Kalendae.moment().add({M:1})]
 		});
-		
+
 
 	</script>
 
 	<hr>
 	<p>Blackout and Direction Tests</p>
-	
+
 	<script type="text/javascript" charset="utf-8">
 		//direction
 		new Kalendae(document.body, {
@@ -115,19 +115,19 @@
 				return [1,0,0,0,0,0,1][Kalendae.moment(date).day()]; //blackout weekends
 			}
 		});
-				
+
 	</script>
 
 
 
 	<hr>
 	<p>Class Map Test</p>
-	
+
 	<script type="text/javascript" charset="utf-8">
 		//direction
 		var classMap = [];
 			classMap[ Kalendae.moment().add({d:5}).format('YYYY-MM-DD') ] = 'closed';
-			
+
 		new Kalendae(document.body, {
 			dateClassMap: classMap
 		});
@@ -140,19 +140,19 @@
 			months:2
 		});
 	</script>
-	
+
 	<hr>
 	This calendar is auto-created.
 	<div class="auto-kal"></div>
-	
+
 	<hr>
 	So is the one on this input.
 	<input type="text" class="auto-kal">
-	
+
 	<hr>
 	This calendar is auto-created with months: 3 and direction: 'future'.
 	<div class="auto-kal" data-kal="months: 3, direction: 'future'"></div>
-	
+
 	<hr>
 	This calander on this input is auto-created with direction: 'future'.
 	<input type="text" class="auto-kal" data-kal="direction: 'future'">
