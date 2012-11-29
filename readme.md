@@ -62,11 +62,7 @@ Kalendae does not require jQuery, but does provide a jQuery plugin when jQuery i
 
 ##moment.js
 
-To ease date handling processes, Kalendae bundles the [moment.js](http://www.momentjs.com) date handling library.  This bundled library has been altered to prevent it from being added to the global context, but is still available if you wish to use it in your own code.  Add the following directly after the `<script>` tag to make moment available for your application.
-    
-    <script type="text/javascript" charset="utf-8">
-        window.moment = Kalendae.moment;
-    </script>
+To ease date handling processes, Kalendae uses the [moment.js](http://www.momentjs.com) date handling library. Kalendae uses the global variable `moment`. Be sure, that this variable is exists.
 
 ##Options
 

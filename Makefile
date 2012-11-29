@@ -3,7 +3,6 @@ kal=src/main.js \
 	src/auto.js \
 	src/input.js \
 	src/MinPubSub.js \
-	src/moment.js \
 	src/moment.ext.js \
 	src/jq.js
 
