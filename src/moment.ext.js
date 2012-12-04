@@ -1,3 +1,4 @@
+Kalendae.moment = moment;
 
 //function to reset the date object to 00:00 GMT
 moment.fn.stripTime = function () {
