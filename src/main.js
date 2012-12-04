@@ -81,7 +81,7 @@ var Kalendae = function (targetElement, options) {
 		var bdates = parseDates(opts.blackout, opts.parseSplitDelimiter);
 		self.blackout = function (input) {
 			input = moment(input).yearDay();
-			if (input < 1 || !self._sel || self._sel.length < 1) return false;
+			if (input < 1 || !self._sel) return false;
 			var i = bdates.length;
 			while (i--) if (bdates[i].yearDay() === input) return true;
 			return false;
