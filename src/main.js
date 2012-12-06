@@ -35,7 +35,7 @@ var Kalendae = function (targetElement, options) {
 	//generate the column headers (Su, Mo, Tu, etc)
 	i = 7;
 	while (i--) {
-		columnHeaders.push( startDay.format('ddd').substr(0,opts.columnHeaderLength) );
+		columnHeaders.push( startDay.format(opts.columnHeaderFormat) );
 		startDay.add('days',1);
 	}
 	
@@ -228,7 +228,7 @@ Kalendae.prototype = {
 		format:					null,			/* string used for parsing dates. */
 		subscribe:				null,			/* object containing events to subscribe to */
 
-		columnHeaderLength:		2,				/* number of characters to show in the column headers */
+		columnHeaderFormat:		'dd',				/* number of characters to show in the column headers */
 		titleFormat:			'MMMM, YYYY',	/* format mask for month titles. See momentjs.com for rules */
 		dayNumberFormat:		'D',			/* format mask for individual days */
 		dayAttributeFormat:		'YYYY-MM-DD',	/* format mask for the data-date attribute set on every span */

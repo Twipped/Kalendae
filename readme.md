@@ -128,9 +128,9 @@ The following options are available for configuration.
     
 The following settings alter the internal behavior of Kalendae and should only be changed by advanced users.
 
-- `columnHeaderLength`:	The number of characters of the week day name to display in column headers.
-    - Default is `2`
     
+- `columnHeaderFormat`:	The format of moment data of the week day name to display in column headers.
+    - Default is `dd`
 - `titleFormat`: Format string used in the calendar title.
     - Default is `"MMMM, YYYY"`
 
