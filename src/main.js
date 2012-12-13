@@ -359,8 +359,14 @@ Kalendae.prototype = {
 	},
 	
 	setSelected : function (input, draw) {
-		this._sel = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
-		this._sel.sort(function (a,b) {return a.yearDay() - b.yearDay();});
+		var new_dates = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
+		var old_dates = parseDates(this.getSelected(), this.settings.parseSplitDelimiter, this.settings.format);
+
+		var i = old_dates.length;
+		while(i--) { this.removeSelected(old_dates[i], draw) }
+
+		var i = new_dates.length;
+		while(i--) { this.addSelected(new_dates[i], draw) }
 
 		if (draw !== false) this.draw();
 	},
