@@ -49,11 +49,8 @@ Kalendae.Input = function (targetElement, options) {
 	});
 	
 	util.addEvent($input, 'blur', function () {
-		if (noclose) {
-			noclose = false;
-			$input.focus();
-		}
-		else self.hide();
+		noclose = false;
+		self.hide();
 	});
 	util.addEvent($input, 'keyup', function (event) {
 		self.setSelected(this.value);
