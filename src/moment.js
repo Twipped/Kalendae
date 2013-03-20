@@ -1381,4 +1381,4 @@
 
     this['moment'] = moment;
 
-}).call(Kalendae);
+}).call(typeof Kalendae === 'undefined' ? window : Kalendae);
