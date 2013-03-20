@@ -2,7 +2,7 @@
 
 Kalendae is an attempt to do something that nobody has yet been able to do: make a date picker that doesn't suck.  Kalendae provides the following features:
 
-1. Fully portable, **no dependencies**.  No jQuery, no Prototype, no MooTools; just add the script and the stylesheet and you're good to go.
+1. Fully portable, **no external dependencies**.  No jQuery, no Prototype, no MooTools; just add the script and the stylesheet and you're good to go.
 2. Fully and easily skinable. The default theme uses only one image file (a mask for the previous and next buttons), everything else is styled using CSS.
 3. Supports all modern browsers and IE8.
 4. Support single day, multiple day, or day range selection.
@@ -32,16 +32,16 @@ Two month, range selection, future dates only, with weekends blacked out:
 Copy the contents of the `build/` folder into wherever your website scripts are kept.  Include the JS and CSS files in the head of your document like so:
 
     <link rel="stylesheet" href="build/kalendae.css" type="text/css" charset="utf-8">
-    <script src="build/kalendae.js" type="text/javascript" charset="utf-8"></script>
+    <script src="build/kalendae.standalone.js" type="text/javascript" charset="utf-8"></script>
 
 Once this is done you can initialize kalendae a number of ways.  The easiest method is to simply add the "auto-kal" class onto the element you want to calendar attached to.  The calendar will be created using the default settings.
 
     <div class="auto-kal"></div>
 
-This works for input elements as well, providing a popup calendar.    
+This works for input elements as well, providing a popup calendar.
 
     <input type="text" class="auto-kal">
-	
+
 
 If you want to override the default settings, you can use the data-kal attribute.
 
@@ -63,7 +63,7 @@ Kalendae does not require jQuery, but does provide a jQuery plugin when jQuery i
 ##moment.js
 
 To ease date handling processes, Kalendae bundles the [moment.js](http://www.momentjs.com) date handling library.  This bundled library has been altered to prevent it from being added to the global context, but is still available if you wish to use it in your own code.  Add the following directly after the `<script>` tag to make moment available for your application.
-    
+
     <script type="text/javascript" charset="utf-8">
         window.moment = Kalendae.moment;
     </script>
@@ -81,7 +81,7 @@ The following options are available for configuration.
     - Uses moment.js notation (see http://momentjs.com/docs/#/display/format )
     - If left undefined, will attempt to parse the date automatically.
     - Default is `null`.
-    
+
 - `mode`: Selection mode.
     - `"single"`: Allows selection of only one day. Clicks change the selected day.  This is the default.
     - `"multiple"`: Allows selection of multiple, non-sequential days. Clicks toggle a day's selection.
@@ -94,19 +94,19 @@ The following options are available for configuration.
 
 - `months`:	The total number of months to display side by side on the calendar.
     - Default is `1`.
-    
+
 - `weekStart`: The day to use for the start of the week.
     - 0 = Sunday, 1 = Monday, etc.
     - Default is `0`.
-    
+
 - `direction`: Restricts date selectability to past or future.
     - Accepted values: past, today-past, any, today-future, future
     - Stacks with `blackout`
     - Default is `"any"`
-    
+
 - `directionScrolling`: If `true` and a direction other than `any` is defined, Kalendae will not allow scrolling the view outside the direction.
     - Default is true.
-    
+
 - `blackout`: Dates to be disallowed from selection.
     - Can be an array of dates formatted according to `format`, or a function taking a moment date object as the first argument and returning true to prevent selection.
     - Stacks with `direction`
@@ -115,7 +115,7 @@ The following options are available for configuration.
 - `viewStartDate`: Date defining the first month to display when created.
     - Uses the `format` definition.
     - Default is `null` (this month or month of first selected day).
-    
+
 - `dateClassMap`: A key/value collection of css classes organized by date.  String date keys found in this collection will have their value attached to the SPAN tag for the date.  This allows for custom coloring for specific days.  See the first example in index.html for usage.
     - Note that this property uses the `dayAttributeFormat` option, NOT the format option, for date strings.
     - Default is `null`.
@@ -125,10 +125,10 @@ The following options are available for configuration.
 - `useYearNav`: Include the double-arrow year navigation. Default is `true`.
 
 ###Advanced Behavior Options
-    
+
 The following settings alter the internal behavior of Kalendae and should only be changed by advanced users.
 
-    
+
 - `columnHeaderFormat`:	The format of moment data of the week day name to display in column headers.
     - Default is `dd`
 - `titleFormat`: Format string used in the calendar title.
@@ -136,16 +136,16 @@ The following settings alter the internal behavior of Kalendae and should only b
 
 - `dayNumberFormat`: Format string for individual day numbers.
 	- Default is `"D"`
-	
+
 - `dayAttributeFormat`: Format string for the `data-date` attribute set on every span 
     - Default is `"YYYY-MM-DD"`
 
 - `parseSplitDelimiter`: RegExp used when splitting multiple dates from a passed string
     - Default is `/,\s*|\s*-\s*/`
-    
+
 - `rangeDelimiter`:	String used to delimit the start and end dates when outputting in range mode
 	- Default is `' - '`
-	
+
 - `multipleDelimiter`: String used to delimit dates when outputting in multiple mode
     - Default is `', '`
 
@@ -195,7 +195,7 @@ Kalendae uses a publish/subscribe event system.  To receive events from a Kalend
     k.subscribe('change', function (date, action) {
        console.log(date, action, this.getSelected());
     });
-    
+
 Callbacks can also be passed in the options object:
 
     new Kalendae('myDiv', {
@@ -203,9 +203,9 @@ Callbacks can also be passed in the options object:
            'change': function (date, action) {
                console.log(date, action, this.getSelected());
            }
-       } 
+       }
     });
-    
+
 Kalendae offers the following events:
 
 - `change` - Fires whenever the selected date changes, either from a user clicking or a call to `setSelected()`
@@ -230,9 +230,17 @@ Coming Soon.
 
 The Kalendae source code is assembled from multiple individual files.  A standard GNU makefile is included to compile the files together into the finished product.
 
-To build Kalendae, navigate to the directory containing this readme file in the system terminal and run the `make` command. 
+To build Kalendae, navigate to the directory containing this readme file in the system terminal and run the `make` command.
 
 To create a minified version, run `make minified`.  If the minified file is blank, run `make minified-test` to see what errors Google Closure Compiler is throwing.
+
+
+##Contributing to Kalendae
+
+1. Please submit all pull requests to the `dev` branch from your own named branch.
+2. Please only include the changes within the `src/` directory, do not include new builds.
+3. New code should match the existing code style, with hard tabs for indentation, spaces for alignment, and [BSD/KNF style bracketing](http://en.wikipedia.org/wiki/Indent_style#BSD_KNF_style).
+4. Please be aware that I have family and work obligations and may take some time to respond to your Pull Request.
 
 ##License
 
