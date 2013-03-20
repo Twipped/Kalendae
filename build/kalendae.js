@@ -483,10 +483,9 @@ Kalendae.prototype = {
 		} while (++i < c);
 		
 		if (opts.directionScrolling) {
-			var diff = -(moment().diff(month, 'months'));		
 			if (opts.direction==='today-past' || opts.direction==='past') {
-
-				if (diff < 0) {
+				var diff = month.add({m:1}).diff(moment(), 'months', true);
+				if (diff <= 0) {
 					this.disableNextMonth = false;
 					util.removeClassName(this.container, classes.disableNextMonth);
 				} else {
@@ -495,8 +494,8 @@ Kalendae.prototype = {
 				}
 
 			} else if (opts.direction==='today-future' || opts.direction==='future') {
-
-				if (diff >= opts.months) {
+				var diff = month.subtract({m:1}).diff(moment(), 'months', true);
+				if (diff > opts.months) {
 					this.disablePreviousMonth = false;
 					util.removeClassName(this.container, classes.disablePreviousMonth);
 				} else {
@@ -508,7 +507,8 @@ Kalendae.prototype = {
 			
 				
 			if (opts.direction==='today-past' || opts.direction==='past') {
-				if (month.add({y:1}).diff(moment(), 'months') <= 0) {
+				var diff = month.add({m:12}).diff(moment(), 'months', true);
+				if (diff <= -11) {
 					this.disableNextYear = false;
 					util.removeClassName(this.container, classes.disableNextYear);
 				} else {
@@ -517,7 +517,8 @@ Kalendae.prototype = {
 				}
 
 			} else if (opts.direction==='today-future' || opts.direction==='future') {
-				if ((month.subtract({y:1}).diff(moment(), 'months') - (opts.months-1)) >= 0) {
+				var diff = month.subtract({m:12}).diff(moment(), 'months', true)
+				if (diff > (11 + opts.months)) {
 					this.disablePreviousYear = false;
 					util.removeClassName(this.container, classes.disablePreviousYear);
 				} else {
