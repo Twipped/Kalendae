@@ -35,7 +35,7 @@ var Kalendae = function (targetElement, options) {
 	//generate the column headers (Su, Mo, Tu, etc)
 	i = 7;
 	while (i--) {
-		columnHeaders.push( startDay.format('ddd').substr(0,opts.columnHeaderLength) );
+		columnHeaders.push( startDay.format(opts.columnHeaderFormat) );
 		startDay.add('days',1);
 	}
 	
@@ -81,7 +81,7 @@ var Kalendae = function (targetElement, options) {
 		var bdates = parseDates(opts.blackout, opts.parseSplitDelimiter);
 		self.blackout = function (input) {
 			input = moment(input).yearDay();
-			if (input < 1 || !self._sel || self._sel.length < 1) return false;
+			if (input < 1 || !self._sel) return false;
 			var i = bdates.length;
 			while (i--) if (bdates[i].yearDay() === input) return true;
 			return false;			
@@ -228,7 +228,7 @@ Kalendae.prototype = {
 		format:					null,			/* string used for parsing dates. */
 		subscribe:				null,			/* object containing events to subscribe to */
 
-		columnHeaderLength:		2,				/* number of characters to show in the column headers */
+		columnHeaderFormat:		'dd',				/* number of characters to show in the column headers */
 		titleFormat:			'MMMM, YYYY',	/* format mask for month titles. See momentjs.com for rules */
 		dayNumberFormat:		'D',			/* format mask for individual days */
 		dayAttributeFormat:		'YYYY-MM-DD',	/* format mask for the data-date attribute set on every span */
@@ -359,8 +359,14 @@ Kalendae.prototype = {
 	},
 	
 	setSelected : function (input, draw) {
-		this._sel = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
-		this._sel.sort(function (a,b) {return a.yearDay() - b.yearDay();});
+		var new_dates = parseDates(input, this.settings.parseSplitDelimiter, this.settings.format);
+		var old_dates = parseDates(this.getSelected(), this.settings.parseSplitDelimiter, this.settings.format);
+
+		var i = old_dates.length;
+		while(i--) { this.removeSelected(old_dates[i], draw) }
+
+		var i = new_dates.length;
+		while(i--) { this.addSelected(new_dates[i], draw) }
 
 		if (draw !== false) this.draw();
 	},
