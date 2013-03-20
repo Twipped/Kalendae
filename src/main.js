@@ -537,8 +537,8 @@ var parseDates = function (input, delimiter, format) {
 		input = [input];
 	}
 	
-	var c = input.length;
-	i = 0;
+	var c = input.length,
+			i = 0;
 	do {
 		if (input[i]) output.push( moment(input[i], format).hours(12) );
 	} while (++i < c);
