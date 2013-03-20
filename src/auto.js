@@ -19,6 +19,6 @@ if (typeof document.addEventListener === 'function') Kalendae.util.domReady(func
 			//otherwise, insert a flat calendar into the element.
 			new Kalendae(util.merge(options, {attachTo:e}));
 		}
-		
+
 	}
 });

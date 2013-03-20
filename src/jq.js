@@ -11,6 +11,6 @@ if (typeof jQuery !== 'undefined' && typeof document.addEventListener === 'funct
 			}
 		});
 		return this;
-	}
+	};
 }
 
