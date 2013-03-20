@@ -95,27 +95,28 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 			$input = this.input,
 			pos = util.getPosition($input),
 			$scrollContainer = util.scrollContainer($input),
-			scrollTop = $scrollContainer ? $scrollContainer.scrollTop : 0;
+			scrollTop = $scrollContainer ? $scrollContainer.scrollTop : 0,
+			opts = this.settings;
 
 		style.display = '';
 		switch (opts.side) {
 			case 'left':
-				style.left = (pos.left - util.getWidth($container) + this.settings.offsetLeft) + 'px';
-				style.top  = (pos.top + this.settings.offsetTop - scrollTop) + 'px';
+				style.left = (pos.left - util.getWidth($container) + opts.offsetLeft) + 'px';
+				style.top  = (pos.top + opts.offsetTop - scrollTop) + 'px';
 				break;
 			case 'right':
 				style.left = (pos.left + util.getWidth($input)) + 'px';
-				style.top  = (pos.top + this.settings.offsetTop - scrollTop) + 'px';
+				style.top  = (pos.top + opts.offsetTop - scrollTop) + 'px';
 				break;
 			case 'top':
-				style.left = (pos.left + this.settings.offsetLeft) + 'px';
-				style.top  = (pos.top - util.getHeight($container) + this.settings.offsetTop - scrollTop) + 'px';
+				style.left = (pos.left + opts.offsetLeft) + 'px';
+				style.top  = (pos.top - util.getHeight($container) + opts.offsetTop - scrollTop) + 'px';
 				break;
 			case 'bottom':
 				/* falls through */
 			default:
-				style.left = (pos.left + this.settings.offsetLeft) + 'px';
-				style.top  = (pos.top + util.getHeight($input) + this.settings.offsetTop - scrollTop) + 'px';
+				style.left = (pos.left + opts.offsetLeft) + 'px';
+				style.top  = (pos.top + util.getHeight($input) + opts.offsetTop - scrollTop) + 'px';
 				break;
 		}
 
