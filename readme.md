@@ -1,4 +1,6 @@
-#Kalendae - A framework agnostic javascript date picker
+#Kalendae - Skins
+
+
 
 Kalendae is an attempt to do something that nobody has yet been able to do: make a date picker that doesn't suck.  Kalendae provides the following features:
 
