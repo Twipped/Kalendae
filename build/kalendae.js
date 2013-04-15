@@ -378,7 +378,10 @@ Kalendae.prototype = {
 		i = new_dates.length;
 		while(i--) { this.addSelected(new_dates[i], draw); }
 
-		if (draw !== false) this.draw();
+		if (draw !== false) {
+			this.viewStartDate = moment(new_dates[0], this.settings.format).dates(1);
+			this.draw();
+		}
 	},
 
 	addSelected : function (date, draw) {
