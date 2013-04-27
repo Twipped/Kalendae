@@ -1,8 +1,8 @@
 /********************************************************************
  *	Kalendae, a framework agnostic javascript date picker           *
- *	Copyright(c) 2012 Jarvis Badgley (chipersoft@gmail.com)         *
+ *	Copyright(c) 2013 Jarvis Badgley (chipersoft@gmail.com)         *
  *	http://github.com/ChiperSoft/Kalendae                           *
- *	Version 0.4                                                     *
+ *	Version 0.4.1                                                   *
  ********************************************************************/
 
 (function (undefined) {
@@ -87,7 +87,7 @@ var Kalendae = function (targetElement, options) {
 	if (typeof opts.blackout === 'function') {
 		self.blackout = opts.blackout;
 	} else if (!!opts.blackout) {
-		var bdates = parseDates(opts.blackout, opts.parseSplitDelimiter);
+		var bdates = parseDates(opts.blackout, opts.parseSplitDelimiter, opts.format);
 		self.blackout = function (input) {
 			input = moment(input).yearDay();
 			if (input < 1 || !self._sel) return false;
@@ -382,7 +382,7 @@ Kalendae.prototype = {
 	},
 
 	addSelected : function (date, draw) {
-		date = moment(date).hours(12);
+		date = moment(date, this.settings.format).hours(12);
 
 		if(this.settings.dayOutOfMonthClickable && this.settings.mode !== 'range'){ this.makeSelectedDateVisible(date); }
 
@@ -423,7 +423,7 @@ Kalendae.prototype = {
 	},
 
 	removeSelected : function (date, draw) {
-		date = moment(date).hours(12);
+		date = moment(date, this.settings.format).hours(12);
 		var i = this._sel.length;
 		while (i--) {
 			if (this._sel[i].yearDay() === date.yearDay()) {
@@ -812,7 +812,7 @@ Kalendae.Input = function (targetElement, options) {
 	});
 
 	util.addEvent($input, 'blur', function () {
-		if (noclose) {
+		if (noclose && util.isIE8()) {
 			noclose = false;
 			$input.focus();
 		}
@@ -1008,7 +1008,7 @@ moment.fn.yearDay = function (input) {
 
 today = Kalendae.moment().stripTime();
 
-if (typeof jQuery !== 'undefined' && typeof document.addEventListener === 'function') {
+if (typeof jQuery !== 'undefined' && (typeof document.addEventListener === 'function' || util.isIE8())) {
 	jQuery.fn.kalendae = function (options) {
 		this.each(function (i, e) {
 			if (e.tagName === 'INPUT') {

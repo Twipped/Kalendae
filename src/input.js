@@ -50,7 +50,7 @@ Kalendae.Input = function (targetElement, options) {
 	});
 
 	util.addEvent($input, 'blur', function () {
-		if (noclose) {
+		if (noclose && util.isIE8()) {
 			noclose = false;
 			$input.focus();
 		}
