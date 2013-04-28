@@ -373,10 +373,10 @@ Kalendae.prototype = {
 			old_dates = parseDates(this.getSelected(), this.settings.parseSplitDelimiter, this.settings.format);
 
 		i = old_dates.length;
-		while(i--) { this.removeSelected(old_dates[i], draw); }
+		while(i--) { this.removeSelected(old_dates[i], false); }
 
 		i = new_dates.length;
-		while(i--) { this.addSelected(new_dates[i], draw); }
+		while(i--) { this.addSelected(new_dates[i], false); }
 
 		if (draw !== false) this.draw();
 	},
@@ -765,7 +765,8 @@ Kalendae.Input = function (targetElement, options) {
 
 	var $input = this.input = util.$(targetElement),
 		overwriteInput,
-		$closeButton;
+		$closeButton,
+		changing = false;
 
 	if (!$input || $input.tagName !== 'INPUT') throw "First argument for Kalendae.Input must be an <input> element or a valid element id.";
 
@@ -807,7 +808,9 @@ Kalendae.Input = function (targetElement, options) {
 	});
 
 	util.addEvent($input, 'focus', function () {
+		changing = true; // prevent setSelected from altering the input contents.
 		self.setSelected(this.value);
+		changing = false;
 		self.show();
 	});
 
@@ -819,7 +822,9 @@ Kalendae.Input = function (targetElement, options) {
 		else self.hide();
 	});
 	util.addEvent($input, 'keyup', function (event) {
+		changing = true; // prevent setSelected from altering the input contents.
 		self.setSelected(this.value);
+		changing = false;
 	});
 
 	var $scrollContainer = util.scrollContainer($input);
@@ -833,6 +838,10 @@ Kalendae.Input = function (targetElement, options) {
 	}
 
 	self.subscribe('change', function () {
+		if (changing) {
+			// the change event came from an internal modification, don't update the field contents
+			return;
+		}
 		$input.value = self.getSelected();
 	});
 
