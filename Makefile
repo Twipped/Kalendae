@@ -58,7 +58,7 @@ build/kalendae.standalone.min.js: build/kalendae.standalone.js
 		--data-urlencode 'output_info=compiled_code' \
 		http://closure-compiler.appspot.com/compile \
 		>> $@
-	gzip -c build/kalendae.min.js | wc -c
+	gzip -c build/kalendae.standalone.min.js | wc -c
 
 
 build/kalendae.min.errors: build/kalendae.js
