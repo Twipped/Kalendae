@@ -369,7 +369,12 @@ Kalendae.prototype = {
 		i = new_dates.length;
 		while(i--) { this.addSelected(new_dates[i], false); }
 
-		if (draw !== false) this.draw();
+		if (draw !== false) {
+			if (new_dates[0]) {
+				this.viewStartDate = moment(new_dates[0], this.settings.format);
+			}
+			this.draw();
+		}
 	},
 
 	addSelected : function (date, draw) {
