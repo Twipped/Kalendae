@@ -2,7 +2,7 @@
  *	Kalendae, a framework agnostic javascript date picker           *
  *	Copyright(c) 2013 Jarvis Badgley (chipersoft@gmail.com)         *
  *	http://github.com/ChiperSoft/Kalendae                           *
- *	Version 0.4.1                                                   *
+ *	Version 0.4.2                                                   *
  ********************************************************************/
 
 (function (undefined) {
@@ -329,7 +329,7 @@ Kalendae.prototype = {
 			case 'single':
 				/* falls through */
 			default:
-				return sel[0];
+				return (sel[0] || null);
 		}
 	},
 

@@ -2,6 +2,11 @@
 
 ## 0.4.2
 
+### Resolved Issues
+
+* \#87 ```getSelected``` does not return ```undefined``` anymore
+
+
 ## 0.4.1
 
 ### Resolved Issues

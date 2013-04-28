@@ -320,7 +320,7 @@ Kalendae.prototype = {
 			case 'single':
 				/* falls through */
 			default:
-				return sel[0];
+				return (sel[0] || null);
 		}
 	},
 
