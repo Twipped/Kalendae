@@ -39,7 +39,14 @@ var util = Kalendae.util = {
 		return y;
 	},
 
-	domReady:function (f){/in/.test(document.readyState) ? setTimeout(function() {util.domReady(f);},9) : f()},
+	domReady: function (f) {
+		var state = document.readyState;
+		if (state === 'complete' || state === 'interactive') {
+			f();
+		} else {
+			setTimeout(function() { util.domReady(f); }, 9);
+		}
+	},
 
 	// Adds a listener callback to a DOM element which is fired on a specified
 	// event.  Callback is sent the event object and the element that triggered the event
@@ -168,7 +175,7 @@ var util = Kalendae.util = {
 	},
 
 	isArray: function (array) {
-		return Object.prototype.toString.call(array) == "[object Array]"
+		return Object.prototype.toString.call(array) == "[object Array]";
 	}
 };
 
