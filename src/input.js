@@ -55,6 +55,7 @@ Kalendae.Input = function (targetElement, options) {
 			$input.focus();
 		}
 		else self.hide();
+		$input.value = self.getSelected();
 	});
 	util.addEvent($input, 'keyup', function (event) {
 		self.setSelected(this.value);
@@ -69,10 +70,6 @@ Kalendae.Input = function (targetElement, options) {
 			$input.blur();
 		});
 	}
-
-	self.subscribe('change', function () {
-		$input.value = self.getSelected();
-	});
 
 };
 
