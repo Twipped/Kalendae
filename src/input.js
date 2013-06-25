@@ -9,6 +9,8 @@ Kalendae.Input = function (targetElement, options) {
 	var self = this,
 		classes = self.classes
 		opts = self.settings = util.merge(self.defaults, options);
+
+  this._events = {};
 	
 	//force attachment to the body
 	opts.attachTo = window.document.body;
@@ -35,27 +37,29 @@ Kalendae.Input = function (targetElement, options) {
 	
 	$container.style.display = 'none';
 	util.addClassName($container, classes.positioned);
-	
-	util.addEvent($container, 'mousedown', function (event, target) {
+
+	this._events.containerMouseDown = util.addEvent($container, 'mousedown', function (event, target) {
 		noclose = true; //IE8 doesn't obey event blocking when it comes to focusing, so we have to do this shit.
 	});
-	util.addEvent(window.document, 'mousedown', function (event, target) {
+
+	this._events.documentMousedown = util.addEvent(window.document, 'mousedown', function (event, target) {
 		noclose = false;
 	});
 
-	util.addEvent($input, 'focus', function () {
+	this._events.inputFocus = util.addEvent($input, 'focus', function() {
 		self.setSelected(this.value);
 		self.show();
-	});
+  });
 	
-	util.addEvent($input, 'blur', function () {
+	this._events.inputBlur = util.addEvent($input, 'blur', function() {
 		if (noclose) {
 			noclose = false;
 			$input.focus();
 		}
 		else self.hide();
-	});
-	util.addEvent($input, 'keyup', function (event) {
+  });
+
+	this._events.inputKeyup = util.addEvent($input, 'keyup', function (event) {
 		self.setSelected(this.value);
 	});
 
@@ -126,7 +130,22 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 	hide : function () {
 		this.container.style.display = 'none';
 		this.publish('hide', this);
-	}
+	},
+
+  destroy : function() {
+    var $container = this.container;
+    var $input = this.input;
+
+    util.removeEvent($container, 'mousedown', this._events.containerMousedown);
+
+    util.removeEvent(window.document, 'mousedown', this._events.documentMousedown);
+
+    util.removeEvent($input, 'focus', this._events.inputFocus);
+
+    util.removeEvent($input, 'blur', this._events.inputBlur);
+
+    util.removeEvent($input, 'keyup', this._events.inputKeyup);
+  }
 	
 });
 
