@@ -584,11 +584,12 @@ var util = Kalendae.util = {
 	},
 	
 	getStyle: function (elem, styleProp) {
-		var y;
+		var y, s;
 		if (elem.currentStyle) {
 			y = elem.currentStyle[styleProp];
 		} else if (window.getComputedStyle) {
-			y = window.getComputedStyle(elem, null)[styleProp];
+      s = window.getComputedStyle(elem, null);
+      y = s ? s[styleProp] : '';
 		}
 		return y;
 	},
