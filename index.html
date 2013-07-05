@@ -86,6 +86,30 @@
 
 	</script>
 
+	<p>Week Select</p>
+	<script type="text/javascript" charset="utf-8">
+		new Kalendae(document.body, {
+			months:1,
+			mode:'week',
+			selected:Kalendae.moment().subtract({M:1})
+		});
+
+		new Kalendae({
+			attachTo:document.body,
+			months:2,
+			mode:'week',
+			selected:Kalendae.moment().subtract({M:1})
+		});
+
+		new Kalendae({
+			attachTo:document.body,
+			months:3,
+			mode:'week',
+			selected:Kalendae.moment().subtract({M:1})
+		});
+
+	</script>
+
 	<hr>
 	<p>Blackout and Direction Tests</p>
 
