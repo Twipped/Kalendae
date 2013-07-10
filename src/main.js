@@ -25,7 +25,7 @@ var Kalendae = function (targetElement, options) {
 		$title,
 		$caption,
 		$header,
-		$days, dayNodes = [],
+		$days, $week, dayNodes = [],
 		$span,
 		i = 0,
 		j = opts.months;
@@ -129,9 +129,17 @@ var Kalendae = function (targetElement, options) {
 		$days = util.make('div', {'class':classes.days}, $cal);
 		i = 0;
 		dayNodes = [];
-		while (i++ < 42) {
-			dayNodes.push(util.make('span', {}, $days));
-		}
+		do {
+			if (opts.mode == 'week') {
+				if ((i % 7) == 0) {
+					$week = util.make('div', {'class': classes.week + ' clearfix'}, $days);
+					dayNodes.push($week);
+				}
+				util.make('span', {}, $week)
+			} else {
+				dayNodes.push(util.make('span', {}, $days));
+			}
+		} while (++i < 42);
 
 		//store each calendar view for easy redrawing
 		calendars.push({
@@ -178,9 +186,7 @@ var Kalendae = function (targetElement, options) {
 			}
 			return false;
 
-
-
-		} else if (util.hasClassName(target.parentNode, classes.days) && util.hasClassName(target, classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
+		} else if ( (util.hasClassName(target.parentNode, classes.days) || util.hasClassName(target.parentNode, classes.week)) && util.hasClassName(target, classes.dayActive) && (clickedDate = target.getAttribute('data-date'))) {
 		//DAY CLICK
 			clickedDate = moment(clickedDate, opts.dayAttributeFormat).hours(12);
 			if (self.publish('date-clicked', self, [clickedDate]) !== false) {
@@ -192,6 +198,9 @@ var Kalendae = function (targetElement, options) {
 					case 'range':
 						self.addSelected(clickedDate);
 						break;
+					case 'week':
+						self.weekSelected(clickedDate);
+						break;
 					case 'single':
 						/* falls through */
 					default:
@@ -202,7 +211,17 @@ var Kalendae = function (targetElement, options) {
 			}
 			return false;
 
+		} else if ( util.hasClassName(target.parentNode, classes.week) && (clickedDate = target.getAttribute('data-date') ) ) {
+		//INACTIVE WEEK CLICK
+			clickedDate = moment(clickedDate, opts.dayAttributeFormat).hours(12);
+			if (self.publish('date-clicked', self, [clickedDate]) !== false) {
+				if (opts.mode == 'week') {
+					self.weekSelected(clickedDate);
+				}
+			}
+			return false;
 		}
+
 		return false;
 	});
 
@@ -253,6 +272,7 @@ Kalendae.prototype = {
 		caption         :'k-caption',
 		header          :'k-header',
 		days            :'k-days',
+		week            :'k-week',
 		dayOutOfMonth   :'k-out-of-month',
 		dayInMonth      :'k-in-month',
 		dayActive       :'k-active',
@@ -310,6 +330,9 @@ Kalendae.prototype = {
 	getSelected : function (format) {
 		var sel = this.getSelectedAsText(format);
 		switch (this.settings.mode) {
+			case 'week':
+				/* falls through range */
+
 			case 'range':
 				sel.splice(2); //shouldn't be more than two, but lets just make sure.
 				return sel.join(this.settings.rangeDelimiter);
@@ -329,6 +352,8 @@ Kalendae.prototype = {
 		if (input < 1 || !this._sel || this._sel.length < 1) return false;
 
 		switch (this.settings.mode) {
+			case 'week':
+				/* falls through range */
 			case 'range':
 				var a = this._sel[0] ? this._sel[0].yearDay() : 0,
 					b = this._sel[1] ? this._sel[1].yearDay() : 0;
@@ -407,6 +432,15 @@ Kalendae.prototype = {
 		return true;
 	},
 
+	weekSelected: function (mom) {
+		var x = mom.toDate();
+		var start = moment(x).startOf('week');
+		var end = moment(x).endOf('week').subtract('day',1);
+		this._sel = [start, end];
+		this.publish('change', this, [mom.day()]);
+		this.draw();
+	},
+
 	makeSelectedDateVisible: function (date) {
 		outOfViewMonth = moment(date).date('1').diff(this.viewStartDate,'months');
 
@@ -442,6 +476,7 @@ Kalendae.prototype = {
 			klass,
 			i=0, c,
 			j=0, k,
+			w,
 			s,
 			dateString,
 			opts = this.settings,
@@ -457,8 +492,16 @@ Kalendae.prototype = {
 			cal = this.calendars[i];
 			cal.caption.innerHTML = month.format(this.settings.titleFormat);
 			j = 0;
+			w = 0;
 			do {
-				$span = cal.days[j];
+				if (opts.mode == 'week') {
+					if (((j % 7) == 0) && (j != 0)) {
+						w++
+					}
+					$span = cal.days[w].childNodes[j%7];
+				} else {
+					$span = cal.days[j];
+				}
 
 				klass = [];
 
