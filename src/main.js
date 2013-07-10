@@ -131,11 +131,11 @@ var Kalendae = function (targetElement, options) {
 		dayNodes = [];
 		do {
 			if (opts.mode == 'week') {
-				if ((i % 7) == 0) {
+				if ((i % 7) === 0) {
 					$week = util.make('div', {'class': classes.week + ' clearfix'}, $days);
 					dayNodes.push($week);
 				}
-				util.make('span', {}, $week)
+				util.make('span', {}, $week);
 			} else {
 				dayNodes.push(util.make('span', {}, $days));
 			}
@@ -495,8 +495,8 @@ Kalendae.prototype = {
 			w = 0;
 			do {
 				if (opts.mode == 'week') {
-					if (((j % 7) == 0) && (j != 0)) {
-						w++
+					if (((j % 7) === 0) && (j !== 0)) {
+						w++;
 					}
 					$span = cal.days[w].childNodes[j%7];
 				} else {
@@ -531,7 +531,7 @@ Kalendae.prototype = {
 
 		if (opts.directionScrolling) {
 			var diffComparison = moment().startOf('day').hours(12);
-			var diff = month.diff(diffComparison, 'months', true);
+			diff = month.diff(diffComparison, 'months', true);
 
 			if (opts.direction === 'today-past' || opts.direction === 'past') {
 				if (diff <= 0) {
