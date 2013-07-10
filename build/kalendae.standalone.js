@@ -378,7 +378,12 @@ Kalendae.prototype = {
 		i = new_dates.length;
 		while(i--) { this.addSelected(new_dates[i], false); }
 
-		if (draw !== false) this.draw();
+		if (draw !== false) {
+			if (new_dates[0]) {
+				this.viewStartDate = moment(new_dates[0], this.settings.format);
+			}
+			this.draw();
+		}
 	},
 
 	addSelected : function (date, draw) {
@@ -438,7 +443,7 @@ Kalendae.prototype = {
 
 	draw : function draw() {
 		// return;
-		var month = moment(this.viewStartDate).hours(12), //force middle of the day to avoid any weird date shifts
+		var month = moment(this.viewStartDate).startOf('day').hours(12), //force middle of the day to avoid any weird date shifts
 			day,
 			classes = this.classes,
 			cal,
@@ -491,8 +496,10 @@ Kalendae.prototype = {
 		} while (++i < c);
 
 		if (opts.directionScrolling) {
-			if (opts.direction==='today-past' || opts.direction==='past') {
-				diff = month.add({m:1}).diff(moment(), 'months', true);
+			var diffComparison = moment().startOf('day').hours(12);
+			var diff = month.diff(diffComparison, 'months', true);
+
+			if (opts.direction === 'today-past' || opts.direction === 'past') {
 				if (diff <= 0) {
 					this.disableNextMonth = false;
 					util.removeClassName(this.container, classes.disableNextMonth);
@@ -500,9 +507,7 @@ Kalendae.prototype = {
 					this.disableNextMonth = true;
 					util.addClassName(this.container, classes.disableNextMonth);
 				}
-
-			} else if (opts.direction==='today-future' || opts.direction==='future') {
-				diff = month.subtract({m:1}).diff(moment(), 'months', true);
+			} else if (opts.direction === 'today-future' || opts.direction === 'future') {
 				if (diff > opts.months) {
 					this.disablePreviousMonth = false;
 					util.removeClassName(this.container, classes.disablePreviousMonth);
@@ -510,12 +515,9 @@ Kalendae.prototype = {
 					this.disablePreviousMonth = true;
 					util.addClassName(this.container, classes.disablePreviousMonth);
 				}
-
 			}
 
-
-			if (opts.direction==='today-past' || opts.direction==='past') {
-				diff = month.add({m:12}).diff(moment(), 'months', true);
+			if (opts.direction === 'today-past' || opts.direction === 'past') {
 				if (diff <= -11) {
 					this.disableNextYear = false;
 					util.removeClassName(this.container, classes.disableNextYear);
@@ -523,9 +525,7 @@ Kalendae.prototype = {
 					this.disableNextYear = true;
 					util.addClassName(this.container, classes.disableNextYear);
 				}
-
 			} else if (opts.direction==='today-future' || opts.direction==='future') {
-				diff = month.subtract({m:12}).diff(moment(), 'months', true);
 				if (diff > (11 + opts.months)) {
 					this.disablePreviousYear = false;
 					util.removeClassName(this.container, classes.disablePreviousYear);
@@ -533,9 +533,7 @@ Kalendae.prototype = {
 					this.disablePreviousYear = true;
 					util.addClassName(this.container, classes.disablePreviousYear);
 				}
-
 			}
-
 		}
 	}
 };
@@ -594,16 +592,24 @@ var util = Kalendae.util = {
 	},
 
 	getStyle: function (elem, styleProp) {
-		var y;
+		var y, s;
 		if (elem.currentStyle) {
 			y = elem.currentStyle[styleProp];
 		} else if (window.getComputedStyle) {
-			y = window.getComputedStyle(elem, null)[styleProp];
+      s = window.getComputedStyle(elem, null);
+      y = s ? s[styleProp] : '';
 		}
 		return y;
 	},
 
-	domReady:function (f){/in/.test(document.readyState) ? setTimeout(function() {util.domReady(f);},9) : f()},
+	domReady: function (f) {
+		var state = document.readyState;
+		if (state === 'complete' || state === 'interactive') {
+			f();
+		} else {
+			setTimeout(function() { util.domReady(f); }, 9);
+		}
+	},
 
 	// Adds a listener callback to a DOM element which is fired on a specified
 	// event.  Callback is sent the event object and the element that triggered the event
@@ -732,7 +738,7 @@ var util = Kalendae.util = {
 	},
 
 	isArray: function (array) {
-		return Object.prototype.toString.call(array) == "[object Array]"
+		return Object.prototype.toString.call(array) == "[object Array]";
 	}
 };
 
@@ -774,6 +780,8 @@ Kalendae.Input = function (targetElement, options) {
 		classes = self.classes,
 		opts = self.settings = util.merge(self.defaults, options);
 
+	this._events = {};
+
 	//force attachment to the body
 	opts.attachTo = window.document.body;
 
@@ -800,28 +808,30 @@ Kalendae.Input = function (targetElement, options) {
 	$container.style.display = 'none';
 	util.addClassName($container, classes.positioned);
 
-	util.addEvent($container, 'mousedown', function (event, target) {
+	this._events.containerMouseDown = util.addEvent($container, 'mousedown', function (event, target) {
 		noclose = true; //IE8 doesn't obey event blocking when it comes to focusing, so we have to do this shit.
 	});
-	util.addEvent(window.document, 'mousedown', function (event, target) {
+
+	this._events.documentMousedown = util.addEvent(window.document, 'mousedown', function (event, target) {
 		noclose = false;
 	});
 
-	util.addEvent($input, 'focus', function () {
+	this._events.inputFocus = util.addEvent($input, 'focus', function () {
 		changing = true; // prevent setSelected from altering the input contents.
 		self.setSelected(this.value);
 		changing = false;
 		self.show();
 	});
 
-	util.addEvent($input, 'blur', function () {
+	this._events.inputBlur = util.addEvent($input, 'blur', function () {
 		if (noclose && util.isIE8()) {
 			noclose = false;
 			$input.focus();
 		}
 		else self.hide();
 	});
-	util.addEvent($input, 'keyup', function (event) {
+
+	this._events.inputKeyup = util.addEvent($input, 'keyup', function (event) {
 		changing = true; // prevent setSelected from altering the input contents.
 		self.setSelected(this.value);
 		changing = false;
@@ -899,8 +909,22 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 	hide : function () {
 		this.container.style.display = 'none';
 		this.publish('hide', this);
-	}
+	},
 
+	destroy : function() {
+		var $container = this.container;
+		var $input = this.input;
+
+		util.removeEvent($container, 'mousedown', this._events.containerMousedown);
+
+		util.removeEvent(window.document, 'mousedown', this._events.documentMousedown);
+
+		util.removeEvent($input, 'focus', this._events.inputFocus);
+
+		util.removeEvent($input, 'blur', this._events.inputBlur);
+
+		util.removeEvent($input, 'keyup', this._events.inputKeyup);
+	}
 });
 
 
