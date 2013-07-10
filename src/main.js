@@ -434,7 +434,7 @@ Kalendae.prototype = {
 
 	draw : function draw() {
 		// return;
-		var month = moment(this.viewStartDate).hours(12), //force middle of the day to avoid any weird date shifts
+		var month = moment(this.viewStartDate).startOf('day').hours(12), //force middle of the day to avoid any weird date shifts
 			day,
 			classes = this.classes,
 			cal,
@@ -487,8 +487,10 @@ Kalendae.prototype = {
 		} while (++i < c);
 
 		if (opts.directionScrolling) {
-			if (opts.direction==='today-past' || opts.direction==='past') {
-				diff = month.add({m:1}).diff(moment(), 'months', true);
+			var diffComparison = moment().startOf('day').hours(12);
+			var diff = month.diff(diffComparison, 'months', true);
+
+			if (opts.direction === 'today-past' || opts.direction === 'past') {
 				if (diff <= 0) {
 					this.disableNextMonth = false;
 					util.removeClassName(this.container, classes.disableNextMonth);
@@ -496,9 +498,7 @@ Kalendae.prototype = {
 					this.disableNextMonth = true;
 					util.addClassName(this.container, classes.disableNextMonth);
 				}
-
-			} else if (opts.direction==='today-future' || opts.direction==='future') {
-				diff = month.subtract({m:1}).diff(moment(), 'months', true);
+			} else if (opts.direction === 'today-future' || opts.direction === 'future') {
 				if (diff > opts.months) {
 					this.disablePreviousMonth = false;
 					util.removeClassName(this.container, classes.disablePreviousMonth);
@@ -506,12 +506,9 @@ Kalendae.prototype = {
 					this.disablePreviousMonth = true;
 					util.addClassName(this.container, classes.disablePreviousMonth);
 				}
-
 			}
 
-
-			if (opts.direction==='today-past' || opts.direction==='past') {
-				diff = month.add({m:12}).diff(moment(), 'months', true);
+			if (opts.direction === 'today-past' || opts.direction === 'past') {
 				if (diff <= -11) {
 					this.disableNextYear = false;
 					util.removeClassName(this.container, classes.disableNextYear);
@@ -519,9 +516,7 @@ Kalendae.prototype = {
 					this.disableNextYear = true;
 					util.addClassName(this.container, classes.disableNextYear);
 				}
-
 			} else if (opts.direction==='today-future' || opts.direction==='future') {
-				diff = month.subtract({m:12}).diff(moment(), 'months', true);
 				if (diff > (11 + opts.months)) {
 					this.disablePreviousYear = false;
 					util.removeClassName(this.container, classes.disablePreviousYear);
@@ -529,9 +524,7 @@ Kalendae.prototype = {
 					this.disablePreviousYear = true;
 					util.addClassName(this.container, classes.disablePreviousYear);
 				}
-
 			}
-
 		}
 	}
 };
