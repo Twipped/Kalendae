@@ -139,7 +139,7 @@ var Kalendae = function (targetElement, options) {
 			} else {
 				dayNodes.push(util.make('span', {}, $days));
 			}
-		} while (++i < 42);
+		} while (++i < opts.daysToDisplay);
 
 		//store each calendar view for easy redrawing
 		calendars.push({
@@ -255,6 +255,7 @@ Kalendae.prototype = {
 		rangeDelimiter        :' - ',           /* string to use between dates when outputting in range mode */
 		multipleDelimiter     :', ',            /* string to use between dates when outputting in multiple mode */
 		useYearNav            :true,
+		daysToDisplay         :42,              /* number of days to display, 35 or 42 will work */
 
 		dateClassMap          :{}
 	},
@@ -525,7 +526,7 @@ Kalendae.prototype = {
 
 
 				day.add('days',1);
-			} while (++j < 42);
+			} while (++j < opts.daysToDisplay);
 			month.add('months',1);
 		} while (++i < c);
 
