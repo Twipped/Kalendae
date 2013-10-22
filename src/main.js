@@ -582,10 +582,14 @@ var parseDates = function (input, delimiter, format) {
 	}
 
 	var c = input.length,
-		i = 0;
+		i = 0,
+		m;
 
 	do {
-		if (input[i]) output.push( moment(input[i], format).hours(12) );
+		if (input[i]) {
+			m = moment(input[i], format).hours(12);
+			if (m.isValid()) output.push(m);
+		}
 	} while (++i < c);
 
 	return output;
