@@ -156,6 +156,8 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 		util.removeEvent($input, 'blur', this._events.inputBlur);
 
 		util.removeEvent($input, 'keyup', this._events.inputKeyup);
+
+    $container.remove();
 	}
 });
 
