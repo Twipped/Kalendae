@@ -79,12 +79,25 @@ Kalendae.Input = function (targetElement, options) {
 		});
 	}
 
+	function fireChange(elem){
+		if (document.createEvent) {
+			var evt = document.createEvent('HTMLEvents');
+			evt.initEvent('change', false, true);
+			elem.dispatchEvent(evt);
+		} else if (document.createEventObject) {
+			elem.fireEvent('onchange') ;
+		} else if (typeof elem.onchange == 'function' ) {
+			elem.onchange();
+		}
+	}
+
 	self.subscribe('change', function () {
 		if (changing) {
 			// the change event came from an internal modification, don't update the field contents
 			return;
 		}
 		$input.value = self.getSelected();
+		fireChange($input);
 	});
 
 };
