@@ -83,6 +83,18 @@ var util = Kalendae.util = {
 		}
 	},
 
+	fireEvent: function (elem, event) {
+		if (document.createEvent) {
+			var e = document.createEvent('HTMLEvents');
+			e.initEvent(event, false, true);
+			elem.dispatchEvent(e);
+		} else if (document.createEventObject) {
+			elem.fireEvent('on' + event) ;
+		} else if (typeof elem['on' + event] == 'function' ) {
+			elem['on' + event]();
+		}
+	},
+
 	hasClassName: function(elem, className) { //copied and modified from Prototype.js
 		if (!(elem = util.$(elem))) return false;
 		var eClassName = elem.className;
