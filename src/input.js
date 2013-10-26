@@ -85,6 +85,7 @@ Kalendae.Input = function (targetElement, options) {
 			return;
 		}
 		$input.value = self.getSelected();
+		util.fireEvent($input, 'change');
 	});
 
 };
