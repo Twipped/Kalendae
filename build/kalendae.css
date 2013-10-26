@@ -208,6 +208,12 @@
 	border-color:#666;
 }
 
+/** Selectable week, hovered **/
+.kalendae .k-week:hover span.k-active {
+	border-color:#666;
+}
+
+.clearfix:after { visibility: hidden; display: block; font-size: 0; content: " "; clear: both; height: 0; }
 
 /*-------------------------------------IE8 ONLY CODE BELOW THIS LINE--------------------------------------------*/
 

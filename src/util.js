@@ -30,16 +30,24 @@ var util = Kalendae.util = {
 	},
 
 	getStyle: function (elem, styleProp) {
-		var y;
+		var y, s;
 		if (elem.currentStyle) {
 			y = elem.currentStyle[styleProp];
 		} else if (window.getComputedStyle) {
-			y = window.getComputedStyle(elem, null)[styleProp];
+      s = window.getComputedStyle(elem, null);
+      y = s ? s[styleProp] : '';
 		}
 		return y;
 	},
 
-	domReady:function (f){/in/.test(document.readyState) ? setTimeout(function() {util.domReady(f);},9) : f()},
+	domReady: function (f) {
+		var state = document.readyState;
+		if (state === 'complete' || state === 'interactive') {
+			f();
+		} else {
+			setTimeout(function() { util.domReady(f); }, 9);
+		}
+	},
 
 	// Adds a listener callback to a DOM element which is fired on a specified
 	// event.  Callback is sent the event object and the element that triggered the event
@@ -72,6 +80,18 @@ var util = Kalendae.util = {
 			elem.detachEvent("on" + event, listener);
 		} else { // Other browsers.
 			elem.removeEventListener(event, listener, false);
+		}
+	},
+
+	fireEvent: function (elem, event) {
+		if (document.createEvent) {
+			var e = document.createEvent('HTMLEvents');
+			e.initEvent(event, false, true);
+			elem.dispatchEvent(e);
+		} else if (document.createEventObject) {
+			elem.fireEvent('on' + event) ;
+		} else if (typeof elem['on' + event] == 'function' ) {
+			elem['on' + event]();
 		}
 	},
 
@@ -168,7 +188,7 @@ var util = Kalendae.util = {
 	},
 
 	isArray: function (array) {
-		return Object.prototype.toString.call(array) == "[object Array]"
+		return Object.prototype.toString.call(array) == "[object Array]";
 	}
 };
 
