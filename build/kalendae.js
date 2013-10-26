@@ -89,10 +89,10 @@ var Kalendae = function (targetElement, options) {
 	} else if (!!opts.blackout) {
 		var bdates = parseDates(opts.blackout, opts.parseSplitDelimiter, opts.format);
 		self.blackout = function (input) {
-			input = moment(input).yearDay();
+			input = moment(input).startOf('day').yearDay();
 			if (input < 1 || !self._sel) return false;
 			var i = bdates.length;
-			while (i--) if (bdates[i].yearDay() === input) return true;
+			while (i--) if (bdates[i].startOf('day').yearDay() === input) return true;
 			return false;
 		};
 	} else {
@@ -302,11 +302,11 @@ Kalendae.prototype = {
 	disableNextYear: false,
 
 	directions: {
-		'past'          :function (date) {return moment(date).yearDay() >= today.yearDay();},
-		'today-past'    :function (date) {return moment(date).yearDay() > today.yearDay();},
+		'past'          :function (date) {return moment(date).startOf('day').yearDay() >= today.yearDay();},
+		'today-past'    :function (date) {return moment(date).startOf('day').yearDay() > today.yearDay();},
 		'any'           :function (date) {return false;},
-		'today-future'  :function (date) {return moment(date).yearDay() < today.yearDay();},
-		'future'        :function (date) {return moment(date).yearDay() <= today.yearDay();}
+		'today-future'  :function (date) {return moment(date).startOf('day').yearDay() < today.yearDay();},
+		'future'        :function (date) {return moment(date).startOf('day').yearDay() <= today.yearDay();}
 	},
 
 	getSelectedAsDates : function () {
@@ -357,15 +357,15 @@ Kalendae.prototype = {
 	},
 
 	isSelected : function (input) {
-		input = moment(input).yearDay();
+		input = moment(input).startOf('day').yearDay();
 		if (input < 1 || !this._sel || this._sel.length < 1) return false;
 
 		switch (this.settings.mode) {
 			case 'week':
 				/* falls through range */
 			case 'range':
-				var a = this._sel[0] ? this._sel[0].yearDay() : 0,
-					b = this._sel[1] ? this._sel[1].yearDay() : 0;
+				var a = this._sel[0] ? this._sel[0].startOf('day').yearDay() : 0,
+					b = this._sel[1] ? this._sel[1].startOf('day').yearDay() : 0;
 
 				if (a === input || b === input) return 1;
 				if (!a || !b) return 0;
@@ -376,7 +376,7 @@ Kalendae.prototype = {
 			case 'multiple':
 				var i = this._sel.length;
 				while (i--) {
-					if (this._sel[i].yearDay() === input) {
+					if (this._sel[i].startOf('day').yearDay() === input) {
 						return true;
 					}
 				}
@@ -386,7 +386,7 @@ Kalendae.prototype = {
 			case 'single':
 				/* falls through */
 			default:
-				return (this._sel[0] && (this._sel[0].yearDay() === input));
+				return (this._sel[0] && (this._sel[0].startOf('day').yearDay() === input));
 		}
 
 		return false;
@@ -425,7 +425,7 @@ Kalendae.prototype = {
 
 				if (this._sel.length !== 1) this._sel = [date];
 				else {
-					if (date.yearDay() > this._sel[0].yearDay()) this._sel[1] = date;
+					if (date.startOf('day').yearDay() > this._sel[0].startOf('day').yearDay()) this._sel[1] = date;
 					else this._sel = [date, this._sel[0]];
 				}
 				break;
@@ -435,7 +435,7 @@ Kalendae.prototype = {
 				this._sel = [date];
 				break;
 		}
-		this._sel.sort(function (a,b) {return a.yearDay() - b.yearDay();});
+		this._sel.sort(function (a,b) {return a.startOf('day').yearDay() - b.startOf('day').yearDay();});
 		this.publish('change', this, [date]);
 		if (draw !== false) this.draw();
 		return true;
@@ -465,7 +465,7 @@ Kalendae.prototype = {
 		date = moment(date, this.settings.format).hours(12);
 		var i = this._sel.length;
 		while (i--) {
-			if (this._sel[i].yearDay() === date.yearDay()) {
+			if (this._sel[i].startOf('day').yearDay() === date.startOf('day').yearDay()) {
 				this._sel.splice(i,1);
 				this.publish('change', this, [date]);
 				if (draw !== false) this.draw();
@@ -523,7 +523,7 @@ Kalendae.prototype = {
 
 				if (!(this.blackout(day) || this.direction(day) || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0) klass.push(classes.dayActive);
 
-				if (day.yearDay() === today.yearDay()) klass.push(classes.dayToday);
+				if (day.startOf('day').yearDay() === today.yearDay()) klass.push(classes.dayToday);
 
 				dateString = day.format(this.settings.dayAttributeFormat);
 				if (opts.dateClassMap[dateString]) klass.push(opts.dateClassMap[dateString]);
@@ -1074,13 +1074,6 @@ if (!Kalendae.moment) {
 
 moment = Kalendae.moment;
 
-//function to reset the date object to 00:00 GMT
-moment.fn.stripTime = function () {
-	this._d = new Date(Math.floor(this._d.valueOf() / 86400000) * 86400000);
-	return this;
-};
-
-
 //function to get the total number of days since the epoch.
 moment.fn.yearDay = function (input) {
 	var yearday = Math.floor(this._d / 86400000);
@@ -1088,7 +1081,7 @@ moment.fn.yearDay = function (input) {
         this.add({ d : input - yearday });
 };
 
-today = Kalendae.moment().stripTime();
+today = Kalendae.moment().startOf('day');
 
 if (typeof jQuery !== 'undefined' && (typeof document.addEventListener === 'function' || util.isIE8())) {
 	jQuery.fn.kalendae = function (options) {
