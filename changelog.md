@@ -8,8 +8,11 @@
 
 * \#111 Remove container on input destroy
 
+* \#95 Support for week select
 
 ### Resolved Issues
+
+* \#110 Only include valid dates
 
 * \#90 Today not respecting current timezone
 
