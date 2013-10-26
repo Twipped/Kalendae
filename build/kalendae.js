@@ -2,7 +2,7 @@
  *	Kalendae, a framework agnostic javascript date picker           *
  *	Copyright(c) 2013 Jarvis Badgley (chipersoft@gmail.com)         *
  *	http://github.com/ChiperSoft/Kalendae                           *
- *	Version 0.4.2                                                   *
+ *	Version 0.5.0                                                   *
  ********************************************************************/
 
 (function (undefined) {
@@ -692,6 +692,18 @@ var util = Kalendae.util = {
 		}
 	},
 
+	fireEvent: function (elem, event) {
+		if (document.createEvent) {
+			var e = document.createEvent('HTMLEvents');
+			e.initEvent(event, false, true);
+			elem.dispatchEvent(e);
+		} else if (document.createEventObject) {
+			elem.fireEvent('on' + event) ;
+		} else if (typeof elem['on' + event] == 'function' ) {
+			elem['on' + event]();
+		}
+	},
+
 	hasClassName: function(elem, className) { //copied and modified from Prototype.js
 		if (!(elem = util.$(elem))) return false;
 		var eClassName = elem.className;
@@ -900,6 +912,7 @@ Kalendae.Input = function (targetElement, options) {
 			return;
 		}
 		$input.value = self.getSelected();
+		util.fireEvent($input, 'change');
 	});
 
 };
@@ -972,7 +985,7 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 
 		util.removeEvent($input, 'keyup', this._events.inputKeyup);
 
-    $container.remove();
+		$container.remove();
 	}
 });
 
