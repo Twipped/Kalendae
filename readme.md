@@ -58,7 +58,7 @@ See the included index.html file for usage examples.
 
 ###jQuery
 
-Kalendae does not require jQuery, but does provide a jQuery plugin when jQuery is available.  jQuery users may create a Kalendae widget or popup by calling `$(selector).kalendae(options)`.
+Kalendae does not require jQuery, but does provide a jQuery plugin when jQuery is available.  jQuery users may create a Kalendae widget or popup by calling `$(selector).kalendae(options)`.  If `selector` is an HTML input element, an instance of Kalendae.Input is created, otherwise the instance will be Kalendae.  This instance is stored via jQuery's data method and can be accessed via `$(selector).data('kalendae')`.
 
 ##moment.js
 
