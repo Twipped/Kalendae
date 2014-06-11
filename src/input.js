@@ -65,7 +65,16 @@ Kalendae.Input = function (targetElement, options) {
 
 	this._events.inputKeyup = util.addEvent($input, 'keyup', function (event) {
 		changing = true; // prevent setSelected from altering the input contents.
-		self.setSelected(this.value);
+		var dateValue = parseDates(this.value, self.settings.parseSplitDelimiter, self.settings.format);
+
+		// If the date in the field is parsable as a valid date, update.  Otherwise deselect and show default view.
+		if (dateValue && dateValue.length && dateValue[0] && dateValue[0].year > 1000) {
+			self.setSelected(this.value);
+		} else {
+			self.setSelected('', null);
+			self.viewStartDate = moment(self.defaultView);
+			self.draw();
+		}
 		changing = false;
 	});
 

@@ -74,6 +74,8 @@ var Kalendae = function (targetElement, options) {
 		self.viewStartDate = moment(self.viewStartDate).subtract({M:viewDelta}).date(1);
 	}
 
+	// store the view that the calendar initialized with in-case we want to reset.
+	self.defaultView = moment(self.viewStartDate);
 
 	if (typeof opts.blackout === 'function') {
 		self.blackout = opts.blackout;
