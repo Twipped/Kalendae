@@ -124,13 +124,13 @@ var Kalendae = function (targetElement, options) {
 		util.make('a', {'class':classes.previousMonth}, $title);          //previous button
 		util.make('a', {'class':classes.nextYear}, $title);               //next button
 		util.make('a', {'class':classes.nextMonth}, $title);              //next button
-		$caption = util.make('span', {'class':classes.caption}, $title);  //title caption
+		$caption = util.make('a', {'class':classes.caption}, $title);  //title caption
 
 		//column headers
 		$header = util.make('div', {'class':classes.header}, $cal);
 		i = 0;
 		do {
-			$span = util.make('span', {}, $header);
+			$span = util.make('a', {}, $header);
 			$span.innerHTML = columnHeaders[i];
 		} while (++i < 7);
 
@@ -144,9 +144,9 @@ var Kalendae = function (targetElement, options) {
 					$week = util.make('div', {'class': classes.week + ' clearfix'}, $days);
 					dayNodes.push($week);
 				}
-				util.make('span', {}, $week);
+				util.make('a', {}, $week);
 			} else {
-				dayNodes.push(util.make('span', {}, $days));
+				dayNodes.push(util.make('a', {}, $days));
 			}
 		} while (++i < 42);
 
@@ -161,7 +161,7 @@ var Kalendae = function (targetElement, options) {
 
 	self.draw();
 
-	util.addEvent($container, 'mousedown', function (event, target) {
+	util.addEvent($container, 'click', function (event, target) {
 		var clickedDate;
 		if (util.hasClassName(target, classes.nextMonth)) {
 		//NEXT MONTH BUTTON
