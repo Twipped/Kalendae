@@ -124,6 +124,9 @@ The following options are available for configuration.
 
 - `useYearNav`: Include the double-arrow year navigation. Default is `true`.
 
+- `side`: Chooses the side on which to display the picker. Default is `bottom`.
+
+
 ###Advanced Behavior Options
 
 The following settings alter the internal behavior of Kalendae and should only be changed by advanced users.
