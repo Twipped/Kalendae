@@ -126,6 +126,10 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 				style.left = (pos.left + opts.offsetLeft) + 'px';
 				style.top  = (pos.top - util.getHeight($container) + opts.offsetTop - scrollTop) + 'px';
 				break;
+			case 'bottom right':
+				style.left = (pos.left - util.getWidth($container) + util.getWidth($input) + opts.offsetLeft) + 'px';
+				style.top  = (pos.top + util.getHeight($input) + opts.offsetTop - scrollTop) + 'px';
+				break;
 			case 'bottom':
 				/* falls through */
 			default:
