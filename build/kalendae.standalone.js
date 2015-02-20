@@ -2,7 +2,7 @@
  *	Kalendae, a framework agnostic javascript date picker           *
  *	Copyright(c) 2013 Jarvis Badgley (chipersoft@gmail.com)         *
  *	http://github.com/ChiperSoft/Kalendae                           *
- *	Version 0.5.0                                                   *
+ *	Version 0.5.1                                                   *
  ********************************************************************/
 
 (function (undefined) {
@@ -45,7 +45,7 @@ var Kalendae = function (targetElement, options) {
 	i = 7;
 	while (i--) {
 		columnHeaders.push( startDay.format(opts.columnHeaderFormat) );
-		startDay.add('days',1);
+		startDay.add(1, 'days');
 	}
 
 	//setup publish/subscribe and apply any subscriptions passed in settings
@@ -83,6 +83,8 @@ var Kalendae = function (targetElement, options) {
 		self.viewStartDate = moment(self.viewStartDate).subtract({M:viewDelta}).date(1);
 	}
 
+	// store the view that the calendar initialized with in-case we want to reset.
+	self.defaultView = moment(self.viewStartDate);
 
 	if (typeof opts.blackout === 'function') {
 		self.blackout = opts.blackout;
@@ -166,7 +168,7 @@ var Kalendae = function (targetElement, options) {
 		if (util.hasClassName(target, classes.nextMonth)) {
 		//NEXT MONTH BUTTON
 			if (!self.disableNext && self.publish('view-changed', self, ['next-month']) !== false) {
-				self.viewStartDate.add('months',1);
+				self.viewStartDate.add(1, 'months');
 				self.draw();
 			}
 			return false;
@@ -182,7 +184,7 @@ var Kalendae = function (targetElement, options) {
 		} else if (util.hasClassName(target, classes.nextYear)) {
 		//NEXT MONTH BUTTON
 			if (!self.disableNext && self.publish('view-changed', self, ['next-year']) !== false) {
-				self.viewStartDate.add('years',1);
+				self.viewStartDate.add(1, 'years');
 				self.draw();
 			}
 			return false;
@@ -457,7 +459,7 @@ Kalendae.prototype = {
 			this.viewStartDate.subtract('months',1);
 		}
 		else if(outOfViewMonth > 0 && outOfViewMonth >= this.settings.months){
-			this.viewStartDate.add('months',1);
+			this.viewStartDate.add(1, 'months');
 		}
 	},
 
@@ -533,9 +535,9 @@ Kalendae.prototype = {
 				$span.setAttribute('data-date', dateString);
 
 
-				day.add('days',1);
+				day.add(1, 'days');
 			} while (++j < 42);
-			month.add('months',1);
+			month.add(1, 'months');
 		} while (++i < c);
 
 		if (opts.directionScrolling) {
@@ -892,7 +894,16 @@ Kalendae.Input = function (targetElement, options) {
 
 	this._events.inputKeyup = util.addEvent($input, 'keyup', function (event) {
 		changing = true; // prevent setSelected from altering the input contents.
-		self.setSelected(this.value);
+		var dateValue = parseDates(this.value, self.settings.parseSplitDelimiter, self.settings.format);
+
+		// If the date in the field is parsable as a valid date, update.  Otherwise deselect and show default view.
+		if (dateValue && dateValue.length && dateValue[0] && dateValue[0].year > 1000) {
+			self.setSelected(this.value);
+		} else {
+			self.setSelected('', null);
+			self.viewStartDate = moment(self.defaultView);
+			self.draw();
+		}
 		changing = false;
 	});
 
@@ -937,26 +948,31 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 			pos = util.getPosition($input),
 			$scrollContainer = util.scrollContainer($input),
 			scrollTop = $scrollContainer ? $scrollContainer.scrollTop : 0,
+			scrollLeft = $scrollContainer ? $scrollContainer.scrollLeft : 0,
 			opts = this.settings;
 
 		style.display = '';
 		switch (opts.side) {
 			case 'left':
-				style.left = (pos.left - util.getWidth($container) + opts.offsetLeft) + 'px';
+				style.left = (pos.left - util.getWidth($container) + opts.offsetLeft - scrollLeft) + 'px';
 				style.top  = (pos.top + opts.offsetTop - scrollTop) + 'px';
 				break;
 			case 'right':
-				style.left = (pos.left + util.getWidth($input)) + 'px';
+				style.left = (pos.left + util.getWidth($input) - scrollLeft) + 'px';
 				style.top  = (pos.top + opts.offsetTop - scrollTop) + 'px';
 				break;
 			case 'top':
-				style.left = (pos.left + opts.offsetLeft) + 'px';
+				style.left = (pos.left + opts.offsetLeft - scrollLeft) + 'px';
 				style.top  = (pos.top - util.getHeight($container) + opts.offsetTop - scrollTop) + 'px';
+				break;
+			case 'bottom right':
+				style.left = (pos.left - util.getWidth($container) + util.getWidth($input) + opts.offsetLeft) + 'px';
+				style.top  = (pos.top + util.getHeight($input) + opts.offsetTop - scrollTop) + 'px';
 				break;
 			case 'bottom':
 				/* falls through */
 			default:
-				style.left = (pos.left + opts.offsetLeft) + 'px';
+				style.left = (pos.left + opts.offsetLeft - scrollLeft) + 'px';
 				style.top  = (pos.top + util.getHeight($input) + opts.offsetTop - scrollTop) + 'px';
 				break;
 		}
@@ -2763,16 +2779,15 @@ moment.fn.yearDay = function (input) {
 };
 
 today = Kalendae.moment().startOf('day');
-
 if (typeof jQuery !== 'undefined' && (typeof document.addEventListener === 'function' || util.isIE8())) {
 	jQuery.fn.kalendae = function (options) {
 		this.each(function (i, e) {
 			if (e.tagName === 'INPUT') {
 				//if element is an input, bind a popup calendar to the input.
-				$(e).data('kalendae', new Kalendae.Input(e, options));
+				jQuery(e).data('kalendae', new Kalendae.Input(e, options));
 			} else {
 				//otherwise, insert a flat calendar into the element.
-				$(e).data('kalendae', new Kalendae($.extend({}, {attachTo:e}, options)));
+				jQuery(e).data('kalendae', new Kalendae(jQuery.extend({}, {attachTo:e}, options)));
 			}
 		});
 		return this;

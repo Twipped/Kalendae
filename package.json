@@ -1,0 +1,28 @@
+{
+  "name": "kalendae",
+  "version": "0.5.1",
+  "description": "A framework agnostic javascript date picker.",
+  "main": "build/kalendae.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ChiperSoft/Kalendae.git"
+  },
+  "keywords": [
+    "date",
+    "datepicker",
+    "calendar",
+    "moment",
+    "frontend"
+  ],
+  "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
+  "contributors": [
+    "Geremia Taglialatela (http://github.com/tagliala)",
+    "Alexey Osipenko <alexey@osipenko.in.ua> (https://github.com/pfiller)",
+    "Patrick Filler (https://github.com/pfiller)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChiperSoft/Kalendae/issues"
+  },
+  "homepage": "https://github.com/ChiperSoft/Kalendae"
+}
