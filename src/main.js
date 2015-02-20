@@ -36,7 +36,7 @@ var Kalendae = function (targetElement, options) {
 	i = 7;
 	while (i--) {
 		columnHeaders.push( startDay.format(opts.columnHeaderFormat) );
-		startDay.add('days',1);
+		startDay.add(1, 'days');
 	}
 
 	//setup publish/subscribe and apply any subscriptions passed in settings
@@ -159,7 +159,7 @@ var Kalendae = function (targetElement, options) {
 		if (util.hasClassName(target, classes.nextMonth)) {
 		//NEXT MONTH BUTTON
 			if (!self.disableNext && self.publish('view-changed', self, ['next-month']) !== false) {
-				self.viewStartDate.add('months',1);
+				self.viewStartDate.add(1, 'months');
 				self.draw();
 			}
 			return false;
@@ -175,7 +175,7 @@ var Kalendae = function (targetElement, options) {
 		} else if (util.hasClassName(target, classes.nextYear)) {
 		//NEXT MONTH BUTTON
 			if (!self.disableNext && self.publish('view-changed', self, ['next-year']) !== false) {
-				self.viewStartDate.add('years',1);
+				self.viewStartDate.add(1, 'years');
 				self.draw();
 			}
 			return false;
@@ -450,7 +450,7 @@ Kalendae.prototype = {
 			this.viewStartDate.subtract('months',1);
 		}
 		else if(outOfViewMonth > 0 && outOfViewMonth >= this.settings.months){
-			this.viewStartDate.add('months',1);
+			this.viewStartDate.add(1, 'months');
 		}
 	},
 
@@ -526,9 +526,9 @@ Kalendae.prototype = {
 				$span.setAttribute('data-date', dateString);
 
 
-				day.add('days',1);
+				day.add(1, 'days');
 			} while (++j < 42);
-			month.add('months',1);
+			month.add(1, 'months');
 		} while (++i < c);
 
 		if (opts.directionScrolling) {
