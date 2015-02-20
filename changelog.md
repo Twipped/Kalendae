@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.1
+
+### Resolved Issues
+
+* \#142 Correct for deprecated usage of Moment.add()
+
+* \#136 Added "bottom right" as a side option for inputs.
+
+* \#118 Use `jQuery` not `$` for the jQuery integration.
+
+
 ## 0.5.0
 
 ### New features

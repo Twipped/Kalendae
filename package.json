@@ -24,5 +24,12 @@
   "bugs": {
     "url": "https://github.com/ChiperSoft/Kalendae/issues"
   },
+  "files": [
+    "build",
+    "changelog.md",
+    "index.html",
+    "LICENSE",
+    "readme.md"
+  ],
   "homepage": "https://github.com/ChiperSoft/Kalendae"
 }
