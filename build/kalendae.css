@@ -11,6 +11,13 @@
 	font-family:'Helvetica Neue', 'Helvetica';
 	cursor:default;
 	position:relative;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.kalendae * {
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 /** Popup Container for Kalendae.Input **/
@@ -30,8 +37,8 @@
 	position:absolute;
 	top:-8px;
 	right:-8px;
-	width:16px;
-	height:16px;
+	width:20px;
+	height:20px;
 	background:white;
 	border:2px solid #ccc;
 	color:#999;
@@ -54,7 +61,14 @@
 .kalendae .k-calendar {display: inline-block;zoom:1;*display:inline;width:155px;vertical-align:top;}
 
 /** Month Separator **/
-.kalendae .k-separator {display: inline-block;zoom:1;*display:inline;width:2px;vertical-align:top;background:#ddd;height:155px;margin:0px 10px;}
+.kalendae .k-separator {
+	display: inline-block;zoom:1;*display:inline;
+	width:2px;
+	vertical-align:top;
+	background:#ddd;
+	height:155px;
+	margin:0px 10px;
+}
 
 /** Month Title Row **/
 .kalendae .k-title {text-align:center;white-space:nowrap;position:relative;height:18px;}
@@ -67,12 +81,12 @@
 .kalendae .k-btn-previous-year,
 .kalendae .k-btn-next-year {
 	width:16px;
-	height:16px;
+	height:23px;
 	cursor:pointer;
 	position:absolute;
 	top:-3px;
 	color:#777;
-	font-size:26px;
+	font-size:32px;
 	line-height: 18px;
 	font-weight: bold;
 	font-family: arial;
@@ -135,7 +149,7 @@
 .kalendae .k-header span,
 .kalendae .k-days span {
 	float:left;
-	margin:1px 1px;
+	margin:1px 1px 2px 1px;
 }
 
 .kalendae .k-header span {
@@ -148,8 +162,8 @@
 
 .kalendae .k-days span {
 	text-align:right;
-	width:13px;
-	height:1.1em;
+	width:20px;
+	height:1.5em;
 	line-height:1em;
 	padding:2px 3px 2px 2px;
 	border:1px solid transparent;
