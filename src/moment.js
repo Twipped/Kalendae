@@ -3007,37 +3007,5 @@
         Exposing Moment
     ************************************/
 
-    function makeGlobal(shouldDeprecate) {
-        /*global ender:false */
-        if (typeof ender !== 'undefined') {
-            return;
-        }
-        oldGlobalMoment = globalScope.moment;
-        if (shouldDeprecate) {
-            globalScope.moment = deprecate(
-                    'Accessing Moment through the global scope is ' +
-                    'deprecated, and will be removed in an upcoming ' +
-                    'release.',
-                    moment);
-        } else {
-            globalScope.moment = moment;
-        }
-    }
-
-    // CommonJS module is defined
-    if (hasModule) {
-        module.exports = moment;
-    } else if (typeof define === 'function' && define.amd) {
-        define(function (require, exports, module) {
-            if (module.config && module.config() && module.config().noGlobal === true) {
-                // release the global variable
-                globalScope.moment = oldGlobalMoment;
-            }
-
-            return moment;
-        });
-        makeGlobal(true);
-    } else {
-        makeGlobal();
-    }
-}).call(this);
+    globalScope.moment = moment;
+}).call(Kalendae);
