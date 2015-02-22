@@ -167,7 +167,7 @@ var Kalendae = function (targetElement, options) {
 		} else if (util.hasClassName(target, classes.previousMonth)) {
 		//PREVIOUS MONTH BUTTON
 			if (!self.disablePreviousMonth && self.publish('view-changed', self, ['previous-month']) !== false) {
-				self.viewStartDate.subtract('months',1);
+				self.viewStartDate.subtract(1,'months');
 				self.draw();
 			}
 			return false;
@@ -183,7 +183,7 @@ var Kalendae = function (targetElement, options) {
 		} else if (util.hasClassName(target, classes.previousYear)) {
 		//PREVIOUS MONTH BUTTON
 			if (!self.disablePreviousMonth && self.publish('view-changed', self, ['previous-year']) !== false) {
-				self.viewStartDate.subtract('years',1);
+				self.viewStartDate.subtract(1,'years');
 				self.draw();
 			}
 			return false;
@@ -437,7 +437,7 @@ Kalendae.prototype = {
 	weekSelected: function (mom) {
 		var x = mom.toDate();
 		var start = moment(x).startOf('week');
-		var end = moment(x).endOf('week').subtract('day',1);
+		var end = moment(x).endOf('week').subtract(1,'day');
 		this._sel = [start, end];
 		this.publish('change', this, [mom.day()]);
 		this.draw();
@@ -447,7 +447,7 @@ Kalendae.prototype = {
 		outOfViewMonth = moment(date).date('1').diff(this.viewStartDate,'months');
 
 		if(outOfViewMonth < 0){
-			this.viewStartDate.subtract('months',1);
+			this.viewStartDate.subtract(1,'months');
 		}
 		else if(outOfViewMonth > 0 && outOfViewMonth >= this.settings.months){
 			this.viewStartDate.add(1, 'months');
