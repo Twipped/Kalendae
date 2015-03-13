@@ -195,23 +195,23 @@ The following properties are exposed on the instantiated `Kalendae` and `Kalenda
 Kalendae uses a publish/subscribe event system.  To receive events from a Kalendae instance you can call the `subscribe()` function on the Kalendae instance, passing the event name and a callback function.  Example:
 
     var k = new Kalendae('myDiv');
-    k.subscribe('change', function (date, action) {
-       console.log(date, action, this.getSelected());
+    k.subscribe('change', function (date) {
+       console.log(date, this.getSelected());
     });
 
 Callbacks can also be passed in the options object:
 
     new Kalendae('myDiv', {
        subscribe: {
-           'change': function (date, action) {
-               console.log(date, action, this.getSelected());
+           'change': function (date) {
+               console.log(date, this.getSelected());
            }
        }
     });
 
 Kalendae offers the following events:
 
-- `change` - Fires whenever the selected date changes, either from a user clicking or a call to `setSelected()`
+- `change` - Fires whenever the selected date changes, either from a user clicking or a call to `setSelected()`. Receives the last clicked on date as the only argument, and the Kalendae instance as `this`.
 
 - `date-clicked` - Fires when a date has been clicked, but before the selection is changed.  Receives the date clicked as a moment object in the first parameter.  Returning false will prevent selection change.
 
