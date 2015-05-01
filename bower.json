@@ -6,7 +6,7 @@
     "Jarvis Badgley",
     "Geremia Taglialatela"
   ],
-  "main": ["kalendae.min.js", "kalendae.css"],
+  "main": ["build/kalendae.min.js", "build/kalendae.css"],
   "description": "A framework agnostic javascript date picker.",
   "keywords": [
     "datepicker",
