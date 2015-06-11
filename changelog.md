@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.3
+
+* \#134/\#149 Fix (hopefully) for daylight savings time oddities in Safari.
+
+## 0.5.2
+
+* Fixing incorrect main file location in bower.json
+
 ## 0.5.1
 
 ### Resolved Issues
