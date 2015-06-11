@@ -1,8 +1,12 @@
 # Changelog
 
-## 0.5.3
+## 0.5.4
 
 * \#134/\#149 Fix (hopefully) for daylight savings time oddities in Safari.
+
+## 0.5.3
+
+* Bad release, nothing to see here
 
 ## 0.5.2
 
