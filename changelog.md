@@ -1,5 +1,11 @@
 # Changelog
 
+## Work In Progress
+
+* Kalendae CSS changed to use box-sizing:border-box.
+* \#155 Fixed bug in input date parsing due to years being compared wrong.
+* \#156 Change events will now bubble up through the DOM
+
 ## 0.5.4
 
 * \#134/\#149 Fix (hopefully) for daylight savings time oddities in Safari.
