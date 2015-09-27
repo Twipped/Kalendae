@@ -86,7 +86,7 @@ var util = Kalendae.util = {
 	fireEvent: function (elem, event) {
 		if (document.createEvent) {
 			var e = document.createEvent('HTMLEvents');
-			e.initEvent(event, false, true);
+			e.initEvent(event, true, true);
 			elem.dispatchEvent(e);
 		} else if (document.createEventObject) {
 			elem.fireEvent('on' + event) ;
