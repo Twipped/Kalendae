@@ -136,6 +136,9 @@
 .kalendae .k-days span {
 	float:left;
 	margin:1px 1px;
+    	box-sizing:content-box;
+    	-moz-box-sizing:content-box;
+    	-webkit-box-sizing:content-box;
 }
 
 .kalendae .k-header span {
