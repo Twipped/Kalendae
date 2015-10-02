@@ -47,19 +47,20 @@ var Kalendae = function (targetElement, options) {
 		}
 	}
 
-	//process default selected dates
-	self._sel = [];
-	if (!!opts.selected) self.setSelected(opts.selected, false);
+    //set the view month
+    if (!!opts.viewStartDate) {
+        vsd = moment(opts.viewStartDate, opts.format);
+    } else {
+        vsd = moment();
+    }
+    self.viewStartDate = vsd.date(1);
 
-	//set the view month
-	if (!!opts.viewStartDate) {
-		vsd = moment(opts.viewStartDate, opts.format);
-	} else if (self._sel.length > 0) {
-		vsd = moment(self._sel[0]);
-	} else {
-		vsd = moment();
-	}
-	self.viewStartDate = vsd.date(1);
+    //process default selected dates
+    self._sel = [];
+    if (!!opts.selected) {
+        self.setSelected(opts.selected, false);
+        self.viewStartDate = moment(self._sel[0]);
+    }
 
 	var viewDelta = ({
 		'past'          : opts.months-1,
