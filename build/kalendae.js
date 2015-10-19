@@ -2,7 +2,7 @@
  *	Kalendae, a framework agnostic javascript date picker           *
  *	Copyright(c) 2013 Jarvis Badgley (chipersoft@gmail.com)         *
  *	http://github.com/ChiperSoft/Kalendae                           *
- *	Version 0.5.1                                                   *
+ *	Version 0.5.5                                                   *
  ********************************************************************/
 
 (function (undefined) {
@@ -56,19 +56,20 @@ var Kalendae = function (targetElement, options) {
 		}
 	}
 
-	//process default selected dates
-	self._sel = [];
-	if (!!opts.selected) self.setSelected(opts.selected, false);
+    //set the view month
+    if (!!opts.viewStartDate) {
+        vsd = moment(opts.viewStartDate, opts.format);
+    } else {
+        vsd = moment();
+    }
+    self.viewStartDate = vsd.date(1);
 
-	//set the view month
-	if (!!opts.viewStartDate) {
-		vsd = moment(opts.viewStartDate, opts.format);
-	} else if (self._sel.length > 0) {
-		vsd = moment(self._sel[0]);
-	} else {
-		vsd = moment();
-	}
-	self.viewStartDate = vsd.date(1);
+    //process default selected dates
+    self._sel = [];
+    if (!!opts.selected) {
+        self.setSelected(opts.selected, false);
+        self.viewStartDate = moment(self._sel[0]);
+    }
 
 	var viewDelta = ({
 		'past'          : opts.months-1,
@@ -176,7 +177,7 @@ var Kalendae = function (targetElement, options) {
 		} else if (util.hasClassName(target, classes.previousMonth)) {
 		//PREVIOUS MONTH BUTTON
 			if (!self.disablePreviousMonth && self.publish('view-changed', self, ['previous-month']) !== false) {
-				self.viewStartDate.subtract('months',1);
+				self.viewStartDate.subtract(1,'months');
 				self.draw();
 			}
 			return false;
@@ -192,7 +193,7 @@ var Kalendae = function (targetElement, options) {
 		} else if (util.hasClassName(target, classes.previousYear)) {
 		//PREVIOUS MONTH BUTTON
 			if (!self.disablePreviousMonth && self.publish('view-changed', self, ['previous-year']) !== false) {
-				self.viewStartDate.subtract('years',1);
+				self.viewStartDate.subtract(1,'years');
 				self.draw();
 			}
 			return false;
@@ -446,7 +447,7 @@ Kalendae.prototype = {
 	weekSelected: function (mom) {
 		var x = mom.toDate();
 		var start = moment(x).startOf('week');
-		var end = moment(x).endOf('week').subtract('day',1);
+		var end = moment(x).endOf('week').subtract(1,'day');
 		this._sel = [start, end];
 		this.publish('change', this, [mom.day()]);
 		this.draw();
@@ -456,7 +457,7 @@ Kalendae.prototype = {
 		outOfViewMonth = moment(date).date('1').diff(this.viewStartDate,'months');
 
 		if(outOfViewMonth < 0){
-			this.viewStartDate.subtract('months',1);
+			this.viewStartDate.subtract(1,'months');
 		}
 		else if(outOfViewMonth > 0 && outOfViewMonth >= this.settings.months){
 			this.viewStartDate.add(1, 'months');
@@ -697,7 +698,7 @@ var util = Kalendae.util = {
 	fireEvent: function (elem, event) {
 		if (document.createEvent) {
 			var e = document.createEvent('HTMLEvents');
-			e.initEvent(event, false, true);
+			e.initEvent(event, true, true);
 			elem.dispatchEvent(e);
 		} else if (document.createEventObject) {
 			elem.fireEvent('on' + event) ;
@@ -897,7 +898,7 @@ Kalendae.Input = function (targetElement, options) {
 		var dateValue = parseDates(this.value, self.settings.parseSplitDelimiter, self.settings.format);
 
 		// If the date in the field is parsable as a valid date, update.  Otherwise deselect and show default view.
-		if (dateValue && dateValue.length && dateValue[0] && dateValue[0].year > 1000) {
+		if (dateValue && dateValue.length && dateValue[0] && dateValue[0].year() > 1000) {
 			self.setSelected(this.value);
 		} else {
 			self.setSelected('', null);

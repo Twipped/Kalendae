@@ -6,6 +6,7 @@
 * \#155 Fixed bug in input date parsing due to years being compared wrong.
 * \#156 Change events will now bubble up through the DOM
 * \#153 Fix issue with initialization on an input with a default value
+* \#159 Fix deprecated usage of Moment.subtract()
 
 ## 0.5.4
 
