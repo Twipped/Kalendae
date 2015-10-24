@@ -299,7 +299,7 @@ Kalendae.prototype = {
 		subscribe             :null,            /* object containing events to subscribe to */
 
 		columnHeaderFormat    :'dd',            /* number of characters to show in the column headers */
-		titleMonthFormat      :'MMMM',          /* format mask for month titles. */
+		titleMonthFormat      :'MMMM,',          /* format mask for month titles. */
         titleYearFormat       :'YYYY',          /* format mask for year titles. */
 		dayNumberFormat       :'D',             /* format mask for individual days */
 		dayAttributeFormat    :'YYYY-MM-DD',    /* format mask for the data-date attribute set on every span */
