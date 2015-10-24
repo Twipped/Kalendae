@@ -120,7 +120,9 @@ var Kalendae = function (targetElement, options) {
 		util.make('a', {'class':classes.previousMonth}, $title);          //previous button
 		util.make('a', {'class':classes.nextYear}, $title);               //next button
 		util.make('a', {'class':classes.nextMonth}, $title);              //next button
-		$caption = util.make('span', {'class':classes.caption}, $title);  //title caption
+		$caption = util.make('div', {'class':classes.caption}, $title);  //title caption
+        util.make('div', {'class':classes.captionMonth}, $caption);          //month text
+        util.make('div', {'class':classes.captionYear}, $caption);           //year text
 
 		//column headers
 		$header = util.make('div', {'class':classes.header + ' ' + (opts.dayHeaderClickable == true ? classes.dayActive : '')}, $cal);
@@ -290,7 +292,8 @@ Kalendae.prototype = {
 		subscribe             :null,            /* object containing events to subscribe to */
 
 		columnHeaderFormat    :'dd',            /* number of characters to show in the column headers */
-		titleFormat           :'MMMM, YYYY',    /* format mask for month titles. See momentjs.com for rules */
+		titleMonthFormat      :'MMMM',          /* format mask for month titles. */
+        titleYearFormat       :'YYYY',          /* format mask for year titles. */
 		dayNumberFormat       :'D',             /* format mask for individual days */
 		dayAttributeFormat    :'YYYY-MM-DD',    /* format mask for the data-date attribute set on every span */
 		parseSplitDelimiter   : /,\s*|\s+-\s+/, /* regex to use for splitting multiple dates from a passed string */
@@ -312,6 +315,8 @@ Kalendae.prototype = {
 		previousYear    :'k-btn-previous-year',
 		nextYear        :'k-btn-next-year',
 		caption         :'k-caption',
+        captionMonth    :'k-caption-month',
+        captionYear     :'k-caption-year',
 		header          :'k-header',
 		days            :'k-days',
 		week            :'k-week',
@@ -556,8 +561,10 @@ Kalendae.prototype = {
 
 			cal.header.parentNode.setAttribute('data-datestart', month.format(this.settings.dayAttributeFormat));
 
-			cal.caption.innerHTML = month.format(this.settings.titleFormat);
-			j = 0;
+            cal.caption.querySelector('.k-caption-month').innerHTML = month.format(this.settings.titleMonthFormat);
+            cal.caption.querySelector('.k-caption-year').innerHTML = month.format(this.settings.titleYearFormat);
+
+            j = 0;
 			w = 0;
 			t = 0;
 			headers = [];
