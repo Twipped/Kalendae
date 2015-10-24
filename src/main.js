@@ -49,13 +49,13 @@ var Kalendae = function (targetElement, options) {
 		}
 	}
 
-    //set the view month
-    if (!!opts.viewStartDate) {
-        vsd = moment(opts.viewStartDate, opts.format);
-    } else {
-        vsd = moment();
-    }
-    self.viewStartDate = vsd.date(1);
+	//set the view month
+	if (!!opts.viewStartDate) {
+		vsd = moment(opts.viewStartDate, opts.format);
+	} else {
+		vsd = moment();
+	}
+	self.viewStartDate = vsd.date(1);
 
 	//set the end range
 	if (!!opts.endDate) {
@@ -63,12 +63,12 @@ var Kalendae = function (targetElement, options) {
 		self.endDate = ved;
 	}
 
-    //process default selected dates
-    self._sel = [];
-    if (!!opts.selected) {
-        self.setSelected(opts.selected, false);
-        self.viewStartDate = moment(self._sel[0]);
-    }
+	//process default selected dates
+	self._sel = [];
+	if (!!opts.selected) {
+		self.setSelected(opts.selected, false);
+		self.viewStartDate = moment(self._sel[0]);
+	}
 
 	var viewDelta = ({
 		'past'          : opts.months-1,
@@ -127,8 +127,8 @@ var Kalendae = function (targetElement, options) {
 		util.make('a', {'class':classes.nextYear}, $title);               //next button
 		util.make('a', {'class':classes.nextMonth}, $title);              //next button
 		$caption = util.make('div', {'class':classes.caption}, $title);  //title caption
-        util.make('div', {'class':classes.captionMonth}, $caption);          //month text
-        util.make('div', {'class':classes.captionYear}, $caption);           //year text
+        	util.make('div', {'class':classes.captionMonth}, $caption);          //month text
+        	util.make('div', {'class':classes.captionYear}, $caption);           //year text
 
 		//column headers
 		$header = util.make('div', {'class':classes.header + ' ' + (opts.dayHeaderClickable == true ? classes.dayActive : '')}, $cal);
@@ -299,8 +299,8 @@ Kalendae.prototype = {
 		subscribe             :null,            /* object containing events to subscribe to */
 
 		columnHeaderFormat    :'dd',            /* number of characters to show in the column headers */
-		titleMonthFormat      :'MMMM,',          /* format mask for month titles. */
-        titleYearFormat       :'YYYY',          /* format mask for year titles. */
+		titleMonthFormat      :'MMMM,',         /* format mask for month titles. */
+        	titleYearFormat       :'YYYY',          /* format mask for year titles. */
 		dayNumberFormat       :'D',             /* format mask for individual days */
 		dayAttributeFormat    :'YYYY-MM-DD',    /* format mask for the data-date attribute set on every span */
 		parseSplitDelimiter   : /,\s*|\s+-\s+/, /* regex to use for splitting multiple dates from a passed string */
@@ -322,8 +322,8 @@ Kalendae.prototype = {
 		previousYear    :'k-btn-previous-year',
 		nextYear        :'k-btn-next-year',
 		caption         :'k-caption',
-        captionMonth    :'k-caption-month',
-        captionYear     :'k-caption-year',
+        	captionMonth    :'k-caption-month',
+        	captionYear     :'k-caption-year',
 		header          :'k-header',
 		days            :'k-days',
 		week            :'k-week',
@@ -462,7 +462,7 @@ Kalendae.prototype = {
 	addSelected : function (date, draw) {
 		date = moment(date, this.settings.format).hours(12);
 
-		if (date.isAfter(this.endDate, 'day')) return false; // safety for when it wasnt a click
+		if (!!this.endDate && date.isAfter(this.endDate, 'day')) return false; // safety for when it wasnt a click
 
 		if(this.settings.dayOutOfMonthClickable && this.settings.mode !== 'range'){ this.makeSelectedDateVisible(date); }
 
@@ -542,17 +542,17 @@ Kalendae.prototype = {
 		return false;
 	},
 
-    removeAllSelected : function (draw) {
-        var i = this._sel.length;
-        while (i--) {
-            this.removeSelected(this._sel[i], false);
-            if (i === 0) {
-                if (draw !== false) this.draw();
-                return true;
-            }
-        }
-        return false;
-    },
+	removeAllSelected : function (draw) {
+		var i = this._sel.length;
+		while (i--) {
+			this.removeSelected(this._sel[i], false);
+			if (i === 0) {
+				if (draw !== false) this.draw();
+				return true;
+			}
+		}
+		return false;
+	},
 
 	draw : function draw() {
 		// return;
@@ -627,21 +627,21 @@ Kalendae.prototype = {
 				}
 
 				if (day.month() != month.month())
-                    klass.push(classes.dayOutOfMonth);
+        			klass.push(classes.dayOutOfMonth);
 				else klass.push(classes.dayInMonth);
 
-				if (!(this.blackout(day) || this.direction(day) || (this.endDate && day.isAfter(this.endDate, 'day')) || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0 )
+				if (!(this.blackout(day) || this.direction(day) || (!!this.endDate && day.isAfter(this.endDate, 'day')) || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0 )
 					klass.push(classes.dayActive);
 
                 if (this.blackout(day))
-                    klass.push(classes.dayBlackout);
+                	klass.push(classes.dayBlackout);
 
-                if (day.clone().startOf('day').yearDay() === getTodayYearDate())
-                    klass.push(classes.dayToday);
+				if (day.clone().startOf('day').yearDay() === getTodayYearDate())
+        			klass.push(classes.dayToday);
 
 				dateString = day.format(this.settings.dayAttributeFormat);
 				if (opts.dateClassMap[dateString])
-                    klass.push(opts.dateClassMap[dateString]);
+        			klass.push(opts.dateClassMap[dateString]);
 
 				$span.innerHTML = day.format(opts.dayNumberFormat);
 				$span.className = klass.join(' ');
@@ -662,14 +662,14 @@ Kalendae.prototype = {
 						do {
 							if (firstDay >= startMonth && !this.direction(firstDay)) t++;
 							firstDay.add(7, 'd');
-						} while(firstDay <= endMonth)
+						} while(firstDay <= endMonth);
 
 						if (t == headers[z]) util.addClassName(cal.header.children[z], classes.daySelected);
 						else util.removeClassName(cal.header.children[z], classes.daySelected);
 					}
-				} while(++z < headers.length)
+				} while(++z < headers.length);
 
-    			if (opts.endDate && month.isSame(this.endDate, 'month')) {
+    			if (!!opts.endDate && month.isSame(this.endDate, 'month')) {
     				this.disableNextMonth = true;
     				this.disableNextYear = true;
     				util.addClassName(this.container, classes.disableNextMonth);
