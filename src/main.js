@@ -327,6 +327,7 @@ Kalendae.prototype = {
 		dayInRange      :'k-range',
 		dayInRangeStart :'k-range-start',
 		dayInRangeEnd   :'k-range-end',
+        dayBlackout     :'k-blackout',
 		dayToday        :'k-today',
 		monthSeparator  :'k-separator',
 		disablePreviousMonth    :'k-disable-previous-month-btn',
@@ -617,15 +618,22 @@ Kalendae.prototype = {
 					}
 				}
 
-				if (day.month() != month.month()) klass.push(classes.dayOutOfMonth);
+				if (day.month() != month.month())
+                    klass.push(classes.dayOutOfMonth);
 				else klass.push(classes.dayInMonth);
 
-				if (!(this.blackout(day) || this.direction(day) || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0) klass.push(classes.dayActive);
+				if (!(this.blackout(day) || this.direction(day) || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0 )
+                    klass.push(classes.dayActive);
 
-				if (day.clone().startOf('day').yearDay() === getTodayYearDate()) klass.push(classes.dayToday);
+                if (this.blackout(day))
+                    klass.push(classes.dayBlackout);
+
+				if (day.clone().startOf('day').yearDay() === getTodayYearDate())
+                    klass.push(classes.dayToday);
 
 				dateString = day.format(this.settings.dayAttributeFormat);
-				if (opts.dateClassMap[dateString]) klass.push(opts.dateClassMap[dateString]);
+				if (opts.dateClassMap[dateString])
+                    klass.push(opts.dateClassMap[dateString]);
 
 				$span.innerHTML = day.format(opts.dayNumberFormat);
 				$span.className = klass.join(' ');
