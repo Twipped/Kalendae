@@ -580,13 +580,12 @@ Kalendae.prototype = {
 			//if the first day of the month is less than our week start, back up a week
 
 			cal = this.calendars[i];
-
 			cal.header.parentNode.setAttribute('data-datestart', month.format(this.settings.dayAttributeFormat));
 
             cal.caption.querySelector('.k-caption-month').innerHTML = month.format(this.settings.titleMonthFormat);
             cal.caption.querySelector('.k-caption-year').innerHTML = month.format(this.settings.titleYearFormat);
 
-            j = 0;
+			j = 0;
 			w = 0;
 			t = 0;
 			headers = [];
