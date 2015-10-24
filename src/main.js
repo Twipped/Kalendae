@@ -532,6 +532,18 @@ Kalendae.prototype = {
 		return false;
 	},
 
+    removeAllSelected : function (draw) {
+        var i = this._sel.length;
+        while (i--) {
+            this.removeSelected(this._sel[i], false);
+            if (i === 0) {
+                if (draw !== false) this.draw();
+                return true;
+            }
+        }
+        return false;
+    },
+
 	draw : function draw() {
 		// return;
 		var month = moment(this.viewStartDate).startOf('month').add(12, 'hours'), //force middle of the day to avoid any weird date shifts
