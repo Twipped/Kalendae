@@ -631,7 +631,7 @@ Kalendae.prototype = {
 				else klass.push(classes.dayInMonth);
 
 				if (!(this.blackout(day) || this.direction(day) || day.isAfter(this.endDate, 'day') || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0 )
-                    klass.push(classes.dayActive);
+					klass.push(classes.dayActive);
 
                 if (this.blackout(day))
                     klass.push(classes.dayBlackout);
