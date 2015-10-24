@@ -183,7 +183,7 @@ var Kalendae = function (targetElement, options) {
 		var clickedDate;
 		if (util.hasClassName(target, classes.nextMonth)) {
 		//NEXT MONTH BUTTON
-			if (!self.disableNext && self.publish('view-changed', self, ['next-month']) !== false) {
+			if (!self.disableNextMonth && self.publish('view-changed', self, ['next-month']) !== false) {
 				self.viewStartDate.add(1, 'months');
 				self.draw();
 			}
@@ -199,7 +199,7 @@ var Kalendae = function (targetElement, options) {
 
 		} else if (util.hasClassName(target, classes.nextYear)) {
 		//NEXT MONTH BUTTON
-			if (!self.disableNext && self.publish('view-changed', self, ['next-year']) !== false) {
+			if (!self.disableNextYear && self.publish('view-changed', self, ['next-year']) !== false) {
 				self.viewStartDate.add(1, 'years');
 				self.draw();
 			}
