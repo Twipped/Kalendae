@@ -630,7 +630,7 @@ Kalendae.prototype = {
                     klass.push(classes.dayOutOfMonth);
 				else klass.push(classes.dayInMonth);
 
-				if (!(this.blackout(day) || this.direction(day) || day.isAfter(this.endDate, 'day') || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0 )
+				if (!(this.blackout(day) || this.direction(day) || (this.endDate && day.isAfter(this.endDate, 'day')) || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0 )
 					klass.push(classes.dayActive);
 
                 if (this.blackout(day))
