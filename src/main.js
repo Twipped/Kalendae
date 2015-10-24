@@ -21,7 +21,7 @@ var Kalendae = function (targetElement, options) {
 		$container = self.container = util.make('div', {'class':classes.container}),
 		calendars = self.calendars = [],
 		startDay = moment().day(opts.weekStart),
-		vsd,
+		vsd, ved,
 		columnHeaders = [],
 		$cal,
 		$title,
@@ -56,6 +56,12 @@ var Kalendae = function (targetElement, options) {
         vsd = moment();
     }
     self.viewStartDate = vsd.date(1);
+
+	//set the end range
+	if (!!opts.endDate) {
+		ved = moment(opts.endDate, opts.format);
+		self.endDate = ved;
+	}
 
     //process default selected dates
     self._sel = [];
@@ -283,6 +289,7 @@ Kalendae.prototype = {
 		direction             :'any',           /* past, today-past, any, today-future, future */
 		directionScrolling    :true,            /* if a direction other than any is defined, prevent scrolling out of range */
 		viewStartDate         :null,            /* date in the month to display.  When multiple months, this is the left most */
+		endDate               :null,            /* date calendar cannot scroll or select past */
 		blackout              :null,            /* array of dates, or function to be passed a date */
 		selected              :null,            /* dates already selected.  can be string, date, or array of strings or dates. */
 		mode                  :'single',        /* single, multiple, range */
@@ -455,6 +462,8 @@ Kalendae.prototype = {
 	addSelected : function (date, draw) {
 		date = moment(date, this.settings.format).hours(12);
 
+		if (date.isAfter(this.endDate, 'day')) return false; // safety for when it wasnt a click
+
 		if(this.settings.dayOutOfMonthClickable && this.settings.mode !== 'range'){ this.makeSelectedDateVisible(date); }
 
 		switch (this.settings.mode) {
@@ -622,8 +631,8 @@ Kalendae.prototype = {
                     klass.push(classes.dayOutOfMonth);
 				else klass.push(classes.dayInMonth);
 
-				if (!(this.blackout(day) || this.direction(day) || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0 )
-                    klass.push(classes.dayActive);
+				if (!(this.blackout(day) || this.direction(day) || day.isAfter(this.endDate, 'day') || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0 )
+					klass.push(classes.dayActive);
 
                 if (this.blackout(day))
                     klass.push(classes.dayBlackout);
@@ -642,6 +651,7 @@ Kalendae.prototype = {
 
 				day.add(1, 'days');
 			} while (++j < 42);
+
 			z = 0;
 			if (headers.length > 0) {
 				do {
@@ -659,7 +669,19 @@ Kalendae.prototype = {
 						else util.removeClassName(cal.header.children[z], classes.daySelected);
 					}
 				} while(++z < headers.length)
-			}
+
+    			if (opts.endDate && month.isSame(this.endDate, 'month')) {
+    				this.disableNextMonth = true;
+    				this.disableNextYear = true;
+    				util.addClassName(this.container, classes.disableNextMonth);
+    				util.addClassName(this.container, classes.disableNextYear);
+    			} else {
+    				this.disableNextMonth = false;
+    				this.disableNextYear = false;
+    				util.removeClassName(this.container, classes.disableNextMonth);
+    				util.removeClassName(this.container, classes.disableNextYear);
+    			}
+            }
 
 			month.add(1, 'months');
 		} while (++i < c);
