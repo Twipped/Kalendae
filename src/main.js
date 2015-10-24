@@ -696,6 +696,7 @@ Kalendae.prototype = {
 				}
 			}
 		}
+        this.publish('draw-end', this);
 	}
 };
 
