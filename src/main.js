@@ -1,4 +1,8 @@
-var today, moment;
+var moment;
+
+var getTodayYearDate = function() {
+	return Kalendae.moment().startOf('day').yearDay();
+};
 
 var Kalendae = function (targetElement, options) {
 	if (typeof document.addEventListener !== 'function' && !util.isIE8()) return;
@@ -296,11 +300,11 @@ Kalendae.prototype = {
 	disableNextYear: false,
 
 	directions: {
-		'past'          :function (date) {return moment(date).startOf('day').yearDay() >= today.yearDay();},
-		'today-past'    :function (date) {return moment(date).startOf('day').yearDay() > today.yearDay();},
+		'past'          :function (date) {return moment(date).startOf('day').yearDay() >= getTodayYearDate();},
+		'today-past'    :function (date) {return moment(date).startOf('day').yearDay() > getTodayYearDate();},
 		'any'           :function (date) {return false;},
-		'today-future'  :function (date) {return moment(date).startOf('day').yearDay() < today.yearDay();},
-		'future'        :function (date) {return moment(date).startOf('day').yearDay() <= today.yearDay();}
+		'today-future'  :function (date) {return moment(date).startOf('day').yearDay() < getTodayYearDate();},
+		'future'        :function (date) {return moment(date).startOf('day').yearDay() <= getTodayYearDate();}
 	},
 
 	getSelectedAsDates : function () {
@@ -517,7 +521,7 @@ Kalendae.prototype = {
 
 				if (!(this.blackout(day) || this.direction(day) || (day.month() != month.month() && opts.dayOutOfMonthClickable === false)) || s>0) klass.push(classes.dayActive);
 
-				if (day.clone().startOf('day').yearDay() === today.yearDay()) klass.push(classes.dayToday);
+				if (day.clone().startOf('day').yearDay() === getTodayYearDate()) klass.push(classes.dayToday);
 
 				dateString = day.format(this.settings.dayAttributeFormat);
 				if (opts.dateClassMap[dateString]) klass.push(opts.dateClassMap[dateString]);
