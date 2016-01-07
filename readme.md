@@ -15,13 +15,13 @@ Kalendae is an attempt to do something that nobody has yet been able to do: make
 
 ##Screenshots
 
-Default calendar, no options defined.  
+Default calendar, no options defined.
 ![screenshot](http://i.imgur.com/Ig52z.png)
 
-Two month calendar attached to an input element.  
+Two month calendar attached to an input element.
 ![screenshot](http://i.imgur.com/GIR3g.png)
 
-Two month, range selection, future dates only, with weekends blacked out:  
+Two month, range selection, future dates only, with weekends blacked out:
 ![screenshot](http://i.imgur.com/JzBc7.png)
 
 ###[View The Demo Page](http://chipersoft.github.com/Kalendae/)
@@ -72,12 +72,12 @@ To ease date handling processes, Kalendae bundles the [moment.js](http://www.mom
 
 The following options are available for configuration.
 
-- `attachTo`:	The element that the calendar div will be appended to.  
+- `attachTo`:	The element that the calendar div will be appended to.
     - In `Kalendae` this defaults to the first argument on the constructor.
     - In `Kalendae.Input` this defaults to the document body.
     - Can be an Element or an element's string ID.
 
-- `format`: The format mask used when parsing date strings.  
+- `format`: The format mask used when parsing date strings.
     - Uses moment.js notation (see http://momentjs.com/docs/#/display/format )
     - If left undefined, will attempt to parse the date automatically.
     - Default is `null`.
@@ -122,6 +122,8 @@ The following options are available for configuration.
 
 - `dayOutOfMonthClickable`: Allow clicks on days that fall outside of the currently focused month. Default is `false`.
 
+- `dayHeaderClickable`: Allow click on header days to select all instances of the selected day name. It only works in "multiple" mode.  Default is `false`.
+
 - `useYearNav`: Include the double-arrow year navigation. Default is `true`.
 
 - `side`: Chooses the side on which to display the picker. Default is `bottom`.
@@ -140,7 +142,7 @@ The following settings alter the internal behavior of Kalendae and should only b
 - `dayNumberFormat`: Format string for individual day numbers.
 	- Default is `"D"`
 
-- `dayAttributeFormat`: Format string for the `data-date` attribute set on every span 
+- `dayAttributeFormat`: Format string for the `data-date` attribute set on every span
     - Default is `"YYYY-MM-DD"`
 
 - `parseSplitDelimiter`: RegExp used when splitting multiple dates from a passed string

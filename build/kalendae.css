@@ -156,6 +156,11 @@
 	color:#666;
 }
 
+.kalendae .k-header.k-active span {
+	cursor: pointer;
+	border-radius:3px;
+}
+
 .kalendae .k-days span {
 	text-align:right;
 	width:20px;
@@ -193,7 +198,8 @@
 }
 
 /** Selected day, when inside the selectable area **/
-.kalendae .k-days span.k-selected.k-active {
+.kalendae .k-days span.k-selected.k-active,
+.kalendae .k-header.k-active span.k-selected {
 	background:#7EA0E2;
 	color:white;
 }
@@ -212,7 +218,8 @@
 }
 
 /** Selectable day, hovered **/
-.kalendae .k-days span.k-active:hover {
+.kalendae .k-days span.k-active:hover,
+.kalendae .k-days span.k-active.k-day-hover-active {
 	border-color:#666;
 }
 
