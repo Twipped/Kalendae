@@ -83,7 +83,31 @@
 			selected:[Kalendae.moment().subtract({M:1}), Kalendae.moment().add({M:1})]
 		});
 
+	</script>
 
+	<p>Month header day select (Multi-select)</p>
+		<script type="text/javascript" charset="utf-8">
+		var firstDay = Kalendae.moment().startOf('month').weekday(2),
+			secondDay = Kalendae.moment().startOf('month').weekday(4),
+			endMonth = Kalendae.moment().endOf('month');
+			selected = [];
+
+		while(firstDay <= endMonth) {
+			if (firstDay >= Kalendae.moment().startOf('month')) {
+				selected.push(firstDay.clone());
+				selected.push(secondDay.clone());
+			}
+			firstDay.add(7, 'd');
+			secondDay.add(7, 'd');
+		}
+
+		new Kalendae({
+			attachTo:document.body,
+			months:3,
+			mode:'multiple',
+			dayHeaderClickable: true,
+			selected: selected
+		});
 	</script>
 
 	<p>Week Select</p>
@@ -173,7 +197,7 @@
 	<hr>
 	So is the one on this input.
 	<input type="text" class="auto-kal">
-	
+
 	<hr>
 	<div style="width: 300px;height: 300px;overflow:scroll;border:1px solid black;">
 		Scroll down and left to find an input.
