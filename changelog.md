@@ -1,5 +1,9 @@
 # Changelog
 
+## Work In Progress
+
+* \#163 Added `dayHeaderClickable` option to support clicking on day headers to select a column of days.
+
 ## 0.5.5
 
 * Kalendae CSS changed to use box-sizing:border-box.
