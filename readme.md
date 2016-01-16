@@ -122,6 +122,8 @@ The following options are available for configuration.
 
 - `dayOutOfMonthClickable`: Allow clicks on days that fall outside of the currently focused month. Default is `false`.
 
+- `dayHeaderClickable`: Allow click on header days to select all instances of the selected day name. It only works in "multiple" mode.  Default is `false`.
+
 - `useYearNav`: Include the double-arrow year navigation. Default is `true`.
 
 - `side`: Chooses the side on which to display the picker. Default is `bottom`.
@@ -248,4 +250,3 @@ To create a minified version, run `make minified`.  If the minified file is blan
 ##License
 
 Kalendae is released under an MIT license and is freely distributable.
-
