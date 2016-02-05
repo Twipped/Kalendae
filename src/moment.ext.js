@@ -15,5 +15,3 @@ moment.fn.yearDay = function (input) {
     return (typeof input === 'undefined') ? yearday :
         this.add({ d : input - yearday });
 };
-
-today = Kalendae.moment().startOf('day');
