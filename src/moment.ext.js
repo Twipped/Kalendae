@@ -1,3 +1,6 @@
+if (typeof moment !== 'undefined') {
+	Kalendae.moment = moment;
+}
 
 if (!Kalendae.moment) {
 	if (window.moment) {
