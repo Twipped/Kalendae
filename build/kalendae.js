@@ -5,9 +5,19 @@
  *	Version 0.5.5                                                   *
  ********************************************************************/
 
-(function (undefined) {
-
-var today, moment;
+(function (factory) {
+   if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['moment'], factory);
+    } else if ( typeof exports === 'object' ) {
+        // Node/CommonJS
+        module.exports = factory();
+    } else {
+        // Browser globals
+        window.Kalendae = factory();
+    }
+} (function (moment) {
+var today;
 
 var Kalendae = function (targetElement, options) {
 	if (typeof document.addEventListener !== 'function' && !util.isIE8()) return;
@@ -607,10 +617,6 @@ var parseDates = function (input, delimiter, format) {
 	return output;
 };
 
-
-
-window.Kalendae = Kalendae;
-
 var util = Kalendae.util = {
 
 	isIE8: function() {
@@ -1093,7 +1099,10 @@ var MinPubSub = function(d){
 		}
 	};
 
-};
+};if (typeof moment !== 'undefined') {
+	Kalendae.moment = moment;
+}
+
 if (!Kalendae.moment) {
 	if (window.moment) {
 		Kalendae.moment = window.moment;
@@ -1127,5 +1136,5 @@ if (typeof jQuery !== 'undefined' && (typeof document.addEventListener === 'func
 	};
 }
 
-
-})();
+    return Kalendae;
+}));
