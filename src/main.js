@@ -1,4 +1,4 @@
-var today, moment;
+var today;
 
 var Kalendae = function (targetElement, options) {
 	if (typeof document.addEventListener !== 'function' && !util.isIE8()) return;
@@ -597,7 +597,3 @@ var parseDates = function (input, delimiter, format) {
 
 	return output;
 };
-
-
-
-window.Kalendae = Kalendae;
