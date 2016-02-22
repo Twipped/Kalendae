@@ -1,19 +1,23 @@
-kal=src/main.js \
+kal=src/intro_standalone.js \
+	src/main.js \
 	src/util.js \
 	src/auto.js \
 	src/input.js \
 	src/MinPubSub.js \
 	src/moment.js \
 	src/moment.ext.js \
-	src/jq.js
+	src/jq.js \
+	src/outro.js
 
-kmomentless=src/main.js \
+kmomentless= src/intro.js \
+	src/main.js \
 	src/util.js \
 	src/auto.js \
 	src/input.js \
 	src/MinPubSub.js \
 	src/moment.ext.js \
-	src/jq.js
+	src/jq.js \
+	src/outro.js
 
 all: build/kalendae.js build/kalendae.standalone.js
 
@@ -34,11 +38,8 @@ build/kalendae.standalone.js: $(kal) src/header.js
 
 build/kalendae.js: $(kmomentless) src/header.js
 	cat src/header.js > $@
-	echo "(function (undefined) {" >> $@
 	echo "" >> $@
 	cat $(kmomentless) >> $@
-	echo "" >> $@
-	echo "})();" >> $@
 
 build/kalendae.min.js: build/kalendae.js
 	cat src/header.js > $@

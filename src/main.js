@@ -1,5 +1,3 @@
-var moment;
-
 var getTodayYearDate = function() {
 	return Kalendae.moment().startOf('day').yearDay();
 };
