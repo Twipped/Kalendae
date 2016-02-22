@@ -4,7 +4,7 @@
         define(['moment'], factory);
     } else if ( typeof exports === 'object' ) {
         // Node/CommonJS
-        module.exports = factory();
+        module.exports = factory(require('moment'));
     } else {
         // Browser globals
         window.Kalendae = factory();
