@@ -1106,7 +1106,9 @@ Kalendae.Input.prototype = util.merge(Kalendae.prototype, {
 
 		util.removeEvent($input, 'keyup', this._events.inputKeyup);
 
-		$container.remove();
+		if ($container.parentNode) {
+			$container.parentNode.removeChild($container);
+		}
 	}
 });
 
