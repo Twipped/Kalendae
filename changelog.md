@@ -1,15 +1,26 @@
 # Changelog
 
-## Work In Progress
+## 0.6
 
-* \#163 Added `dayHeaderClickable` option to support clicking on day headers to select a column of days.
+* \#176 **POTENTIALLY BREAKING CHANGE** Now includes a UMD wrapper for loading in AMD and CommonJS environments. If you are using Kalendae in these environments with a shim, you will need to remove the shim.
+
+  - Standalone still bundles moment.js, non-standalone requires `'moment'` at load time.
+
+* \#168 New `dayHeaderClickable` option (defaults to false) allows the user to click on the day column headers to select all days for that month.
+
+* \#165/\#167 Today reference is no longer cached in memory, and thus updates when the computer crosses 12am.
+
 
 ## 0.5.5
 
 * Kalendae CSS changed to use box-sizing:border-box.
+
 * \#155 Fixed bug in input date parsing due to years being compared wrong.
+
 * \#156 Change events will now bubble up through the DOM
+
 * \#153 Fix issue with initialization on an input with a default value
+
 * \#159 Fix deprecated usage of Moment.subtract()
 
 ## 0.5.4
