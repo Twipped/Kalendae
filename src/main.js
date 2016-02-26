@@ -320,6 +320,8 @@ Kalendae.prototype = {
 		dayActive       :'k-active',
 		daySelected     :'k-selected',
 		dayInRange      :'k-range',
+		dayInRangeStart :'k-range-start',
+		dayInRangeEnd   :'k-range-end',
 		dayToday        :'k-today',
 		monthSeparator  :'k-separator',
 		disablePreviousMonth    :'k-disable-previous-month-btn',
@@ -580,7 +582,16 @@ Kalendae.prototype = {
 
 				if (s) klass.push(({'-1':classes.dayInRange,'1':classes.daySelected, 'true':classes.daySelected})[s]);
 
-				if (opts.dayHeaderClickable == true && opts.mode == 'multiple') {
+				if (opts.mode === 'range') {
+					if (this._sel[0] && this._sel[0].startOf('day').yearDay() === day.clone().startOf('day').yearDay()) {
+						klass.push(classes.dayInRangeStart);
+					}
+					if (this._sel[1] && this._sel[1].startOf('day').yearDay() === day.clone().startOf('day').yearDay()) {
+						klass.push(classes.dayInRangeEnd);
+					}
+				}
+
+				if (opts.dayHeaderClickable && opts.mode === 'multiple') {
 					klass.push('k-day-week-' + day.weekday());
 					if ((s == true || s == 1) && !this.direction(day) && month.format('M') == day.format('M')) {
 						headers[day.weekday()] = headers[day.weekday()] + 1;
