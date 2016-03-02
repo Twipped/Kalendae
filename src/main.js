@@ -529,7 +529,7 @@ Kalendae.prototype = {
 
 	draw : function draw() {
 		// return;
-		var month = moment(this.viewStartDate).startOf('day').add(12, 'hours'), //force middle of the day to avoid any weird date shifts
+		var month = moment(this.viewStartDate).startOf('month').add(12, 'hours'), //force middle of the day to avoid any weird date shifts
 			day,
 			classes = this.classes,
 			cal,
