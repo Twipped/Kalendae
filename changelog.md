@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.1
+
+* \#84 Added `k-range-start` and `k-range-end` css classes to the first and last selected days in a range calender.
+
+* \#164 `Input#destroy` no longer uses the `DOMElement#remove()` function, as that is not present in Internet Explorer.
+
+* \#177 Fix a case where in some circumstances the next month button would not be available.
+
 ## 0.6
 
 * \#176 **POTENTIALLY BREAKING CHANGE** Now includes a UMD wrapper for loading in AMD and CommonJS environments. If you are using Kalendae in these environments with a shim, you will need to remove the shim.

@@ -2,7 +2,7 @@
  *	Kalendae, a framework agnostic javascript date picker           *
  *	Copyright(c) 2013-2016 Jarvis Badgley (chipersoft@gmail.com)    *
  *	http://github.com/ChiperSoft/Kalendae                           *
- *	Version 0.6.0                                                   *
+ *	Version 0.6.1                                                   *
  ********************************************************************/
 (function (undefined) {
 
@@ -551,7 +551,7 @@ Kalendae.prototype = {
 
 	draw : function draw() {
 		// return;
-		var month = moment(this.viewStartDate).startOf('day').add(12, 'hours'), //force middle of the day to avoid any weird date shifts
+		var month = moment(this.viewStartDate).startOf('month').add(12, 'hours'), //force middle of the day to avoid any weird date shifts
 			day,
 			classes = this.classes,
 			cal,
