@@ -1,5 +1,7 @@
 # Changelog
 
+## In Development
+
 ## 0.6.1
 
 * \#84 Added `k-range-start` and `k-range-end` css classes to the first and last selected days in a range calender.
