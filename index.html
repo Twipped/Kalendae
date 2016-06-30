@@ -167,6 +167,16 @@
 
 	</script>
 
+    <hr>
+    <p>End Date - Direction: future - Single Select</p>
+    <script type="text/javascript">
+        new Kalendae(document.body, {
+            months: 3,
+            direction: 'future',
+            endDate: Kalendae.moment().startOf('month').add(75, 'days')
+        });
+    </script>
+
 
 
 	<hr>

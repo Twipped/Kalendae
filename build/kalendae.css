@@ -69,6 +69,9 @@
 /** Month Title Row **/
 .kalendae .k-title {text-align:center;white-space:nowrap;position:relative;height:18px;}
 .kalendae .k-caption {font-size:12px;line-height:18px;}
+.kalendae .k-caption-month,
+.kalendae .k-caption-year {display: inline;}
+.kalendae .k-caption-month {margin-right: 0.4em;}
 
 
 /** Month and Year Buttons **/
