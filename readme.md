@@ -250,3 +250,25 @@ To create a minified version, run `make minified`.  If the minified file is blan
 ##License
 
 Kalendae is released under an MIT license and is freely distributable.
+
+
+## haorooms博客对该插件进行样式修改和扩展
+
+增加了移动版的功能，设置：
+
+	side:middle
+
+然后引入 Kalendae_mobile.css
+
+就可以实现汉化版的移动端周选择控件！
+
+如下图：
+
+![screenshot](http://sandbox.runjs.cn/uploads/rs/216/0y89gzo2/mobile.png)
+
+然后引入 Kalendae_pc.css
+
+就可以实现汉化版的pc端选择控件！
+
+如下图：
+![screenshot](http://sandbox.runjs.cn/uploads/rs/216/0y89gzo2/pc.png)
