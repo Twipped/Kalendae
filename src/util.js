@@ -5,6 +5,12 @@ var util = Kalendae.util = {
 		return !!( (/msie 8./i).test(navigator.appVersion) && !(/opera/i).test(navigator.userAgent) && window.ActiveXObject && XDomainRequest && !window.msPerformance );
 	},
 
+	isTouchDevice: function () {
+		return (('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0));
+		//navigator.maxTouchPoints for microsoft IE11
+		//navigator.msMaxTouchPoints for microsoft IE backwards compatibility
+	},
+
 // ELEMENT FUNCTIONS
 
 	$: function (elem) {
@@ -68,7 +74,7 @@ var util = Kalendae.util = {
 		if (elem.attachEvent) { // IE only.  The "on" is mandatory.
 			elem.attachEvent("on" + eventName, listener);
 		} else { // Other browsers.
-			if(eventName === 'mousedown' && 'ontouchstart' in window || 'onmsgesturechange' in window) {
+			if(eventName === 'mousedown' && util.isTouchDevice()) {
 				//works on touch devices
 				elem.addEventListener('touchstart', listener, false);
 			} else {
