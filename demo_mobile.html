@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html lang="ru-RU">
+    <head>
+        <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width; initial-scale=1.0">
+        <title>JavaScript日期选择控件Kalendae DEMO演示</title>
+         <script src="http://libs.baidu.com/jquery/1.11.1/jquery.min.js"></script> 
+        <link rel="stylesheet" href="build/kalendae_mobile.css" type="text/css" charset="utf-8">
+        <!-- <script src="src/moment.js" type="text/javascript" charset="utf-8"></script> -->
+        <!-- <script src="build/kalendae.js" type="text/javascript" charset="utf-8"></script> -->
+        <script src="build/kalendae.standalone.js" type="text/javascript" charset="utf-8"></script>
+        <style type="text/css" media="screen">
+            .kalendae .k-days span.closed {
+                background:red;
+            }
+        </style>
+    </head>
+    <body>
+
+        <input type="text" id="test1">
+
+
+        <script type="text/javascript" charset="utf-8">
+            var k4 = new Kalendae.Input('test1', {
+                months: 1,
+                mode: 'week',
+                format: "YYYY-MM-DD",
+                rangeDelimiter: "至",
+                side:"middle",
+                selected: Kalendae.moment().subtract({M: 1}),
+                subscribe: {
+                    'change': function (date) {
+                        console.log(this.getSelected());
+                    }}
+            })
+
+
+        </script>
+       <div style="display: none">本资源由haorooms前端资源库整理，更多资源请查看haorooms。资源整理耗费时间和精力，假如您转载该资源，请注明出自haorooms前端资源库！谢谢！</div>
+
+    </body>
+</html>
