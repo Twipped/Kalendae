@@ -2,22 +2,24 @@
 
 ## In Development
 
-* 	#### From Pull Request: [#161](https://github.com/ChiperSoft/Kalendae/pull/161)
+*  \#191 / \#185 Added config option `closeOnSelection` for Kalendae.Input de-focus the input field (and dismiss the date picker) once a selection has been made.
 
-	* **Element Structure**:
-		* The title is split into 2 divs for month and year so that they can be styled separately if needed. (Only breaking if your css selected `span.k-caption` instead of just `.k-caption`).
+*  \#161 DOM Structure changes to facilitate deeper styling of the date picker.
 
-	* **New Options**
-		* `endDate` - defines the last day and month which will be selectable. Prevents navigating past in months/years.
-		* `titleFormat` is replaced by the two below  to accomodate the new title div structure:
-			* `titleMonthFormat`
-			* `titleYearFormat`
+  * **Element Structure**:
+    * The title is split into 2 divs for month and year so that they can be styled separately if needed. (Only breaking if your css selected `span.k-caption` instead of just `.k-caption`).
 
-	* **New Methods**
-		* `removeAllSelected()` - Added to clear all selected values at once if mode is anything other than `'single'`.
+  * New Options
+    * `endDate` - defines the last day and month which will be selectable. Prevents navigating past in months/years.
+    * `titleFormat` is replaced by the two below  to accomodate the new title div structure:
+      * `titleMonthFormat`
+      * `titleYearFormat`
 
-	* **New Events**
-		* `draw-end`- Added to enable view changes that depend on new data. Such as jQuery or other DOM maniuplations.
+  * New Methods
+    * `removeAllSelected()` - Added to clear all selected values at once if mode is anything other than `'single'`.
+
+  * New Events
+    * `draw-end`- Added to enable view changes that depend on new data. Such as jQuery or other DOM maniuplations.
 
     * **Examples**
         * Added examples for: `endDate`,
