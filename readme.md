@@ -92,6 +92,8 @@ The following options are available for configuration.
     - In "multiple" mode, strings may contain multiple dates separated by commas. *ex: 2/3/2012, 3/15/2012, 4/2/2012*
     - In "range" mode, strings may contain two dates separated by a hyphen. *ex: 2/3/2012 - 3/15/2012*
 
+- `closeOnSelection`: Setting to `true` and in `Kalendae.Input` the calendar popup will automatically close when a date is picked.
+
 - `months`:	The total number of months to display side by side on the calendar.
     - Default is `1`.
 

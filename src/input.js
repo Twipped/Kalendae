@@ -95,7 +95,7 @@ Kalendae.Input = function (targetElement, options) {
 		}
 		$input.value = self.getSelected();
 		util.fireEvent($input, 'change');
-		if (opts.closeOnSelection) {
+		if (opts.closeOnSelection && opts.mode === 'single') {
 			self.hide();
 		}
 	});
