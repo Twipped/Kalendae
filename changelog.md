@@ -2,9 +2,11 @@
 
 ## In Development
 
-*  \#191 / \#185 Added config option `closeOnSelection` for Kalendae.Input de-focus the input field (and dismiss the date picker) once a selection has been made.
+* \#191 / \#185 Added config option `closeOnSelection` for Kalendae.Input de-focus the input field (and dismiss the date picker) once a selection has been made.
 
-*  \#161 DOM Structure changes to facilitate deeper styling of the date picker.
+* \#187 / \#188 Fix bug with date selection on touch devices
+
+* \#161 DOM Structure changes to facilitate deeper styling of the date picker.
 
   * **Element Structure**:
     * The title is split into 2 divs for month and year so that they can be styled separately if needed. (Only breaking if your css selected `span.k-caption` instead of just `.k-caption`).
