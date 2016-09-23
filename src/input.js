@@ -96,6 +96,7 @@ Kalendae.Input = function (targetElement, options) {
 		$input.value = self.getSelected();
 		util.fireEvent($input, 'change');
 		if (opts.closeOnSelection && opts.mode === 'single') {
+			$input.blur();
 			self.hide();
 		}
 	});
