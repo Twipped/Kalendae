@@ -316,6 +316,7 @@
                 attachTo: null, /* the element to attach the root container to. can be string or DOMElement */
                 months: 1, /* total number of months to display side by side */
                 weekStart: 0, /* day to use for the start of the week. 0 is Sunday */
+				disableDate:false, /* Future dates are not available */
                 direction: 'any', /* past, today-past, any, today-future, future */
                 directionScrolling: true, /* if a direction other than any is defined, prevent scrolling out of range */
                 viewStartDate: null, /* date in the month to display.  When multiple months, this is the left most */
@@ -738,6 +739,27 @@
                         }
                     }
                 }
+
+				if(opts.disableDate){//新增将来日期不可选择选项
+					var _cdt = new Date();
+					var y =  _cdt.getFullYear(), m =  (_cdt.getMonth())+1, d =  _cdt.getDate() ;
+
+					$(this.container).find('.k-week').each(function(index,elem){
+						var _dom = $(elem).find('span'),
+							flag  = false ;
+						_dom.each(function(i,x){
+							var _dArr = $(x).attr('data-date').split('-');
+							var _y = Number(_dArr[0]), _m = Number(_dArr[1]), _d = Number(_dArr[2]);
+							if(!(_y > y  || (_y == y && _m > m)  || (_y == y && _m == m && _d > d)) ){
+								flag = true ;
+								return false;
+							}
+						});
+
+						$(elem).css("pointer-events", "auto");
+						!flag && $(elem).css("pointer-events", "none");
+					});
+				}	
             }
         };
 
