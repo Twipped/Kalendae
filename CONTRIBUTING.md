@@ -1,4 +1,4 @@
-##Contributing to Kalendae
+## Contributing to Kalendae
 
 1. Please submit all pull requests to the `dev` branch from your own named branch (not your master).
 2. Please only include the changes within the `src/` directory, do not include new builds.
