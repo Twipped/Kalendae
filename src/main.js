@@ -440,7 +440,7 @@ Kalendae.prototype = {
 
 		if (draw !== false) {
 			if (new_dates[0]) {
-				this.viewStartDate = moment(new_dates[0], this.settings.format);
+				this.viewStartDate = moment(new_dates[0], this.settings.format).date(1);
 			}
 			this.draw();
 		}
