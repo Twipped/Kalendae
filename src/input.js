@@ -49,6 +49,12 @@ Kalendae.Input = function (targetElement, options) {
 	});
 
 	this._events.inputFocus = util.addEvent($input, 'focus', function () {
+        if (util.isIE8() && self.container.style.display !== "none") {
+            // Block refocusing that can cause previous/next button click blocking in IE8
+            // NOTE:  This is a custom fix for https://github.com/ChiperSoft/Kalendae/issues/119
+            return;
+        }
+        
 		changing = true; // prevent setSelected from altering the input contents.
 		self.setSelected(this.value);
 		changing = false;
