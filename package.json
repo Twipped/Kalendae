@@ -5,7 +5,7 @@
   "main": "build/kalendae.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ChiperSoft/Kalendae.git"
+    "url": "https://github.com/Twipped/Kalendae.git"
   },
   "keywords": [
     "date",
@@ -14,7 +14,7 @@
     "moment",
     "frontend"
   ],
-  "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
+  "author": "Jocelyn Badgley <joc@twipped.com>",
   "contributors": [
     "Geremia Taglialatela (http://github.com/tagliala)",
     "Alexey Osipenko <alexey@osipenko.in.ua> (https://github.com/pfiller)",
@@ -22,7 +22,7 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ChiperSoft/Kalendae/issues"
+    "url": "https://github.com/Twipped/Kalendae/issues"
   },
   "files": [
     "build",
@@ -31,5 +31,5 @@
     "LICENSE",
     "readme.md"
   ],
-  "homepage": "https://github.com/ChiperSoft/Kalendae"
+  "homepage": "https://github.com/Twipped/Kalendae"
 }

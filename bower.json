@@ -1,8 +1,8 @@
 {
   "name": "kalendae",
-  "homepage": "https://github.com/chipersoft/kalendae",
+  "homepage": "https://github.com/Twipped/kalendae",
   "authors": [
-    "Jarvis Badgley",
+    "Jocelyn Badgley",
     "Geremia Taglialatela"
   ],
   "main": ["build/kalendae.min.js", "build/kalendae.css"],
