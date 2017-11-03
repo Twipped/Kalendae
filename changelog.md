@@ -1,6 +1,6 @@
 # Changelog
 
-## In Development
+## 0.7.0
 
 * \#191 / \#185 Added config option `closeOnSelection` for Kalendae.Input de-focus the input field (and dismiss the date picker) once a selection has been made.
 
