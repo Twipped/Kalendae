@@ -43,28 +43,10 @@ build/kalendae.js: $(kmomentless) src/header.js
 
 build/kalendae.min.js: build/kalendae.js
 	cat src/header.js > $@
-	curl -s \
-		--data-urlencode 'js_code@build/kalendae.js' \
-		--data-urlencode 'output_format=text' \
-		--data-urlencode 'output_info=compiled_code' \
-		http://closure-compiler.appspot.com/compile \
-		>> $@
+	node_modules/.bin/uglifyjs build/kalendae.js --compress --mangle >> $@
 	gzip -c build/kalendae.min.js | wc -c
 
 build/kalendae.standalone.min.js: build/kalendae.standalone.js
 	cat src/header.js > $@
-	curl -s \
-		--data-urlencode 'js_code@build/kalendae.standalone.js' \
-		--data-urlencode 'output_format=text' \
-		--data-urlencode 'output_info=compiled_code' \
-		http://closure-compiler.appspot.com/compile \
-		>> $@
+	node_modules/.bin/uglifyjs build/kalendae.standalone.js --compress --mangle >> $@
 	gzip -c build/kalendae.standalone.min.js | wc -c
-
-
-build/kalendae.min.errors: build/kalendae.js
-	curl -s \
-		--data-urlencode 'js_code@build/kalendae.js' \
-		--data-urlencode 'output_format=text' \
-		--data-urlencode 'output_info=errors' \
-		http://closure-compiler.appspot.com/compile

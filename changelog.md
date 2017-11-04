@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1
+
+* Switch to UglifyJS to fix the broken minified build. (\#212)
+
 ## 0.7.0
 
 * \#191 / \#185 Added config option `closeOnSelection` for Kalendae.Input de-focus the input field (and dismiss the date picker) once a selection has been made.
