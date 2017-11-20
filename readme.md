@@ -24,7 +24,7 @@ Two month calendar attached to an input element.
 Two month, range selection, future dates only, with weekends blacked out:  
 ![screenshot](http://i.imgur.com/JzBc7.png)
 
-### [View The Demo Page](http://chipersoft.github.com/Kalendae/)
+### [View The Demo Page](http://twipped.github.com/Kalendae/)
 
 
 ## Usage
