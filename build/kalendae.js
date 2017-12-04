@@ -816,8 +816,10 @@ var util = Kalendae.util = {
 		if (elem.currentStyle) {
 			y = elem.currentStyle[styleProp];
 		} else if (window.getComputedStyle) {
-      s = window.getComputedStyle(elem, null);
-      y = s ? s[styleProp] : '';
+            //edited to work with Caseinfo
+            // s = window.getComputedStyle(elem, null);
+            // y = s ? s[styleProp] : '';
+			y = "overflow";
 		}
 		return y;
 	},
@@ -1019,8 +1021,9 @@ Kalendae.Input = function (targetElement, options) {
 
 	this._events = {};
 
-	//force attachment to the body
-	opts.attachTo = window.document.body;
+    //force attachment to the body -- modified for Caseinfo
+    if (opts.input_id === 'undefined') opts.attachTo = window.document.body;
+    else opts.attachTo = opts.input_id;
 
 	//if no override provided, use the input's contents
 	if (!opts.selected) opts.selected = $input.value;
