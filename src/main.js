@@ -518,7 +518,7 @@ Kalendae.prototype = {
 	},
 
 	makeSelectedDateVisible: function (date) {
-		outOfViewMonth = moment(date).date('1').diff(this.viewStartDate,'months');
+		var outOfViewMonth = moment(date).date('1').diff(this.viewStartDate,'months');
 
 		if(outOfViewMonth < 0){
 			this.viewStartDate.subtract(1,'months');
