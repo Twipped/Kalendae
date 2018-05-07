@@ -88,7 +88,7 @@ The following options are available for configuration.
     - `"range"`: Selects multiple days in sequence. First click defines start of the range, second defines the end of the range.
 
 - `selected`: The date selected when the calendar is created.
-    - Values my be a string, JavaScript Date object, Moment object, or an array containing any of the three.
+    - Values may be a string, JavaScript Date object, Moment object, or an array containing any of the three.
     - In "multiple" mode, strings may contain multiple dates separated by commas. *ex: 2/3/2012, 3/15/2012, 4/2/2012*
     - In "range" mode, strings may contain two dates separated by a hyphen. *ex: 2/3/2012 - 3/15/2012*
 
