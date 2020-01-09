@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.0
+
+* Fix issue with the month of March when using in GMT timezone. (\#229, Fixes \#125)
+
+* Fix a global pollution with date selection (\#222)
+
 ## 0.7.1
 
 * Switch to UglifyJS to fix the broken minified build. (\#212)

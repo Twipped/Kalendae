@@ -33,6 +33,7 @@
   ],
   "homepage": "https://github.com/Twipped/Kalendae",
   "devDependencies": {
-    "uglify-js": "~3.1.6"
-  }
+    "uglify-js": "~3.7.4"
+  },
+  "dependencies": {}
 }

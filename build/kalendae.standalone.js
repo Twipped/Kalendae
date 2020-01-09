@@ -1,8 +1,8 @@
 /********************************************************************
  *	Kalendae, a framework agnostic javascript date picker           *
- *	Copyright(c) 2013-2017 Jocelyn Badgley (joc@twipped.com)        *
+ *	Copyright(c) 2013-2020 Jocelyn Badgley (joc@twipped.com)        *
  *	http://github.com/Twipped/Kalendae                              *
- *	Version 0.7.1                                                   *
+ *	Version 1.0.0                                                   *
  ********************************************************************/
 (function (undefined) {
 
@@ -540,7 +540,7 @@ Kalendae.prototype = {
 	},
 
 	makeSelectedDateVisible: function (date) {
-		outOfViewMonth = moment(date).date('1').diff(this.viewStartDate,'months');
+		var outOfViewMonth = moment(date).date('1').diff(this.viewStartDate,'months');
 
 		if(outOfViewMonth < 0){
 			this.viewStartDate.subtract(1,'months');
@@ -708,11 +708,11 @@ Kalendae.prototype = {
 		} while (++i < c);
 
 		if (opts.directionScrolling) {
-			var diffComparison = moment().startOf('day').hours(12);
+			var diffComparison = moment().startOf('month').hours(12);
 			diff = month.diff(diffComparison, 'months', true);
 
 			if (opts.direction === 'today-past' || opts.direction === 'past') {
-				if (diff <= 0) {
+				if (diff < 0) {
 					this.disableNextMonth = false;
 					util.removeClassName(this.container, classes.disableNextMonth);
 				} else {
@@ -4304,7 +4304,8 @@ moment = Kalendae.moment;
 
 //function to get the total number of days since the epoch.
 moment.fn.yearDay = function (input) {
-	var yearday = Math.floor(this._d / 86400000);
+	var utcDate = Date.UTC(this._d.getFullYear(), this._d.getMonth(), this._d.getDate());
+	var yearday = Math.floor(utcDate / 86400000);
     return (typeof input === 'undefined') ? yearday :
         this.add({ d : input - yearday });
 };
