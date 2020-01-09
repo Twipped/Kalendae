@@ -1,6 +1,6 @@
 {
   "name": "kalendae",
-  "version": "0.7.1",
+  "version": "1.0.0",
   "description": "A framework agnostic javascript date picker.",
   "main": "build/kalendae.js",
   "repository": {
