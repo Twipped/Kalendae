@@ -518,7 +518,7 @@ Kalendae.prototype = {
 	},
 
 	makeSelectedDateVisible: function (date) {
-		outOfViewMonth = moment(date).date('1').diff(this.viewStartDate,'months');
+		var outOfViewMonth = moment(date).date('1').diff(this.viewStartDate,'months');
 
 		if(outOfViewMonth < 0){
 			this.viewStartDate.subtract(1,'months');
@@ -686,11 +686,11 @@ Kalendae.prototype = {
 		} while (++i < c);
 
 		if (opts.directionScrolling) {
-			var diffComparison = moment().startOf('day').hours(12);
+			var diffComparison = moment().startOf('month').hours(12);
 			diff = month.diff(diffComparison, 'months', true);
 
 			if (opts.direction === 'today-past' || opts.direction === 'past') {
-				if (diff <= 0) {
+				if (diff < 0) {
 					this.disableNextMonth = false;
 					util.removeClassName(this.container, classes.disableNextMonth);
 				} else {
