@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+* Fix for scrolling in divs where overflow has am x/y shortcut value. (\#230)
+
 ## 1.0.0
 
 * Fix issue with the month of March when using in GMT timezone. (\#229, Fixes \#125)
