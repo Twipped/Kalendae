@@ -1,21 +1,21 @@
 kal=src/intro_standalone.js \
 	src/main.js \
 	src/util.js \
-	src/auto.js \
 	src/input.js \
 	src/MinPubSub.js \
 	src/moment.js \
 	src/moment.ext.js \
+	src/auto.js \
 	src/jq.js \
 	src/outro.js
 
 kmomentless= src/intro.js \
 	src/main.js \
 	src/util.js \
-	src/auto.js \
 	src/input.js \
 	src/MinPubSub.js \
 	src/moment.ext.js \
+	src/auto.js \
 	src/jq.js \
 	src/outro.js
 

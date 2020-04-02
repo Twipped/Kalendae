@@ -2,7 +2,7 @@
  *	Kalendae, a framework agnostic javascript date picker           *
  *	Copyright(c) 2013-2020 Jocelyn Badgley (joc@twipped.com)        *
  *	http://github.com/Twipped/Kalendae                              *
- *	Version 1.0.0                                                   *
+ *	Version 1.0.1                                                   *
  ********************************************************************/
 (function (undefined) {
 
@@ -983,30 +983,6 @@ var util = Kalendae.util = {
 	}
 };
 
-
-//auto-initializaiton code
-if (typeof document.addEventListener === 'function') Kalendae.util.domReady(function () {
-	var els = util.$$('.auto-kal'),
-		i = els.length,
-		e,
-		options,
-		optionsRaw;
-
-	while (i--) {
-		e = els[i];
-		optionsRaw = e.getAttribute('data-kal');
-		options = (optionsRaw == null || optionsRaw == "") ? {} : (new Function('return {' + optionsRaw + '};'))();
-
-		if (e.tagName === 'INPUT') {
-			//if element is an input, bind a popup calendar to the input.
-			new Kalendae.Input(e, options);
-		} else {
-			//otherwise, insert a flat calendar into the element.
-			new Kalendae(util.merge(options, {attachTo:e}));
-		}
-
-	}
-});
 Kalendae.Input = function (targetElement, options) {
 	if (typeof document.addEventListener !== 'function'  && !util.isIE8()) return;
 
@@ -4310,6 +4286,30 @@ moment.fn.yearDay = function (input) {
     return (typeof input === 'undefined') ? yearday :
         this.add({ d : input - yearday });
 };
+
+//auto-initializaiton code
+if (typeof document.addEventListener === 'function') Kalendae.util.domReady(function () {
+	var els = util.$$('.auto-kal'),
+		i = els.length,
+		e,
+		options,
+		optionsRaw;
+
+	while (i--) {
+		e = els[i];
+		optionsRaw = e.getAttribute('data-kal');
+		options = (optionsRaw == null || optionsRaw == "") ? {} : (new Function('return {' + optionsRaw + '};'))();
+
+		if (e.tagName === 'INPUT') {
+			//if element is an input, bind a popup calendar to the input.
+			new Kalendae.Input(e, options);
+		} else {
+			//otherwise, insert a flat calendar into the element.
+			new Kalendae(util.merge(options, {attachTo:e}));
+		}
+
+	}
+});
 if (typeof jQuery !== 'undefined' && (typeof document.addEventListener === 'function' || util.isIE8())) {
 	jQuery.fn.kalendae = function (options) {
 		this.each(function (i, e) {
