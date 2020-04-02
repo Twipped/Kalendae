@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+* Fix for auto-initialization of inputs on IE10
+
 ## 1.0.1
 
 * Fix for scrolling in divs where overflow has am x/y shortcut value. (\#230)
