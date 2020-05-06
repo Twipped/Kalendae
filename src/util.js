@@ -133,7 +133,7 @@ var util = Kalendae.util = {
 		do {
 			var overflow = util.getStyle(elem, 'overflow');
 			// overflow will be either straight up "auto" or it can be "hidden auto" if styles like overflow-x are used
-			if (overflow.indexOf('auto') !== -1 || overflow.indexOf('scroll') !== -1) return elem;
+			if (overflow.indexOf('auto') !== -1 || overflow.indexOf('scroll') !== -1 || elem.scrollLeft > 0 || elem.scrollLeft < 0 || elem.scrollTop > 0) return elem;
 		} while ((elem = elem.parentNode) && elem != window.document.body);
 		return null;
 	},
